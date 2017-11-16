@@ -6,74 +6,146 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+  <style media="screen">
+    html,
+    body {
+      height: 100%;
+    }
+
+    .main-container {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+    }
+
+    .action-pane {
+      border: 2px solid red;
+      margin: 10px;
+    }
+
+    .left-pane {
+      min-width: 120px;
+      max-width: 120px;
+      flex: 1 1 auto;
+      flex-direction: column;
+    }
+
+    .channels-users {
+      border-top: 2px solid red;
+      flex-grow: 1;
+      height: 50%;
+    }
+
+    .map-container {
+      display: flex;
+      flex-direction: row;
+      height: 100%;
+      justify-content: flex-start;
+    }
+
+    .center-pane {
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+
+    .chat-body-area {
+      flex: 1 1 auto;
+    }
+
+    .chat-input-area {
+      flex: 0 1 auto;
+      height: 100px;
+    }
+  </style>
   <script src='http://code.jquery.com/jquery-latest.min.js'></script>
   <script src='/socket.io/socket.io.js'></script>
+
 </head>
 
 <body>
-  <div class="table-responsive col-md-6">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-md-1">Channel</th>
-          <th class="col-md-2">Channel ID</th>
-        </tr>
-      </thead>
-      <tbody id="channels">
-      </tbody>
-    </table>
-  </div>
-  <div class="table-responsive col-md-3">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-md-1">Avatar</th>
-          <th class="col-md-2">User</th>
-          <th class="col-md-3">User ID</th>
-        </tr>
-      </thead>
-      <tbody id="users">
-      </tbody>
-    </table>
-  </div>
-  <div class="table-responsive col-md-6">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-md-1">Sender</th>
-          <th class="col-md-2">Channel</th>
-          <th class="col-md-3">Message</th>
-        </tr>
-      </thead>
-      <tbody id="messages">
-      </tbody>
-    </table>
-  </div>
-  <div class="table-responsive col-md-6">
-    <table>
-      <thead>
-        <tr>
-          <th class="col-md-1">Pin</th>
-          <th class="col-md-2">Lat</th>
-          <th class="col-md-3">Long</th>
-        </tr>
-      </thead>
-      <tbody id="maps">
-      </tbody>
-    </table>
-  </div>
-
-  <div class='container'>
-    <div class='col-md-4'>
-      <form id='messageForm'>
-        <div class='form-group'>
-          <label>Enter Message</label>
-          <textarea id="send_message" class='form-control'></textarea>
-          <br />
-          <input type="submit" class='btn btn-primary' value='Send Message' />
-        </div>
-      </form>
+  <div class="main-container">
+    <div class="status-bar"></div>
+    <div class="action-pane left-pane" channels-users-pane>
+      <div class="channels-users">channels
+          <div class="table-responsive col-md-6">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="col-md-1">Channel</th>
+                    <th class="col-md-2">Channel ID</th>
+                  </tr>
+                </thead>
+                <tbody id="channels">
+                </tbody>
+              </table>
+            </div>
+      </div>
+      <div class=" channels-users">users
+          <div class="table-responsive col-md-3">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="col-md-1">Avatar</th>
+                    <th class="col-md-2">User</th>
+                    <th class="col-md-3">User ID</th>
+                  </tr>
+                </thead>
+                <tbody id="users">
+                </tbody>
+              </table>
+            </div>
+      </div>
     </div>
+    <div class="center-pane">
+      <div class="action-pane chat-body-area">
+          <div class="table-responsive col-md-6">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="col-md-1">Sender</th>
+                    <th class="col-md-2">Channel</th>
+                    <th class="col-md-3">Message</th>
+                  </tr>
+                </thead>
+                <tbody id="messages">
+                </tbody>
+              </table>
+            </div>
+      </div>
+      <div class="action-pane chat-input-area">
+          <div class='col-md-4'>
+              <form id='messageForm'>
+                <div class='form-group'>
+                  <label>Enter Message</label>
+                  <textarea id="send_message" class='form-control'></textarea>
+                  <br />
+                  <input type="submit" class='btn btn-primary' value='Send Message' />
+                </div>
+              </form>
+            </div>
+      </div>
+    </div>
+    <div class="action-pane map-container">
+      <div class="table-responsive col-md-6">
+        <table>
+          <thead>
+            <tr>
+              <th class="col-md-1">Pin</th>
+              <th class="col-md-2">Lat</th>
+              <th class="col-md-3">Long</th>
+            </tr>
+          </thead>
+          <tbody id="maps">
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
   </div>
 
   <script>
