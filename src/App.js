@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {slapState: {}};
   };
 
-  //RECIVES STATE DATA 
+  //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io('localhost:3001');
     this.socket.on('state', (slapState) => {
@@ -32,12 +32,17 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to SlapChat</h1>
-        </header>
-        <NavBar />
+          <NavBar />  
+      </header>
         <SideBar users = {this.state.slapState.users}/>
         <MessageList />
+        <div className="MapContainer">
+          <Map className="Map"
+            containerElement={<div style={{height:100+'%', width:100+'%'}} />}
+            mapElement={<div style={{height:100+'%', width:100+'%'}} />}
+          />
+        </div>
         <ChatBar />
-        <Map />
         <Footer />
       </div>
     );
