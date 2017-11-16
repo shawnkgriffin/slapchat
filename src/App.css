@@ -1,34 +1,28 @@
 .App {
-  text-align: center;
+  height: 100%;
 }
 
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
+html, body {
+  height: 100%
 }
 
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
+
+#main-section {
+  padding: 0;
 }
 
-.App-title {
+.NavBar-title {
   font-size: 1.5em;
 }
 
-.App-intro {
-  font-size: large;
-}
-
 .SideBar {
+  height: 100%;
   float: left;
   background-color: red;
 }
 
 .ChatBar {
-  background-color: green;
+  background-color: pink;
 }
 
 .MapContainer {
@@ -36,10 +30,6 @@
 }
 
 .MessageList {
-  background-color: yellow;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  background-color: blue;
+  padding: 0;
 }

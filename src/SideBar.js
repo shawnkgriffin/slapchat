@@ -2,11 +2,10 @@ import React, { Component } from "react";
 
 class SideBar extends Component {
   render() {
-    
 
     return (
 
-      <div className="SideBar container col">
+      <div className="SideBar container col-4">
           <ul>
             <li className="user-info">
               USER INFO

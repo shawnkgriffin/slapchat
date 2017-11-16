@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import io from 'socket.io-client'
 import Map from './Map.js'
 import MessageList from './MessageList.js'
 import SideBar from './SideBar.js'
 import NavBar from './NavBar.js'
-import Footer from './Footer.js'
 
 
 
@@ -27,15 +25,13 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App container-fluid">
-        <header className="App-header">
-        <NavBar />
-      </header>
-      <div className="row">
-        <SideBar users = {this.state.slapState.users}/>
-        <MessageList />
-        <Map />
-      </div>
+      <div className="App container-fluid row">
+          <SideBar users = {this.state.slapState.users}/>
+          <main id="main-section" className="row container-fluid col-8">
+            <NavBar />
+            <MessageList />
+            <Map />
+          </main>
       </div>
     );
   }
