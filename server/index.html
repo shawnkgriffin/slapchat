@@ -1,12 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <title>slap</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <script src='http://code.jquery.com/jquery-latest.min.js'></script>
+  <script src='/socket.io/socket.io.js'></script>
 </head>
+
 <body>
-    TEST
+  <div class="table-responsive col-md-6">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-md-1">Channel</th>
+          <th class="col-md-2">Channel ID</th>
+        </tr>
+      </thead>
+      <tbody id="channels">
+      </tbody>
+    </table>
+  </div>
+  <div class="table-responsive col-md-3">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-md-1">Avatar</th>
+          <th class="col-md-2">User</th>
+          <th class="col-md-3">User ID</th>
+        </tr>
+      </thead>
+      <tbody id="users">
+      </tbody>
+    </table>
+  </div>
+  <div class="table-responsive col-md-6">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-md-1">Sender</th>
+          <th class="col-md-2">Channel</th>
+          <th class="col-md-3">Message</th>
+        </tr>
+      </thead>
+      <tbody id="messages">
+      </tbody>
+    </table>
+  </div>
+  <div class="table-responsive col-md-6">
+    <table>
+      <thead>
+        <tr>
+          <th class="col-md-1">Pin</th>
+          <th class="col-md-2">Lat</th>
+          <th class="col-md-3">Long</th>
+        </tr>
+      </thead>
+      <tbody id="maps">
+      </tbody>
+    </table>
+  </div>
+
+  <div class='container'>
+    <div class='col-md-4'>
+      <form id='messageForm'>
+        <div class='form-group'>
+          <label>Enter Message</label>
+          <textarea id="send_message" class='form-control'></textarea>
+          <br />
+          <input type="submit" class='btn btn-primary' value='Send Message' />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      var socket = io.connect()
+      const $messageForm = $('#messageForm')
+      const $message = $('#send_message') // send message button
+      const $messages = $('#messages') // messsages table
+      const $chat = $('#chat')
+      const $users = $('#users')
+      const $channels = $('#channels')
+      const $maps = $('#maps')
+      const my_channel_id = "C0G9QKBBL"
+      const my_user_id = "W012A3CDE"
+
+
+      $messageForm.submit(e => {
+        e.preventDefault()
+        socket.emit('chat.postmessage', { channel: my_channel_id, user: my_user_id, text: $message.val() })
+        $message.val('')
+      })
+
+      socket.on('state', state => {
+        // Render the state information. 
+        $messages.empty()
+        state.messages.forEach(message => {
+          $messages.append(`<tr><td>${message.user}</td><td>${message.channel_id}</td><td>${message.text}</td></tr>`)
+        })
+        $users.empty()
+        state.users.forEach(user => {
+          $users.append(`<tr><td><img src="${user.profile.image_24}" alt="" style="width:24px;height:24px;">
+            </td><td>${user.name}</td><td>${user.id}</td></tr>`)
+        })
+        $channels.empty()
+        state.channels.forEach(channel => {
+          $channels.append(`<tr><td>${channel.name}</td><td>${channel.id}</td></tr>`)
+        })
+        $maps.empty()
+        state.map.markers.forEach(marker => {
+          $maps.append(`<tr><td>${marker.name}</td><td>${marker.location[0]}</td><td>${marker.location[1]}</td></tr>`)
+        })
+      }
+      )
+    })
+
+  </script>
 </body>
+
 </html>
