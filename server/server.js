@@ -22,4 +22,10 @@ io.sockets.on('connection', (socket) => {
         connections.splice(connections.indexOf(socket), 1);
         console.log('Disconnected %s sockets connnected', connections.length);
     });
+
+    //Recieve Messages
+    socket.on('chat.postmessage', (message) => {
+        // io.sockets.emit()
+        console.log('chat.postmessage', message);
+    });
 });
