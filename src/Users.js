@@ -7,12 +7,11 @@ function Users({users}){
     <div>
         {
           users.map(user => {
-            return <User user={ user } loading= {{loading: true}}/>
+            return <User user={ user }/>
           })
         }
     </div>
   );
 }
-
 
 export default Users;
