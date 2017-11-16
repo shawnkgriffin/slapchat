@@ -2,7 +2,13 @@ import React, { Component } from "react";
 
 class ChatBar extends Component {
   render() {
-    return <p> ChatBar </p>;
+    return (
+      <div className="ChatBar">
+        <input id="message-input" placeholder="Message">
+        </input>
+        <button>Send</button>
+      </div>
+    )
   }
 }
 

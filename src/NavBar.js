@@ -2,7 +2,11 @@ import React, { Component } from "react";
 
 class NavBar extends Component {
   render() {
-    return <p> NavBar </p>;
+    return (
+      <div className="container-fluid">
+        <h1 className="App-title">Welcome to SlapChat</h1>
+      </div>
+    )
   }
 }
 

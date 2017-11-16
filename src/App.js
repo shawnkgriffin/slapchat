@@ -5,7 +5,6 @@ import io from 'socket.io-client'
 import Map from './Map.js'
 import MessageList from './MessageList.js'
 import SideBar from './SideBar.js'
-import ChatBar from './ChatBar.js'
 import NavBar from './NavBar.js'
 import Footer from './Footer.js'
 
@@ -28,17 +27,15 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
+      <div className="App container-fluid">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to SlapChat</h1>
-        </header>
         <NavBar />
+      </header>
+      <div className="row">
         <SideBar users = {this.state.slapState.users}/>
         <MessageList />
-        <ChatBar />
         <Map />
-        <Footer />
+      </div>
       </div>
     );
   }

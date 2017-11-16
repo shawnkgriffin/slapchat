@@ -1,8 +1,18 @@
 import React, { Component } from "react";
+import ChatBar from './ChatBar.js'
 
 class MessageList extends Component {
   render() {
-    return <p> MessageList </p>;
+    return ( 
+      <div className="MessageList container col-6">
+        <main>
+          <span>I am the MessageList</span>
+        </main>
+        <footer>
+          <ChatBar />
+        </footer>
+      </div>
+    )
   }
 }
 

@@ -2,7 +2,11 @@ import React, { Component } from "react";
 
 class Map extends Component {
   render() {
-    return <p> Map </p>;
+    return (
+      <div className="MapContainer container col">
+        <span>put map here</span>
+      </div>
+    )
   }
 }
 
