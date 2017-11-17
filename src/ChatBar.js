@@ -18,9 +18,7 @@ class ChatBar extends Component {
 
   // need an on change event
   onMessageChange(event) {
-    this.setState({ content: event.target.value });
-    console.log(this)    
-    
+    this.setState({ content: event.target.value });    
   }
 
   // Main render
