@@ -7,7 +7,7 @@ function MessageList({messages}){
     <div>
       {
         messages.map(message => {
-          return <Message message={ message } />
+          return <Message    key={message.id} message={ message } />
         })
       }
     </div>

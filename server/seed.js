@@ -88,6 +88,7 @@ var seed = {
   ],
   messages: [
     {
+      id: "1358546515.000008",
       channel_id: "C0G9QKBBL",
       type: "message",
       ts: "1358546515.000008",
@@ -99,6 +100,7 @@ var seed = {
     {
       channel_id: "C0G9QKBBL",
       type: "message",
+      id: "1358546515.000007",
       ts: "1358546515.000007",
       user: "U2147483896",
       text: "Got it on my way.",
@@ -122,12 +124,14 @@ var seed = {
       channel_id: "C0G9QKBBL",
       type: "something_else",
       user: "U2147483896",
-      ts: "1358546515.000007",
+      ts: "135854615.000007",
+      id: "135854515.0007",
       wibblr: true,
       name: "shawn",
       avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4"
     },
     {
+      id: "1503435956.000247",
       channel_id: "C0G9QKBBL",
       text: "Garbage unit is 98% full",
       name: "shawn",
@@ -149,7 +153,7 @@ var seed = {
   ],
   users: [
     {
-      id: "W012A3CDE",
+      id: "W01a2A3CDE",
       team_id: "T012AB3C4",
       name: "shawn",
       deleted: false,
@@ -186,7 +190,7 @@ var seed = {
       has_2fa: false
     },
     {
-      id: "W07QCRPA4",
+      id: "W07QCRs",
       team_id: "T0G9PQBBK",
       name: "Scott",
       color: "9f69e7",
@@ -208,7 +212,7 @@ var seed = {
       }
     },
     {
-      id: "W07QCRPA4",
+      id: "W 07QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Jessica",
       color: "9f69e7",
@@ -230,7 +234,7 @@ var seed = {
       }
     },
     {
-      id: "W07QCRPA4",
+      id: "W027QaCRPA4",
       team_id: "T0G9PQBBK",
       name: "Tony",
       color: "9f69e7",
@@ -252,7 +256,7 @@ var seed = {
       }
     },
     {
-      id: "W07QCRPA4",
+      id: "W07QCRPsA4",
       team_id: "T0G9PQBBK",
       name: "Bob",
       color: "9f69e7",
@@ -274,7 +278,7 @@ var seed = {
       }
     },
     {
-      id: "W07QCRPA4",
+      id: "W073QCfRPA4",
       team_id: "T0G9PQBBK",
       name: "finn",
       deleted: false,
@@ -307,7 +311,7 @@ var seed = {
       has_2fa: false
     },
     {
-      id: "W07QCRPA4",
+      id: "W047QCsRPA4",
       team_id: "T0G9PQBBK",
       name: "Greg",
       deleted: false,
@@ -341,7 +345,7 @@ var seed = {
       has_2fa: false
     },
     {
-      id: "W07QCRPA4",
+      id: "W057QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Travis",
       deleted: false,

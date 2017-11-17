@@ -7,7 +7,7 @@ function Users({users}){
     <div>
         {
           users.map(user => {
-            return <User user={ user }/>
+            return <User  key={user.id} user={ user }/>
           })
         }
     </div>
