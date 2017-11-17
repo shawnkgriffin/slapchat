@@ -1,0 +1,67 @@
+// bootstrap font bug workaround
+$icon-font-path: "../../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
+
+// override vars here!
+
+@import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+.fixed-container {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.nav-and-content {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.messages-and-map {
+  display: flex;
+  flex-grow: 1;
+}
+
+.side-bar {
+  background-color: #2ECC71;
+  min-width: 200px;
+}
+
+.nav-bar {
+  background-color: #9B59B6;
+  color: #34495E;
+  min-height: 60px;
+}
+
+.message-interface {
+  display: flex;
+  flex-direction: column;
+  background-color: #ECF0F1;
+  min-width: 400px;
+}
+
+.message-container {
+  flex-grow: 1;
+  padding: 20px; 
+}
+
+.message {
+  padding: 5px;
+}
+
+.chat-bar {
+  
+}
+
+#message-input {
+  min-height: 40px;
+  width: 100%;
+}
+
+.map-container {
+  background-color: #3498DB;
+  flex-grow: 1;
+}

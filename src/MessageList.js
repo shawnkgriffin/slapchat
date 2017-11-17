@@ -1,22 +1,21 @@
 import React from 'react';
 import Message from './Message.js';
+import ChatBar from './ChatBar.js';
 
-
-function MessageList({messages}){
+function MessageList({messages, onNewMessage}){
+  console.log(onNewMessage)
   return (
-    <div>
-      {
-        messages.map(message => {
-          return <Message    key={message.id} message={ message } />
-        })
-      }
-    </div>
+    <section className="message-interface">
+      <div className="message-container">
+        {
+          messages.map(message => {
+            return <Message key={ message.id } message={ message } />
+          })
+        }
+      </div>
+      <ChatBar onNewMessage={onNewMessage} />
+    </section>
   ) 
 }
-  
-
-
-  
-
 
 export default MessageList
