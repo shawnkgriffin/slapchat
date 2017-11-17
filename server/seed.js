@@ -56,7 +56,8 @@ var seed = {
       },
       previous_names: [],
       num_members: 2
-    },{
+    },
+    {
       id: "C0G9NNBBL",
       name: "Instructors",
       is_channel: true,
@@ -87,19 +88,25 @@ var seed = {
   ],
   messages: [
     {
+      id: "1358546515.000008",
       channel_id: "C0G9QKBBL",
       type: "message",
       ts: "1358546515.000008",
       user: "U2147483896",
+      name: "shawn",
+      avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4",
       text: "Head to lift 7 for chair problem."
     },
     {
       channel_id: "C0G9QKBBL",
       type: "message",
+      id: "1358546515.000007",
       ts: "1358546515.000007",
       user: "U2147483896",
       text: "Got it on my way.",
       is_starred: true,
+      name: "shawn",
+      avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4",
       reactions: [
         {
           name: "space_invader",
@@ -116,12 +123,20 @@ var seed = {
     {
       channel_id: "C0G9QKBBL",
       type: "something_else",
-      ts: "1358546515.000007",
-      wibblr: true
+      user: "U2147483896",
+      ts: "135854615.000007",
+      id: "135854515.0007",
+      wibblr: true,
+      name: "shawn",
+      avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4"
     },
     {
+      id: "1503435956.000247",
       channel_id: "C0G9QKBBL",
       text: "Garbage unit is 98% full",
+      name: "shawn",
+      avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4",
+      user: "U2147483896",
       username: "ecto1138",
       bot_id: "B19LU7CSY",
       attachments: [
@@ -138,7 +153,7 @@ var seed = {
   ],
   users: [
     {
-      id: "W012A3CDE",
+      id: "W01a2A3CDE",
       team_id: "T012AB3C4",
       name: "shawn",
       deleted: false,
@@ -175,7 +190,7 @@ var seed = {
       has_2fa: false
     },
     {
-      id: "W07QCRPA4",
+      id: "W07QCRs",
       team_id: "T0G9PQBBK",
       name: "Scott",
       color: "9f69e7",
@@ -193,73 +208,77 @@ var seed = {
         real_name: "Scott Dispatch",
         real_name_normalized: "Scott Dispatch",
         display_name: "Scott",
-        display_name_normalized: "",
-      }},
-      {
-        id: "W07QCRPA4",
-        team_id: "T0G9PQBBK",
-        name: "Jessica",
-        color: "9f69e7",
+        display_name_normalized: ""
+      }
+    },
+    {
+      id: "W 07QCdRPA4",
+      team_id: "T0G9PQBBK",
+      name: "Jessica",
+      color: "9f69e7",
+      real_name: "Jessica Ski School",
+      tz: "America/Los_Angeles",
+      tz_label: "Pacific Daylight Time",
+      tz_offset: -25200,
+      profile: {
+        image_24: "https://www.dropbox.com/s/o49uwc0hibhdmhe/Jessica.jpg?dl=1",
+        first_name: "Jessica",
+        last_name: "Ski School",
+        title: "Jessica",
+        phone: "",
+        skype: "",
         real_name: "Jessica Ski School",
-        tz: "America/Los_Angeles",
-        tz_label: "Pacific Daylight Time",
-        tz_offset: -25200,
-        profile: {
-          image_24: "https://www.dropbox.com/s/o49uwc0hibhdmhe/Jessica.jpg?dl=1",
-          first_name: "Jessica",
-          last_name: "Ski School",
-          title: "Jessica",
-          phone: "",
-          skype: "",
-          real_name: "Jessica Ski School",
-          real_name_normalized: "Jessica Ski School",
-          display_name: "Jessica",
-          display_name_normalized: "",
-        }},
-      {
-        id: "W07QCRPA4",
-        team_id: "T0G9PQBBK",
-        name: "Tony",
-        color: "9f69e7",
+        real_name_normalized: "Jessica Ski School",
+        display_name: "Jessica",
+        display_name_normalized: ""
+      }
+    },
+    {
+      id: "W027QaCRPA4",
+      team_id: "T0G9PQBBK",
+      name: "Tony",
+      color: "9f69e7",
+      real_name: "Tony Ski Patrol",
+      tz: "America/Los_Angeles",
+      tz_label: "Pacific Daylight Time",
+      tz_offset: -25200,
+      profile: {
+        image_24: "https://www.dropbox.com/s/xbgayosa4jekst8/tony.png?dl=1",
+        first_name: "Tony",
+        last_name: "Ski Patrol",
+        title: "Tony",
+        phone: "",
+        skype: "",
         real_name: "Tony Ski Patrol",
-        tz: "America/Los_Angeles",
-        tz_label: "Pacific Daylight Time",
-        tz_offset: -25200,
-        profile: {
-          image_24: "https://www.dropbox.com/s/xbgayosa4jekst8/tony.png?dl=1",
-          first_name: "Tony",
-          last_name: "Ski Patrol",
-          title: "Tony",
-          phone: "",
-          skype: "",
-          real_name: "Tony Ski Patrol",
-          real_name_normalized: "Tony Ski Patrol",
-          display_name: "Tony",
-          display_name_normalized: "",
-        }},
-      {
-        id: "W07QCRPA4",
-        team_id: "T0G9PQBBK",
-        name: "Bob",
-        color: "9f69e7",
+        real_name_normalized: "Tony Ski Patrol",
+        display_name: "Tony",
+        display_name_normalized: ""
+      }
+    },
+    {
+      id: "W07QCRPsA4",
+      team_id: "T0G9PQBBK",
+      name: "Bob",
+      color: "9f69e7",
+      real_name: "Bob Maintenance",
+      tz: "America/Los_Angeles",
+      tz_label: "Pacific Daylight Time",
+      tz_offset: -25200,
+      profile: {
+        image_24: "https://www.dropbox.com/s/rtf0q8vraxhejql/bob.jpg?dl=1",
+        first_name: "Bob",
+        last_name: "Maintenance",
+        title: "Bob",
+        phone: "",
+        skype: "",
         real_name: "Bob Maintenance",
-        tz: "America/Los_Angeles",
-        tz_label: "Pacific Daylight Time",
-        tz_offset: -25200,
-        profile: {
-          image_24: "https://www.dropbox.com/s/rtf0q8vraxhejql/bob.jpg?dl=1",
-          first_name: "Bob",
-          last_name: "Maintenance",
-          title: "Bob",
-          phone: "",
-          skype: "",
-          real_name: "Bob Maintenance",
-          real_name_normalized: "Bob Maintenance",
-          display_name: "Bob",
-          display_name_normalized: "",
-        }},
-      {
-      id: "W07QCRPA4",
+        real_name_normalized: "Bob Maintenance",
+        display_name: "Bob",
+        display_name_normalized: ""
+      }
+    },
+    {
+      id: "W073QCfRPA4",
       team_id: "T0G9PQBBK",
       name: "finn",
       deleted: false,
@@ -292,7 +311,7 @@ var seed = {
       has_2fa: false
     },
     {
-      id: "W07QCRPA4",
+      id: "W047QCsRPA4",
       team_id: "T0G9PQBBK",
       name: "Greg",
       deleted: false,
@@ -326,7 +345,7 @@ var seed = {
       has_2fa: false
     },
     {
-      id: "W07QCRPA4",
+      id: "W057QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Travis",
       deleted: false,
@@ -375,8 +394,7 @@ var seed = {
       }
     ]
   }
-}
+};
 module.exports = {
   seed
-}
-
+};

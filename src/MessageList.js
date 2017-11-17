@@ -1,17 +1,21 @@
-import React, { Component } from "react";
-import ChatBar from './ChatBar.js'
+import React from 'react';
+import Message from './Message.js';
+import ChatBar from './ChatBar.js';
 
-class MessageList extends Component {
-  render() {
-    return ( 
-      <section className="message-interface">
-        <div className="message-container">
-          <span>I am the MessageList</span>
-        </div>
-        <ChatBar />
-      </section>
-    )
-  }
+function MessageList({messages, onNewMessage}){
+  console.log(onNewMessage)
+  return (
+    <section className="message-interface">
+      <div className="message-container">
+        {
+          messages.map(message => {
+            return <Message key={ message.id } message={ message } />
+          })
+        }
+      </div>
+      <ChatBar onNewMessage={onNewMessage} />
+    </section>
+  ) 
 }
 
 export default MessageList

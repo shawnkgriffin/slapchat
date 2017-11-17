@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import Users from "./Users.js";
+import Channels from "./Channels.js";
 
 class SideBar extends Component {
   render() {
@@ -15,22 +17,12 @@ class SideBar extends Component {
             </li>
             <li>
               <ul id="channels">
-                <li>Patrol Team 1</li>
-                <li>Patrol Team 2</li>
-                <li>Patrol Team 3</li>
-                <li>Patrol Team 4</li>
-                <li>Patrol Team 5</li>
-                <li>Patrol Team 6</li>
+                <Channels channels={this.props.channels} />
               </ul>
             </li>
             <li>
               <ul id="direct-messages">
-                <li>User</li>
-                <li>User</li>
-                <li>User</li>
-                <li>User</li>
-                <li>User</li>
-                <li>User</li>
+                <Users users={this.props.users} />
               </ul>
             </li>
           </ul>
