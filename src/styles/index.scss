@@ -26,31 +26,42 @@ $icon-font-path: "../../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 }
 
 .side-bar {
-  background-color: #3498db;
+  background-color: #2ECC71;
   min-width: 200px;
 }
 
 .nav-bar {
-  background-color: black;
-  color: #3498db;
+  background-color: #9B59B6;
+  color: #34495E;
+  min-height: 60px;
 }
 
 .message-interface {
   display: flex;
   flex-direction: column;
-  background-color: #eee;
+  background-color: #ECF0F1;
   min-width: 400px;
 }
 
 .message-container {
-  flex-grow: 1; 
+  flex-grow: 1;
+  padding: 20px; 
+}
+
+.message {
+  padding: 5px;
 }
 
 .chat-bar {
-  background-color: black;
+  
+}
+
+#message-input {
+  min-height: 40px;
+  width: 100%;
 }
 
 .map-container {
-  background-color: #3498db;
+  background-color: #3498DB;
   flex-grow: 1;
 }
