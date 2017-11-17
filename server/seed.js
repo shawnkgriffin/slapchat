@@ -155,6 +155,7 @@ var seed = {
     {
       id: "W01a2A3CDE",
       team_id: "T012AB3C4",
+      position:{ lat: 50.11528441138468, lng: -122.9272109117575 },
       name: "shawn",
       deleted: false,
       color: "9f69e7",
@@ -193,6 +194,7 @@ var seed = {
       id: "W07QCRs",
       team_id: "T0G9PQBBK",
       name: "Scott",
+      position: { lat: 50.1133362564326, lng: -122.91468101741026 },
       color: "9f69e7",
       real_name: "Scott Dispatch",
       tz: "America/Los_Angeles",
@@ -215,6 +217,7 @@ var seed = {
       id: "W 07QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Jessica",
+      position:{ lat: 50.11198764488344, lng: -122.92159079945013 },
       color: "9f69e7",
       real_name: "Jessica Ski School",
       tz: "America/Los_Angeles",
@@ -238,6 +241,7 @@ var seed = {
       team_id: "T0G9PQBBK",
       name: "Tony",
       color: "9f69e7",
+      position:{ lat: 50.095655337414236, lng: -122.89925413788879 },
       real_name: "Tony Ski Patrol",
       tz: "America/Los_Angeles",
       tz_label: "Pacific Daylight Time",
@@ -259,6 +263,7 @@ var seed = {
       id: "W07QCRPsA4",
       team_id: "T0G9PQBBK",
       name: "Bob",
+      position:{ lat: 50.106355374239335, lng: -122.92235216122272 },
       color: "9f69e7",
       real_name: "Bob Maintenance",
       tz: "America/Los_Angeles",
@@ -282,6 +287,7 @@ var seed = {
       team_id: "T0G9PQBBK",
       name: "finn",
       deleted: false,
+      position: { lat: 50.09837765839853, lng: -122.92397760821027 },
       color: "9f69e7",
       real_name: "Finn Hiltner",
       tz: "America/Los_Angeles",
@@ -314,6 +320,7 @@ var seed = {
       id: "W047QCsRPA4",
       team_id: "T0G9PQBBK",
       name: "Greg",
+      position : { lat: 50.123270188658665, lng: -122.91294340973344 },
       deleted: false,
       color: "9f69e7",
       real_name: "Greg Sugiyama",
@@ -348,6 +355,7 @@ var seed = {
       id: "W057QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Travis",
+      position:{ lat: 50.11844447745653, lng: -122.92434657073115 },
       deleted: false,
       color: "9f69e7",
       real_name: "Travis Kothlow",
@@ -378,19 +386,23 @@ var seed = {
       has_2fa: false
     }
   ],
-  map: {
+  slapMap: {
+    defaultZoom:13,
+    defaultCenter:{ lat: 50.089577, lng:  -122.931307},
     markers: [
       {
-        name: "Lift 7",
-        location: [25.1212, 55.1535]
+        label: "Excelerator Chair",
+        title: "Chair 138 out of service\nshould be replaced.",
+        position: { lat: 50.111600, lng:  -122.923411}
       },
       {
-        name: "Skier down, require assistance",
-        location: [25.2084, 55.2719]
+        label: "Accident",
+        title: "Skier down, require assistance",
+        position: { lat: 50.074817, lng:  -122.9369727}
       },
       {
-        name: "Class location",
-        location: [25.2285, 55.3273]
+        label: "Class position",
+        position: { lat: 50.097066, lng:  -122.953452}
       }
     ]
   }

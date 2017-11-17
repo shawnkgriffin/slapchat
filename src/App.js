@@ -17,7 +17,7 @@ class App extends Component {
       messages: [],
       channels: [],
       loading: true,
-      currentUser: ''
+      currentUser: ""
     };
     this.onNewMessage = this.onNewMessage.bind(this);
   }
@@ -26,45 +26,55 @@ class App extends Component {
   componentDidMount() {
     this.socket = io("localhost:3001");
     this.socket.on("state", slapState => {
-      this.setState({ ...slapState, loading: false, currentUser: slapState.users[0]});
-    }
-  );
+      this.setState({
+        ...slapState,
+        loading: false,
+        currentUser: slapState.users[0]
+      });
+    });
   }
 
   // when we get a new message, send it to the server
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage(content) {
     // Send the msg object as a JSON-formatted string.
-    this.socket.emit('chat.postmessage', {
+    this.socket.emit("chat.postmessage", {
       channel: this.state.channels[0].id, // TODO should use the selected channel or userid.
       user: this.state.currentUser.id,
       name: this.state.currentUser.name,
       avatar: this.state.currentUser.profile.image_24, // TODO rationalize and simplify the avatar to single image for us
       text: content
-    })
+    });
   }
 
   render() {
     console.log("SLAPSTATE", this.state);
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to SlapChat</h1>
-        </header>
         <NavBar />
         {this.state.loading ? (
           <div>Loading</div>
         ) : (
           <div>
+            <div className="MapContainer">
+              <Map
+                slapMap={this.state.slapMap}
+                users={this.state.users}
+                className="Map"
+                containerElement={
+                  <div style={{ height: 100 + "%", width: 100 + "%" }} />
+                }
+                mapElement={
+                  <div style={{ height: 100 + "%", width: 100 + "%" }} />
+                }
+              />
+            </div>
             <Channels channels={this.state.channels} />
             <Users users={this.state.users} />
             <MessageList messages={this.state.messages} />
-            <ChatBar onNewMessage={this.onNewMessage}/>
-            <Map />
+            <ChatBar onNewMessage={this.onNewMessage} />
           </div>
         )}
-
       </div>
     );
   }
