@@ -4,14 +4,12 @@ import ChatBar from './ChatBar.js'
 class MessageList extends Component {
   render() {
     return ( 
-      <div className="MessageList container col-6">
-        <main>
+      <section className="message-interface">
+        <div className="message-container">
           <span>I am the MessageList</span>
-        </main>
-        <footer>
-          <ChatBar />
-        </footer>
-      </div>
+        </div>
+        <ChatBar />
+      </section>
     )
   }
 }

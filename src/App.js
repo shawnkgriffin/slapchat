@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './App.css';
 import io from 'socket.io-client'
 import Map from './Map.js'
 import MessageList from './MessageList.js'
@@ -15,7 +14,7 @@ class App extends Component {
     this.state = {slapState: {}};
   };
 
-  //RECIVES STATE DATA 
+  //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io('localhost:3001');
     this.socket.on('state', (slapState) => {
@@ -25,12 +24,14 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App container-fluid row">
-          <SideBar users = {this.state.slapState.users}/>
-          <main id="main-section" className="row container-fluid col-8">
+      <div className="fixed-container">
+        <SideBar users = {this.state.slapState.users}/>
+        <main className="nav-and-content">
             <NavBar />
-            <MessageList />
-            <Map />
+            <section className="messages-and-map">
+              <MessageList />
+              <Map />
+            </section>
           </main>
       </div>
     );

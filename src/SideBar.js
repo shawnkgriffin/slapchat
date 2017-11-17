@@ -5,7 +5,7 @@ class SideBar extends Component {
 
     return (
 
-      <div className="SideBar container col-4">
+      <div className="side-bar">
           <ul>
             <li className="user-info">
               USER INFO

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 class Map extends Component {
   render() {
     return (
-      <div className="MapContainer container col">
+      <div className="map-container">
         <span>put map here</span>
       </div>
     )
