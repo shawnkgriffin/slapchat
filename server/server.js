@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io').listen(server);
+const uuidv4 = require('uuid/v4');
 
 let connections = [];
 
@@ -32,6 +33,7 @@ io.sockets.on('connection', (socket) => {
 
     //Recieve Messages
     socket.on('chat.postmessage', (message) => {
+        message.id = uuidv4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1' 
         state.seed.messages.push(message)
         io.sockets.emit('state', state.seed)
         console.log('chat.postmessage', message);
