@@ -21,12 +21,11 @@
 
     .action-pane {
       border: 2px solid red;
-      margin: 10px;
     }
 
     .left-pane {
-      min-width: 120px;
-      max-width: 120px;
+      min-width: 200px;
+      max-width: 200px;
       flex: 1 1 auto;
       flex-direction: column;
     }
@@ -71,7 +70,7 @@
     <div class="status-bar"></div>
     <div class="action-pane left-pane" channels-users-pane>
       <div class="channels-users">channels
-        <div class="table-responsive col-md-6">
+        <div class="table-responsive col-md-12">
           <table>
             <thead>
               <tr>
@@ -85,13 +84,13 @@
         </div>
       </div>
       <div class=" channels-users">users
-        <div class="table-responsive col-md-3">
+        <div class="table-responsive table-sm col-md-12">
           <table>
             <thead>
               <tr>
-                <th class="col-md-1">Avatar</th>
-                <th class="col-md-2">User</th>
-                <th class="col-md-3">User ID</th>
+                <th class="col-sm-1">Avatar</th>
+                <th class="col-sm-2">User</th>
+                <th class="col-sm-3">User ID</th>
               </tr>
             </thead>
             <tbody id="users">
@@ -102,13 +101,13 @@
     </div>
     <div class="center-pane">
       <div class="action-pane chat-body-area">
-        <div class="table-responsive col-md-6">
+        <div class="table-responsive table-sm col-sm-12">
           <table>
             <thead>
               <tr>
-                <th class="col-md-1">Sender</th>
-                <th class="col-md-2">Channel</th>
-                <th class="col-md-3">Message</th>
+                <th class="col-sm-1">Sender</th>
+                <th class="col-sm-2">Channel</th>
+                <th class="col-sm-3">Message</th>
               </tr>
             </thead>
             <tbody id="messages">
@@ -117,7 +116,7 @@
         </div>
       </div>
       <div class="action-pane chat-input-area">
-        <div class='col-md-4'>
+        <div class='col-md-12'>
           <form id='messageForm'>
             <div class='form-group'>
               <label>Enter Message</label>
