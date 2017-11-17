@@ -8,7 +8,6 @@ import Users from "./Users.js";
 import ChatBar from "./ChatBar.js";
 import Channels from "./Channels.js";
 import NavBar from "./NavBar.js";
-import Footer from "./Footer.js";
 
 class App extends Component {
   constructor(props) {
@@ -66,7 +65,6 @@ class App extends Component {
           </div>
         )}
 
-        <Footer />
       </div>
     );
   }
