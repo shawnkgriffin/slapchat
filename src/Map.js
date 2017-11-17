@@ -4,8 +4,13 @@ import { withGoogleMap, GoogleMap, Marker } from "react-google-maps";
 class Map extends Component {
   render() {
     const markers = this.props.slapMap.markers || [];
-    this.props.users.forEach( user => markers.push({label:user.name, position: user.position}) )
-    console.log("Markers", markers)
+    this.props.users.forEach(user =>
+      markers.push({
+        label: user.name,
+        position: user.position
+      })
+    );
+    console.log("Markers", markers);
 
     return (
       <GoogleMap
