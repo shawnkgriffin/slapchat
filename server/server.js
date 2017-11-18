@@ -19,6 +19,10 @@ app.get('/', (req, res) =>{
     res.sendFile(__dirname + '/index.html');
 });
 
+console.log('/public', __dirname + "/public")
+app.use('/public', express.static(__dirname + "/public"));
+
+
 //Socket on connect
 io.sockets.on('connection', (socket) => {
     connections.push(socket);
