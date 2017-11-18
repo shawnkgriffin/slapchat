@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
-import Users from './Users.js';
-import Channels from './Channels.js';
+import React, { Component } from "react";
+import Users from "./Users.js";
+import Channels from "./Channels.js";
 
 class SideBar extends Component {
   render() {

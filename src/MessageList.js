@@ -1,6 +1,6 @@
-import React from 'react';
-import Message from './Message.js';
-import ChatBar from './ChatBar.js';
+import React from "react";
+import Message from "./Message.js";
+import ChatBar from "./ChatBar.js";
 
 function MessageList({ messages, onNewMessage }) {
   console.log(onNewMessage);

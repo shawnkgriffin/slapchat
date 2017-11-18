@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
   Marker
-} from 'react-google-maps';
+} from "react-google-maps";
 
 const MyMapComponent = withScriptjs(
   withGoogleMap(props => (
@@ -23,7 +23,7 @@ class Map extends Component {
       markers.push({
         label: user.name,
         position: user.position,
-        icon: 'https://www.dropbox.com/s/bpewpbzoyhz0dku/skiing-blue.png?dl=1'
+        icon: "https://www.dropbox.com/s/bpewpbzoyhz0dku/skiing-blue.png?dl=1"
       })
     );
     return (

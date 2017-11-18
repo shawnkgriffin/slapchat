@@ -1,5 +1,5 @@
-import React from 'react';
-import Channel from './Channel.js';
+import React from "react";
+import Channel from "./Channel.js";
 
 function Channels({ channels }) {
   return (
