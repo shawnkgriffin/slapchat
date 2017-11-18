@@ -155,7 +155,7 @@ var seed = {
     {
       id: "W01a2A3CDE",
       team_id: "T012AB3C4",
-      position:{ lat: 50.11528441138468, lng: -122.9272109117575 },
+      position: { lat: 50.11528441138468, lng: -122.9272109117575 },
       name: "shawn",
       deleted: false,
       color: "9f69e7",
@@ -217,7 +217,7 @@ var seed = {
       id: "W 07QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Jessica",
-      position:{ lat: 50.11198764488344, lng: -122.92159079945013 },
+      position: { lat: 50.11198764488344, lng: -122.92159079945013 },
       color: "9f69e7",
       real_name: "Jessica Ski School",
       tz: "America/Los_Angeles",
@@ -241,7 +241,7 @@ var seed = {
       team_id: "T0G9PQBBK",
       name: "Tony",
       color: "9f69e7",
-      position:{ lat: 50.095655337414236, lng: -122.89925413788879 },
+      position: { lat: 50.095655337414236, lng: -122.89925413788879 },
       real_name: "Tony Ski Patrol",
       tz: "America/Los_Angeles",
       tz_label: "Pacific Daylight Time",
@@ -263,7 +263,7 @@ var seed = {
       id: "W07QCRPsA4",
       team_id: "T0G9PQBBK",
       name: "Bob",
-      position:{ lat: 50.106355374239335, lng: -122.92235216122272 },
+      position: { lat: 50.106355374239335, lng: -122.92235216122272 },
       color: "9f69e7",
       real_name: "Bob Maintenance",
       tz: "America/Los_Angeles",
@@ -320,7 +320,7 @@ var seed = {
       id: "W047QCsRPA4",
       team_id: "T0G9PQBBK",
       name: "Greg",
-      position : { lat: 50.123270188658665, lng: -122.91294340973344 },
+      position: { lat: 50.123270188658665, lng: -122.91294340973344 },
       deleted: false,
       color: "9f69e7",
       real_name: "Greg Sugiyama",
@@ -355,7 +355,7 @@ var seed = {
       id: "W057QCdRPA4",
       team_id: "T0G9PQBBK",
       name: "Travis",
-      position:{ lat: 50.11844447745653, lng: -122.92434657073115 },
+      position: { lat: 50.11844447745653, lng: -122.92434657073115 },
       deleted: false,
       color: "9f69e7",
       real_name: "Travis Kothlow",
@@ -387,25 +387,25 @@ var seed = {
     }
   ],
   slapMap: {
-    defaultZoom:13,
-    defaultCenter:{ lat: 50.089577, lng:  -122.931307},
+    defaultZoom: 13,
+    defaultCenter: { lat: 50.089577, lng: -122.931307 },
     markers: [
       {
         label: "Excelerator Chair",
         title: "Chair 138 out of service\nshould be replaced.",
-        position: { lat: 50.111600, lng:  -122.923411},
-        icon: 'https://www.dropbox.com/s/mgqorxhch3tqcze/construction.png?dl=1'
+        position: { lat: 50.1116, lng: -122.923411 },
+        icon: "https://www.dropbox.com/s/mgqorxhch3tqcze/construction.png?dl=1"
       },
       {
         label: "Accident",
         title: "Skier down, require assistance",
-        position: { lat: 50.074817, lng:  -122.9369727},
-        icon: 'https://www.dropbox.com/s/v72zzdjfmr5ieup/avalanche1.png?dl=1'
+        position: { lat: 50.074817, lng: -122.9369727 },
+        icon: "https://www.dropbox.com/s/v72zzdjfmr5ieup/avalanche1.png?dl=1"
       },
       {
         label: "Class position",
-        position: { lat: 50.097066, lng:  -122.953452},
-        icon: 'https://www.dropbox.com/s/m271ehpmvoxpqh2/school.png?dl=1'
+        position: { lat: 50.097066, lng: -122.953452 },
+        icon: "https://www.dropbox.com/s/m271ehpmvoxpqh2/school.png?dl=1"
       }
     ]
   }
