@@ -160,8 +160,10 @@
       const $maps = $('#maps')
       const my_channel_id = "C0G9QKBBL"
       const my_user_id = "W01a2A3CDE"
-      const radius = .05 // hard code small distance on map. 
-
+      const distanceToMove = .01 // hard code small distance on map. 
+      let MOVE_USER = false // used to move a user around the map. 
+      let timeoutUser = null
+      var myState = {}
 
       $messageForm.submit(e => {
         e.preventDefault()
@@ -174,17 +176,37 @@
         })
         $message.val('')
       })
+
       $moveUser.click(e => {
-        console.log('moveUser click')
         e.preventDefault()
-        socket.emit('user.move', {
-          user: my_user_id,
-          position: { lat: 50.106355374239335 + Math.random() * radius - radius/2, lng: -122.92235216122272 + Math.random() * radius - radius/2 }
-        })
+        // if MOVE_USER is true then user is moving 
+        if (MOVE_USER) {
+          console.log('moveUser', MOVE_USER)
+          MOVE_USER = false;
+          $moveUser.text("Move")
+          clearTimeout(timeoutUser)
+        } else {
+          console.log('moveUser', MOVE_USER)
+          MOVE_USER = true;
+          $moveUser.text("Stop")
+          timeoutUser = setInterval(() => {
+            myState.users.forEach(user => {
+              console.log('moveUser:socket.emit', user)
+              socket.emit('user.move', {
+                user: user.id,
+                position: {
+                  lat: user.position.lat + (Math.random() - .5) * distanceToMove,
+                  lng: user.position.lng + (Math.random() - .5) * distanceToMove
+                }
+              })
+            })
+          }, 5000)
+        }
       })
 
       socket.on('state', state => {
         // Render the state information. 
+        myState =  jQuery.extend({}, state)
         $messages.empty()
         state.messages.forEach(message => {
           $messages.append(`<tr><td>${message.user}</td><td>${message.channel_id}</td><td>${message.text}</td></tr>`)
