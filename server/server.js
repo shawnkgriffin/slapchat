@@ -44,7 +44,6 @@ io.sockets.on('connection', (socket) => {
         console.log( 'user.move', data.user, data.position)
         state.seed.users.forEach(user => {
             if (user.id ===data.user) {
-                console.log( 'user.move', user.position, data.position)
                 user.position = data.position
             }
         })
