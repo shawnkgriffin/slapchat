@@ -160,10 +160,11 @@
       const $maps = $('#maps')
       const my_channel_id = "C0G9QKBBL"
       const my_user_id = "W01a2A3CDE"
-      const distanceToMove = .01 // hard code small distance on map. 
+      const distanceToMove = .001 // hard code small distance on map. 
       let MOVE_USER = false // used to move a user around the map. 
       let timeoutUser = null
       var myState = {}
+      const timeoutValue = 1000 // move users every 1 seconds.
 
       $messageForm.submit(e => {
         e.preventDefault()
