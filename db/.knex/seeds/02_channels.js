@@ -5,7 +5,7 @@ exports.seed = function(knex, Promise) {
       return Promise.all([
         knex("channels").insert({
           name: "Ski Patrol",
-          private: true
+          private: false
         }),
         knex("channels").insert({
           name: "Maintenance",

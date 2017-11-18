@@ -1,13 +1,16 @@
 require("dotenv").config();
-console.log(process.env);
 module.exports = {
   development: {
     client: 'postgresql',
     connection: {
       host     : process.env.DB_HOST,
       password : process.env.DB_PASS,
-      database : process.env.DB_NAME,
+      database : process.env.DB_DATABASE,
       port     : process.env.DB_PORT
+    },
+    
+    migrations: {
+      directory: './migrations'
     },
     
     seeds: {
@@ -18,7 +21,7 @@ module.exports = {
   production: {
     client: 'postgresql',
     connection: {
-      database: process.env.DB_NAME,
+      database: process.env.DB_DATABASE,
       user:     process.env.DB_USER,
       password: process.env.DB_PASS
     },
@@ -26,9 +29,9 @@ module.exports = {
       min: 2,
       max: 10
     },
-    migrations: {
-      tableName: 'knex_migrations'
-    }
+    // migrations: {
+    //   tableName: 'knex_migrations'
+    // }
   }
 
 };
