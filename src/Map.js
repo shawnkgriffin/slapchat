@@ -17,7 +17,8 @@ class Map extends Component {
     this.props.users.forEach(user =>
       markers.push({
         label: user.name,
-        position: user.position
+        position: user.position,
+        icon: 'https://www.dropbox.com/s/bpewpbzoyhz0dku/skiing-blue.png?dl=1'
       })
     );
     return (

@@ -393,16 +393,19 @@ var seed = {
       {
         label: "Excelerator Chair",
         title: "Chair 138 out of service\nshould be replaced.",
-        position: { lat: 50.111600, lng:  -122.923411}
+        position: { lat: 50.111600, lng:  -122.923411},
+        icon: 'https://www.dropbox.com/s/mgqorxhch3tqcze/construction.png?dl=1'
       },
       {
         label: "Accident",
         title: "Skier down, require assistance",
-        position: { lat: 50.074817, lng:  -122.9369727}
+        position: { lat: 50.074817, lng:  -122.9369727},
+        icon: 'https://www.dropbox.com/s/v72zzdjfmr5ieup/avalanche1.png?dl=1'
       },
       {
         label: "Class position",
-        position: { lat: 50.097066, lng:  -122.953452}
+        position: { lat: 50.097066, lng:  -122.953452},
+        icon: 'https://www.dropbox.com/s/m271ehpmvoxpqh2/school.png?dl=1'
       }
     ]
   }
