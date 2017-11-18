@@ -6,7 +6,7 @@ function MessageList({messages, onNewMessage}){
   console.log(onNewMessage)
   return (
     <section className="message-interface">
-      <div className="message-container">
+      <div className="messages-container">
         {
           messages.map(message => {
             return <Message key={ message.id } message={ message } />

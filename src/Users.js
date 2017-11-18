@@ -4,10 +4,10 @@ import User from "./User.js";
 
 function Users({users}){
   return (
-    <div>
+    <div className="list-group">
         {
           users.map(user => {
-            return <User  key={user.id} user={ user }/>
+            return <User key={user.id} user={ user }/>
           })
         }
     </div>
