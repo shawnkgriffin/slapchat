@@ -6,26 +6,16 @@ class SideBar extends Component {
   render() {
 
     return (
-
       <div className="side-bar">
-          <ul>
-            <li className="user-info">
-              USER INFO
-            </li>
-            <li id="chat-title">
-              <p>All chats</p>
-            </li>
-            <li>
-              <ul id="channels">
-                <Channels channels={this.props.channels} />
-              </ul>
-            </li>
-            <li>
-              <ul id="direct-messages">
-                <Users users={this.props.users} />
-              </ul>
-            </li>
-          </ul>
+        <div className="user-info">
+          USER INFO
+        </div>
+        <section className="channels">
+            <Channels channels={this.props.channels} />
+        </section>
+        <section className="direct-messsages">
+            <Users users={this.props.users} />
+        </section>
       </div>
     );
   }

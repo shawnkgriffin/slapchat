@@ -1,9 +1,12 @@
 // bootstrap font bug workaround
 $icon-font-path: "../../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
 
+// bootflat bug workaround
+$img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
 // override vars here!
 
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../../node_modules/bootflat/bootflat/scss/bootflat.scss";
 
 .fixed-container {
   position: fixed;
@@ -12,56 +15,78 @@ $icon-font-path: "../../node_modules/bootstrap-sass/assets/fonts/bootstrap/";
   left: 0;
   bottom: 0;
   right: 0;
-}
 
-.nav-and-content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
+  .side-bar {
+    background-color: #A0D468;
+    display: flex;
+    flex-direction: column;
+    min-width: 200px;
+    justify-content: space-around;
 
-.messages-and-map {
-  display: flex;
-  flex-grow: 1;
-}
+    .user-info {
+      min-height: 60px;
+    }
 
-.side-bar {
-  background-color: #2ECC71;
-  min-width: 200px;
-}
+    .channels {
+      flex-grow: 2;
+    }
+    
+    .direct-messsages {
+      flex-grow: 2;
+    }
+  }
 
-.nav-bar {
-  background-color: #9B59B6;
-  color: #34495E;
-  min-height: 60px;
-}
+  .nav-and-content {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 
-.message-interface {
-  display: flex;
-  flex-direction: column;
-  background-color: #ECF0F1;
-  min-width: 400px;
-}
+    .nav-bar {
+      display: flex;
+      background-color: #BE90D4;
+      color: #34495E;
+      min-height: 60px;
+      align-items: center;
+    }
+    
+    .messages-and-map {
+      display: flex;
+      flex-grow: 1;
 
-.message-container {
-  flex-grow: 1;
-  padding: 20px; 
-}
+      .map-container {
+        background-color: #3498DB;
+        flex-grow: 1;
+      }
 
-.message {
-  padding: 5px;
-}
+      .message-interface {
+        display: flex;
+        flex-direction: column;
+        background-color: #ECF0F1;
+        min-width: 400px;
+      
+        .messages-container {
+          flex-grow: 1;
+          padding: 20px; 
 
-.chat-bar {
-  
-}
+          .message {
+            padding: 5px;
+          }
 
-#message-input {
-  min-height: 40px;
-  width: 100%;
-}
+          .chat-bar {
+            display: flex;
 
-.map-container {
-  background-color: #3498DB;
-  flex-grow: 1;
+            #message-input {
+              min-height: 40px;
+              flex-grow: 1;
+            }
+
+            button {
+              border-radius: 0;  
+              margin: 0;
+            }
+          }
+        }
+      }
+    }
+  }
 }

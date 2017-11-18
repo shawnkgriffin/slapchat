@@ -4,7 +4,7 @@ import Channel from "./Channel.js";
 
 function Channels({channels}){
   return (
-    <div>
+    <div className="list-group">
         {
           channels.map(channel => {
             return <Channel  key={channel.id} channel={ channel }/>
