@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import io from 'socket.io-client'
-import Map from './Map.js'
-import MessageList from './MessageList.js'
-import SideBar from './SideBar.js'
-import NavBar from './NavBar.js'
+import React, { Component } from "react";
+import io from "socket.io-client";
+import Map from "./Map.js";
+import MessageList from "./MessageList.js";
+import SideBar from "./SideBar.js";
+import NavBar from "./NavBar.js";
 
 class App extends Component {
   constructor(props) {
@@ -41,29 +41,26 @@ class App extends Component {
       avatar: this.state.currentUser.profile.image_24, // TODO rationalize and simplify the avatar to single image for us
       text: content
     });
-  }
+  };
 
   render() {
     console.log("SLAPSTATE", this.state);
     return (
       <div className="fixed-container">
-        <SideBar 
-          users={this.state.users}
-          channels={this.state.channels}
-        />
+        <SideBar users={this.state.users} channels={this.state.channels} />
         <main className="nav-and-content">
           <NavBar />
-        {this.state.loading ? (
-          <div>Loading</div>
-        ) : (
-          <section className="messages-and-map">
-            <MessageList 
-              messages={this.state.messages}
-              onNewMessage={this.onNewMessage}
-            />
-            <Map />
-          </section>
-        )}
+          {this.state.loading ? (
+            <div>Loading</div>
+          ) : (
+            <section className="messages-and-map">
+              <MessageList
+                messages={this.state.messages}
+                onNewMessage={this.onNewMessage}
+              />
+              <Map slapMap={this.state.slapMap} users={this.state.users} />
+            </section>
+          )}
         </main>
       </div>
     );
