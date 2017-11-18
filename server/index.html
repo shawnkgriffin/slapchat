@@ -21,12 +21,11 @@
 
     .action-pane {
       border: 2px solid red;
-      margin: 10px;
     }
 
     .left-pane {
-      min-width: 120px;
-      max-width: 120px;
+      min-width: 200px;
+      max-width: 200px;
       flex: 1 1 auto;
       flex-direction: column;
     }
@@ -39,7 +38,7 @@
 
     .map-container {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       height: 100%;
       justify-content: flex-start;
     }
@@ -71,7 +70,7 @@
     <div class="status-bar"></div>
     <div class="action-pane left-pane" channels-users-pane>
       <div class="channels-users">channels
-        <div class="table-responsive col-md-6">
+        <div class="table-responsive col-md-12">
           <table>
             <thead>
               <tr>
@@ -85,13 +84,13 @@
         </div>
       </div>
       <div class=" channels-users">users
-        <div class="table-responsive col-md-3">
+        <div class="table-responsive table-sm col-md-12">
           <table>
             <thead>
               <tr>
-                <th class="col-md-1">Avatar</th>
-                <th class="col-md-2">User</th>
-                <th class="col-md-3">User ID</th>
+                <th class="col-sm-1">Avatar</th>
+                <th class="col-sm-2">User</th>
+                <th class="col-sm-3">User ID</th>
               </tr>
             </thead>
             <tbody id="users">
@@ -102,13 +101,13 @@
     </div>
     <div class="center-pane">
       <div class="action-pane chat-body-area">
-        <div class="table-responsive col-md-6">
+        <div class="table-responsive table-sm col-sm-12">
           <table>
             <thead>
               <tr>
-                <th class="col-md-1">Sender</th>
-                <th class="col-md-2">Channel</th>
-                <th class="col-md-3">Message</th>
+                <th class="col-sm-1">Sender</th>
+                <th class="col-sm-2">Channel</th>
+                <th class="col-sm-3">Message</th>
               </tr>
             </thead>
             <tbody id="messages">
@@ -117,7 +116,7 @@
         </div>
       </div>
       <div class="action-pane chat-input-area">
-        <div class='col-md-4'>
+        <div class='col-md-12'>
           <form id='messageForm'>
             <div class='form-group'>
               <label>Enter Message</label>
@@ -130,11 +129,11 @@
       </div>
     </div>
     <div class="action-pane map-container">
-      <div class="table-responsive col-md-6">
+      <div class="table-responsive col-md-12">
         <table>
           <thead>
             <tr>
-              <th class="col-md-1">Pin</th>
+              <th class="col-md-1">Label</th>
               <th class="col-md-2">Lat</th>
               <th class="col-md-3">Long</th>
             </tr>
@@ -143,7 +142,7 @@
           </tbody>
         </table>
       </div>
-
+      <button type="button" class='col-md-2 btn btn-primary btn-sm' id="move_user">Move User</button>
     </div>
 
   </div>
@@ -153,25 +152,35 @@
       var socket = io.connect()
       const $messageForm = $('#messageForm')
       const $message = $('#send_message') // send message button
+      const $moveUser = $('#move_user') // move user button
       const $messages = $('#messages') // messsages table
       const $chat = $('#chat')
       const $users = $('#users')
       const $channels = $('#channels')
       const $maps = $('#maps')
       const my_channel_id = "C0G9QKBBL"
-      const my_user_id = "W012A3CDE"
+      const my_user_id = "W01a2A3CDE"
+      const radius = .05 // hard code small distance on map. 
 
 
       $messageForm.submit(e => {
         e.preventDefault()
         socket.emit('chat.postmessage', {
-          channel: my_channel_id, 
+          channel: my_channel_id,
           user: my_user_id,
           name: "shawn",
-          avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4", 
+          avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4",
           text: $message.val()
         })
         $message.val('')
+      })
+      $moveUser.click(e => {
+        console.log('moveUser click')
+        e.preventDefault()
+        socket.emit('user.move', {
+          user: my_user_id,
+          position: { lat: 50.106355374239335 + Math.random() * radius - radius/2, lng: -122.92235216122272 + Math.random() * radius - radius/2 }
+        })
       })
 
       socket.on('state', state => {
@@ -190,8 +199,12 @@
           $channels.append(`<tr><td>${channel.name}</td><td>${channel.id}</td></tr>`)
         })
         $maps.empty()
-        state.map.markers.forEach(marker => {
-          $maps.append(`<tr><td>${marker.name}</td><td>${marker.location[0]}</td><td>${marker.location[1]}</td></tr>`)
+        state.slapMap.markers.forEach(marker => {
+          $maps.append(`<tr><td>${marker.label}</td><td>${marker.position.lat}</td><td>${marker.position.lng}</td></tr>`)
+        })
+
+        state.users.forEach(user => {
+          $maps.append(`<tr><td>${user.name}</td><td>${user.position.lat}</td><td>${user.position.lng}</td></tr>`)
         })
       }
       )
