@@ -6,7 +6,6 @@ const MyMapComponent = withScriptjs(withGoogleMap((props) =>
       defaultZoom={13}
       defaultCenter={{ lat: 50.093284, lng: -122.934940 }}
     >
-      {props.isMarkerShown && <Marker position={{ lat: 50.059167, lng: -122.956944 }} /> }
       {props.markers.map((marker) => <Marker {...marker} />)}
     </GoogleMap>
   )
@@ -17,7 +16,8 @@ class Map extends Component {
     this.props.users.forEach(user =>
       markers.push({
         label: user.name,
-        position: user.position
+        position: user.position,
+        icon: 'https://www.dropbox.com/s/bpewpbzoyhz0dku/skiing-blue.png?dl=1'
       })
     );
     return (
