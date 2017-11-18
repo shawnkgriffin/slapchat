@@ -38,4 +38,16 @@ io.sockets.on('connection', (socket) => {
         io.sockets.emit('state', state.seed)
         console.log('chat.postmessage', message);
     });
+
+    // User moves
+    socket.on('user.move', (data) => {
+        console.log( 'user.move', data.user, data.position)
+        state.seed.users.forEach(user => {
+            if (user.id ===data.user) {
+                console.log( 'user.move', user.position, data.position)
+                user.position = data.position
+            }
+        })
+        io.sockets.emit('state', state.seed)
+    })
 });

@@ -38,7 +38,7 @@
 
     .map-container {
       display: flex;
-      flex-direction: row;
+      flex-direction: column;
       height: 100%;
       justify-content: flex-start;
     }
@@ -142,7 +142,7 @@
           </tbody>
         </table>
       </div>
-
+      <button type="button" class='btn btn-primary btn-sm' id="move_user">Move User</button>
     </div>
 
   </div>
@@ -152,25 +152,35 @@
       var socket = io.connect()
       const $messageForm = $('#messageForm')
       const $message = $('#send_message') // send message button
+      const $moveUser = $('#move_user') // move user button
       const $messages = $('#messages') // messsages table
       const $chat = $('#chat')
       const $users = $('#users')
       const $channels = $('#channels')
       const $maps = $('#maps')
       const my_channel_id = "C0G9QKBBL"
-      const my_user_id = "W012A3CDE"
+      const my_user_id = "W01a2A3CDE"
+      const radius = .05 // hard code small distance on map. 
 
 
       $messageForm.submit(e => {
         e.preventDefault()
         socket.emit('chat.postmessage', {
-          channel: my_channel_id, 
+          channel: my_channel_id,
           user: my_user_id,
           name: "shawn",
-          avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4", 
+          avatar: "https://avatars3.githubusercontent.com/u/8441361?s=40&v=4",
           text: $message.val()
         })
         $message.val('')
+      })
+      $moveUser.click(e => {
+        console.log('moveUser click')
+        e.preventDefault()
+        socket.emit('user.move', {
+          user: my_user_id,
+          position: { lat: 50.106355374239335 + Math.random() * radius - radius/2, lng: -122.92235216122272 + Math.random() * radius - radius/2 }
+        })
       })
 
       socket.on('state', state => {
@@ -191,6 +201,10 @@
         $maps.empty()
         state.slapMap.markers.forEach(marker => {
           $maps.append(`<tr><td>${marker.label}</td><td>${marker.position.lat}</td><td>${marker.position.lng}</td></tr>`)
+        })
+
+        state.users.forEach(user => {
+          $maps.append(`<tr><td>${user.name}</td><td>${user.position.lat}</td><td>${user.position.lng}</td></tr>`)
         })
       }
       )
