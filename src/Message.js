@@ -1,6 +1,7 @@
 import React from "react";
 
 function Message({ message }) {
+  console.log("MESSAGE", message);
   return (
     <div className="message">
       <img

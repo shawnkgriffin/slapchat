@@ -15,7 +15,7 @@ class App extends Component {
       messages: [],
       channels: [],
       loading: false,
-      currentUser: ""
+      currentUser: null
     };
     this.onNewMessage = this.onNewMessage.bind(this);
   }
@@ -90,7 +90,8 @@ class App extends Component {
           ) : (
             <section className="messages-and-map">
               <MessageList
-                messages={this.state.channel_messages}
+                channel_messages={this.state.channel_messages}
+                direct_messages={this.state.direct_messages}
                 onNewMessage={this.onNewMessage}
               />
               {/* <Map slapMap={this.state.slapMap} users={this.state.users} /> */}

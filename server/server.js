@@ -60,18 +60,27 @@ io.sockets.on("connection", socket => {
 
   //Get Direct_Messages
   socket.on("direct_messages.get", direct_message => {
-    knex
-      .select()
-      .from("direct_messages")
+    knex("direct_messages")
+      .join("users", "direct_messages.sender_user_id", "=", "users.id")
+      .select(
+        "direct_messages.sender_user_id",
+        "direct_messages.recipient_user_id",
+        "direct_messages.content",
+        "users.id",
+        "users.first_name",
+        "users.last_name",
+        "users.display_name",
+        "users.email",
+        "users.avatar"
+      )
       .then(direct_messages => {
-        console.log("DMS", direct_messages);
+        console.log("DM", direct_messages);
         socket.emit("direct_messages", direct_messages);
       });
   });
 
   //Post Direct_Messages
   socket.on("direct_message.post", direct_message => {
-    console.log(direct_message);
     knex
       .insert(direct_message)
       .into("direct_messages")
@@ -84,7 +93,6 @@ io.sockets.on("connection", socket => {
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
-    console.log(channel_message);
     knex
       .insert(channel_message)
       .into("channel_messages")
@@ -97,11 +105,9 @@ io.sockets.on("connection", socket => {
 
   //Get Channel_Messages
   socket.on("channel_messages.get", channel_message => {
-    knex
-      .from("channel_messages")
-      .leftJoin("users", "channel_messages.sender_user_id", "=", "users.id")
+    knex("channel_messages")
+      .join("users", "channel_messages.sender_user_id", "=", "users.id")
       .then(channels => {
-        console.log("join", channels);
         socket.emit("channel_messages", channels);
       });
   });
