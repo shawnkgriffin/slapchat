@@ -389,26 +389,30 @@ var seed = {
   slapMap: {
     defaultZoom: 13,
     defaultCenter: { lat: 50.089577, lng: -122.931307 },
+    polygons: [{}],
     markers: [
       {
         label: "Excelerator Chair",
         title: "Chair 138 out of service\nshould be replaced.",
         position: { lat: 50.1116, lng: -122.923411 },
         icon: "http://localhost:3001/construction.png",
-        draggable: true
+        draggable: true,
+        id: 1
       },
       {
         label: "Accident",
         title: "Skier down, require assistance",
         position: { lat: 50.074817, lng: -122.9369727 },
         icon: "http://localhost:3001/avalanche1.png",
-        draggable: true
+        draggable: true,
+        id: 2
       },
       {
         label: "Class position",
         position: { lat: 50.097066, lng: -122.953452 },
         icon: "http://localhost:3001/school.png",
-        draggable: true
+        draggable: true,
+        id: 3
       }
     ]
   }
