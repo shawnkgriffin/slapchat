@@ -5,6 +5,7 @@ import {
   GoogleMap,
   Marker
 } from "react-google-maps";
+const SERVER = "http://localhost:3001/"; // entered as Jira task to figure out how to handle server static info
 
 const MyMapComponent = withScriptjs(
   withGoogleMap(props => (
@@ -23,7 +24,7 @@ class Map extends Component {
       markers.push({
         label: user.name,
         position: user.position,
-        icon: "http://localhost:3001/skiing-blue.png"
+        icon: SERVER + "skiing-blue.png"
       })
     );
     return (

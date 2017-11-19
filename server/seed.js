@@ -295,7 +295,7 @@ var seed = {
       tz_offset: -25200,
       profile: {
         avatar_hash: "8fbdd10b41c6",
-        image_24: "http://localhost:3001/avatars/finn.png",
+        image_24: "http://localhost:3001/avatars/finn.png?dl=1",
         first_name: "Finn",
         last_name: "Hiltner",
         title: "Finn",
