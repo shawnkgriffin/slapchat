@@ -5,7 +5,8 @@ import {
   GoogleMap,
   Marker
 } from "react-google-maps";
-const SERVER = "http://localhost:3001/"; // entered as Jira task to figure out how to handle server static info
+const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
+// const GOOGLE_MAPS_KEY = "AIzaSyBFL2uwAAg3ymHvkirWLapG5yaV3mTFEzY"; // TODO fix this in .env
 
 const MyMapComponent = withScriptjs(
   withGoogleMap(props => (
@@ -32,7 +33,7 @@ class Map extends Component {
   }
 
   handleMarkerClick = marker => {
-    console.log("handleMarkerClick", marker);
+    console.log("handleMarkerClick", marker, this.map);
   };
   handleDragEnd = (marker, a, b) => {
     console.log("handleDragEnd", marker.latLng.lat(), marker.latLng.lat());
@@ -51,7 +52,7 @@ class Map extends Component {
       <div className="map-container">
         <MyMapComponent
           isMarkerShown
-          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+          googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=AIzaSyBFL2uwAAg3ymHvkirWLapG5yaV3mTFEzY"
           loadingElement={<div style={{ height: `100%` }} />}
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
