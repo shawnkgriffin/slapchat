@@ -14,14 +14,13 @@ console.log(state.seed);
 
 server.listen(process.env.PORT || 3001);
 
+console.log("/public", __dirname + "/public");
+app.use(express.static("public"));
+
 //Index HTML is for debugging
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
-
-console.log('/public', __dirname + "/public")
-app.use('/public', express.static(__dirname + "/public"));
-
 
 //Socket on connect
 io.sockets.on("connection", socket => {

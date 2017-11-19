@@ -201,7 +201,7 @@ var seed = {
       tz_label: "Pacific Daylight Time",
       tz_offset: -25200,
       profile: {
-        image_24: "https://www.dropbox.com/s/4pon02x9ufsbfgi/scott.jpg?dl=1",
+        image_24: "http://localhost:3001/avatars/scott.jpg",
         first_name: "Scott",
         last_name: "Dispatch",
         title: "Scott",
@@ -224,7 +224,7 @@ var seed = {
       tz_label: "Pacific Daylight Time",
       tz_offset: -25200,
       profile: {
-        image_24: "https://www.dropbox.com/s/o49uwc0hibhdmhe/Jessica.jpg?dl=1",
+        image_24: "http://localhost:3001/avatars/Jessica.jpg",
         first_name: "Jessica",
         last_name: "Ski School",
         title: "Jessica",
@@ -247,7 +247,7 @@ var seed = {
       tz_label: "Pacific Daylight Time",
       tz_offset: -25200,
       profile: {
-        image_24: "https://www.dropbox.com/s/xbgayosa4jekst8/tony.png?dl=1",
+        image_24: "http://localhost:3001/avatars/tony.png",
         first_name: "Tony",
         last_name: "Ski Patrol",
         title: "Tony",
@@ -270,7 +270,7 @@ var seed = {
       tz_label: "Pacific Daylight Time",
       tz_offset: -25200,
       profile: {
-        image_24: "https://www.dropbox.com/s/rtf0q8vraxhejql/bob.jpg?dl=1",
+        image_24: "http://localhost:3001/avatars/bob.jpg",
         first_name: "Bob",
         last_name: "Maintenance",
         title: "Bob",
@@ -295,7 +295,7 @@ var seed = {
       tz_offset: -25200,
       profile: {
         avatar_hash: "8fbdd10b41c6",
-        image_24: "https://www.dropbox.com/s/t63rr2yisnz4pdf/finn.png?dl=1",
+        image_24: "http://localhost:3001/avatars/finn.png",
         first_name: "Finn",
         last_name: "Hiltner",
         title: "Finn",
@@ -394,18 +394,21 @@ var seed = {
         label: "Excelerator Chair",
         title: "Chair 138 out of service\nshould be replaced.",
         position: { lat: 50.1116, lng: -122.923411 },
-        icon: "https://www.dropbox.com/s/mgqorxhch3tqcze/construction.png?dl=1"
+        icon: "http://localhost:3001/construction.png",
+        draggable: true
       },
       {
         label: "Accident",
         title: "Skier down, require assistance",
         position: { lat: 50.074817, lng: -122.9369727 },
-        icon: "https://www.dropbox.com/s/v72zzdjfmr5ieup/avalanche1.png?dl=1"
+        icon: "http://localhost:3001/avalanche1.png",
+        draggable: true
       },
       {
         label: "Class position",
         position: { lat: 50.097066, lng: -122.953452 },
-        icon: "https://www.dropbox.com/s/m271ehpmvoxpqh2/school.png?dl=1"
+        icon: "http://localhost:3001/school.png",
+        draggable: true
       }
     ]
   }

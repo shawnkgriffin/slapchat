@@ -23,7 +23,7 @@ class Map extends Component {
       markers.push({
         label: user.name,
         position: user.position,
-        icon: "https://www.dropbox.com/s/bpewpbzoyhz0dku/skiing-blue.png?dl=1"
+        icon: "http://localhost:3001/skiing-blue.png"
       })
     );
     return (
