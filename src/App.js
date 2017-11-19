@@ -28,6 +28,40 @@ class App extends Component {
         currentUser: slapState.users[0]
       });
     });
+    this.socket.emit("users.get", {
+      user: 0,
+    });
+    this.socket.emit("channels.get", {
+      user: 0,
+    });
+    this.socket.emit("direct_messages.get", {
+      user: 0,
+    });
+    this.socket.emit("direct_message.post", {
+      sender_user_id: 33,
+      recipient_user_id: 34,
+      content: "text"
+    });
+    this.socket.emit("channel_messages.get", {
+      user: 0,
+    });
+    this.socket.emit("channel_message.post", {
+      sender_user_id: 33,
+      channel_id: 13,
+      content: "text"
+    });
+    this.socket.on("users", users => {
+      this.setState({users: users})
+    });
+    this.socket.on("channels", channels => {
+      this.setState({channels: channels})
+    })
+    this.socket.on("direct_messages", direct_messages => {
+      this.setState({direct_messages: direct_messages})
+    })
+    this.socket.on("channel_messages", channel_messages => {
+      this.setState({channel_messages: channel_messages})
+    })
   }
 
   // when we get a new message, send it to the server
@@ -44,7 +78,6 @@ class App extends Component {
   };
 
   render() {
-    console.log("SLAPSTATE", this.state);
     return (
       <div className="fixed-container">
         <SideBar users={this.state.users} channels={this.state.channels} />
