@@ -29,6 +29,7 @@
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "knex": "^0.14.0",
+    "knex-logger": "^0.1.0",
     "node-sass": "^4.6.1",
     "object-assign": "4.1.1",
     "pg": "^7.4.0",
