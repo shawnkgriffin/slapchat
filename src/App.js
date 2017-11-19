@@ -10,9 +10,11 @@ class App extends Component {
     super(props);
     this.state = {
       users: [],
+      direct_messages: [],
+      channel_messages: [],
       messages: [],
       channels: [],
-      loading: true,
+      loading: false,
       currentUser: ""
     };
     this.onNewMessage = this.onNewMessage.bind(this);
@@ -21,47 +23,47 @@ class App extends Component {
   //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io("localhost:3001");
-    this.socket.on("state", slapState => {
-      this.setState({
-        ...slapState,
-        loading: false,
-        currentUser: slapState.users[0]
-      });
-    });
+    // this.socket.on("state", slapState => {
+    //   this.setState({
+    //     ...slapState,
+    //     loading: false,
+    //     currentUser: slapState.users[0]
+    //   });
+    // });
     this.socket.emit("users.get", {
-      user: 0,
+      user: 0
     });
     this.socket.emit("channels.get", {
-      user: 0,
+      user: 0
     });
     this.socket.emit("direct_messages.get", {
-      user: 0,
-    });
-    this.socket.emit("direct_message.post", {
-      sender_user_id: 33,
-      recipient_user_id: 34,
-      content: "text"
+      user: 0
     });
     this.socket.emit("channel_messages.get", {
-      user: 0,
+      user: 0
     });
-    this.socket.emit("channel_message.post", {
-      sender_user_id: 33,
-      channel_id: 13,
-      content: "text"
-    });
+    // this.socket.emit("direct_message.post", {
+    //   sender_user_id: 2,
+    //   recipient_user_id: 3,
+    //   content: "text"
+    // });
+    // this.socket.emit("channel_message.post", {
+    //   sender_user_id: 2,
+    //   channel_id: 3,
+    //   content: "text"
+    // });
     this.socket.on("users", users => {
-      this.setState({users: users})
+      this.setState({ users: users });
     });
     this.socket.on("channels", channels => {
-      this.setState({channels: channels})
-    })
+      this.setState({ channels: channels });
+    });
     this.socket.on("direct_messages", direct_messages => {
-      this.setState({direct_messages: direct_messages})
-    })
+      this.setState({ direct_messages: direct_messages });
+    });
     this.socket.on("channel_messages", channel_messages => {
-      this.setState({channel_messages: channel_messages})
-    })
+      this.setState({ channel_messages: channel_messages });
+    });
   }
 
   // when we get a new message, send it to the server
@@ -88,10 +90,10 @@ class App extends Component {
           ) : (
             <section className="messages-and-map">
               <MessageList
-                messages={this.state.messages}
+                messages={this.state.channel_messages}
                 onNewMessage={this.onNewMessage}
               />
-              <Map slapMap={this.state.slapMap} users={this.state.users} />
+              {/* <Map slapMap={this.state.slapMap} users={this.state.users} /> */}
             </section>
           )}
         </main>

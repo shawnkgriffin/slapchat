@@ -5,12 +5,11 @@ function User({ user }) {
     <div className="user list-group-item">
       <img
         className="Avatar test2"
-        src={user.profile.image_24}
-        alt={user.name}
+        src={user.avatar}
+        alt={user.display_name}
         style={{ width: 24, height: 24 }}
       />
-      <span className="user-username">{user.name}</span>
-      <span className="user-content">{user.text}</span>
+      <span className="user-username">{user.display_name}</span>
     </div>
   );
 }
