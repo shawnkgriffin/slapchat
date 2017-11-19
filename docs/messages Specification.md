@@ -16,6 +16,7 @@ this.socket.emit("direct_message.post", {
       text: content
 }
 this.socket.emit{"user.move", {user: user.id, position: { lat: 50.1116, lng: -122.923411 }}}
+this.props.sendServer("marker.move", marker)
 
 ```
 # Server will send the data after retrieving from the db.  

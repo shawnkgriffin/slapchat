@@ -16,6 +16,7 @@ class App extends Component {
       currentUser: ""
     };
     this.onNewMessage = this.onNewMessage.bind(this);
+    this.sendServer = this.sendServer.bind(this);
   }
 
   //RECIVES STATE DATA
@@ -43,6 +44,13 @@ class App extends Component {
     });
   };
 
+  // When a lower level component needs to send something to the server
+  // it calls sendServer(action, payload)
+  sendServer = function sendServer(action, payload) {
+    console.log("sendServer", action, payload);
+    this.socket.emit(action, payload);
+  };
+
   render() {
     console.log("SLAPSTATE", this.state);
     return (
@@ -58,7 +66,11 @@ class App extends Component {
                 messages={this.state.messages}
                 onNewMessage={this.onNewMessage}
               />
-              <Map slapMap={this.state.slapMap} users={this.state.users} />
+              <Map
+                sendServer={this.sendServer}
+                slapMap={this.state.slapMap}
+                users={this.state.users}
+              />
             </section>
           )}
         </main>

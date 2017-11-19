@@ -16,8 +16,8 @@ const MyMapComponent = withScriptjs(
     >
       {props.markers.map((marker, index) => (
         <Marker
-          onClick={props.onMarkerClick}
-          onDragEnd={props.onDragEnd}
+          onClick={markerState => props.onMarkerClick(marker, markerState)}
+          onDragEnd={markerState => props.onDragEnd(marker, markerState)}
           key={index}
           {...marker}
         />
@@ -32,11 +32,23 @@ class Map extends Component {
     this.handleDragEnd = this.handleDragEnd.bind(this);
   }
 
-  handleMarkerClick = marker => {
-    console.log("handleMarkerClick", marker, this.map);
+  handleMarkerClick = (marker, markerState) => {
+    console.log("google:", window.google);
+    console.log("handleMarkerClick", marker, markerState);
   };
-  handleDragEnd = (marker, a, b) => {
-    console.log("handleDragEnd", marker.latLng.lat(), marker.latLng.lat());
+  handleDragEnd = (marker, markerState) => {
+    console.log(
+      "handleDragEnd",
+      marker,
+      markerState.latLng.lat(),
+      markerState.latLng.lng(),
+      markerState
+    );
+    marker.position = {
+      lat: markerState.latLng.lat(),
+      lng: markerState.latLng.lng()
+    };
+    this.props.sendServer("marker.move", marker);
   };
 
   render() {
