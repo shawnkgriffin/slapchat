@@ -77,7 +77,27 @@ io.sockets.on("connection", socket => {
         socket.emit("direct_messages", direct_messages);
       });
   });
+  //Get Layers
+  socket.on("layers.get", layer => {
+    knex
+      .select()
+      .from("layers")
+      .then(layers => {
+        console.log("LAYERS", layers);
+        socket.emit("layers", layers);
+      });
+  });
 
+  //Get Markers
+  socket.on("markers.get", marker => {
+    knex
+      .select()
+      .from("markers")
+      .then(markers => {
+        console.log("MARKERS", markers);
+        socket.emit("markers", markers);
+      });
+  });
   //Post Direct_Messages
   socket.on("direct_message.post", direct_message => {
     knex
@@ -92,7 +112,6 @@ io.sockets.on("connection", socket => {
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
-    console.log("channel_message.post", channel_message);
     knex
       .insert(channel_message)
       .into("channel_messages")

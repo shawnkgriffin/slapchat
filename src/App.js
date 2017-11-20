@@ -30,6 +30,12 @@ class App extends Component {
     this.socket.emit("users.get", {
       user: 0
     });
+    this.socket.emit("layers.get", {
+      user: 0
+    });
+    this.socket.emit("markers.get", {
+      user: 0
+    });
     this.socket.emit("channels.get", {
       user: 0
     });

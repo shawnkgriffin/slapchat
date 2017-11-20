@@ -24,3 +24,5 @@ yarn-error.log*
 *.sql
 
 .env
+/server/.env
+/db/.knex/.env
