@@ -92,6 +92,7 @@ io.sockets.on("connection", socket => {
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
+    console.log("channel_message.post", channel_message);
     knex
       .insert(channel_message)
       .into("channel_messages")
