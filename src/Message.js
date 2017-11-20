@@ -3,14 +3,20 @@ import React from "react";
 function Message({ message }) {
   return (
     <div className="message">
-      <img
-        className="Avatar test2"
-        src={message.avatar}
-        alt={message.display_name}
-        style={{ width: 24, height: 24 }}
-      />
-      <span className="message-username">{message.display_name}</span>
-      <span className="message-content">{message.content}</span>
+      <div className="left-of-message">
+        <img
+          className="message-avatar"
+          src={message.avatar}
+          alt={message.display_name}
+        />
+      </div>
+      <div className="message-info-and-content">
+        <div className="message-info">
+          <span className="message-username">{message.display_name}</span>
+          <span className="message-time">4:21</span>
+        </div>
+        <span className="message-content">{message.content}</span>
+      </div>
     </div>
   );
 }

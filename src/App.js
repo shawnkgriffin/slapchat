@@ -20,6 +20,7 @@ class App extends Component {
       currentDirectMessage: null
     };
     this.onNewMessage = this.onNewMessage.bind(this);
+    this.sendServer = this.sendServer.bind(this);
   }
 
   //RECIVES STATE DATA
@@ -88,6 +89,13 @@ class App extends Component {
     this.socket.emit(action, payload);
   };
 
+  // When a lower level component needs to send something to the server
+  // it calls sendServer(action, payload)
+  sendServer = function sendServer(action, payload) {
+    console.log("sendServer", action, payload);
+    this.socket.emit(action, payload);
+  };
+
   render() {
     return (
       <div className="fixed-container">
@@ -103,7 +111,11 @@ class App extends Component {
                 direct_messages={this.state.direct_messages}
                 onNewMessage={this.onNewMessage}
               />
-              {/* <Map slapMap={this.state.slapMap} users={this.state.users} /> */}
+              {/* <Map
+                sendServer={this.sendServer}
+                // slapMap={this.state.slapMap}
+                users={this.state.users}
+              /> */}
             </section>
           )}
         </main>

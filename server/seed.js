@@ -397,7 +397,8 @@ var seed = {
         position: { lat: 50.1116, lng: -122.923411 },
         icon: "http://localhost:3001/construction.png",
         draggable: true,
-        id: 1
+        id: 1,
+        user_id: 1 // creator or last person to change it
       },
       {
         label: "Accident",
@@ -405,14 +406,16 @@ var seed = {
         position: { lat: 50.074817, lng: -122.9369727 },
         icon: "http://localhost:3001/avalanche1.png",
         draggable: true,
-        id: 2
+        id: 2,
+        user_id: 1 // creator or last person to change it
       },
       {
         label: "Class position",
         position: { lat: 50.097066, lng: -122.953452 },
         icon: "http://localhost:3001/school.png",
         draggable: true,
-        id: 3
+        id: 3,
+        user_id: 1 // creator or last person to change it
       }
     ]
   }

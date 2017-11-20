@@ -112,6 +112,12 @@ io.sockets.on("connection", socket => {
       });
   });
 
+  //Marker moves
+  socket.on("marker.move", marker => {
+    console.log("marker.move", marker);
+    io.sockets.emit("marker.move", marker);
+  });
+
   // User moves
   socket.on("user.move", data => {
     console.log("user.move", data.user, data.position);

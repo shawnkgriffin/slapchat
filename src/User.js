@@ -2,15 +2,15 @@ import React from "react";
 
 function User({ user }) {
   return (
-    <div className="user list-group-item">
+    <li className="user list-group-item">
       <img
-        className="Avatar test2"
+        className="direct-message-list-avatar"
         src={user.avatar}
-        alt={user.display_name}
+        alt=""
         style={{ width: 24, height: 24 }}
       />
       <span className="user-username">{user.display_name}</span>
-    </div>
+    </li>
   );
 }
 

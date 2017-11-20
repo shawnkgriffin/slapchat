@@ -27,13 +27,15 @@ class ChatBar extends Component {
     return (
       <div className="chat-bar">
         <input
-          id="message-input"
+          className="message-input"
           placeholder="Type a message and hit ENTER"
           onKeyPress={this.onMessageSubmit}
           onChange={this.onMessageChange}
           value={this.state.content}
         />
-        <button className="btn btn-primary">Send</button>
+        <button id="message-submit-button" className="btn btn-primary">
+          Send
+        </button>
       </div>
     );
   }
