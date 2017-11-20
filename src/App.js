@@ -66,6 +66,14 @@ class App extends Component {
         channel_messages: this.state.channel_messages.concat(channel_message)
       });
     });
+    this.socket.on("markers", markers => {
+      this.setState({ markers: markers });
+      console.log("markers", markers);
+    });
+    this.socket.on("layers", layers => {
+      this.setState({ layers: layers });
+      console.log("layers", layers);
+    });
   }
 
   // when we get a new message, send it to the server
