@@ -49,21 +49,26 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
     }
     .list-group {
       margin-bottom: 0;
-      // border-style: none;
+      border-style: none;
+      border-radius: 0;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
     }
+
+    .list-group-item:hover {
+      background-color: ghostwhite;
+      font-style: italic;
+      font-weight: bold;
+      border-radius: 0;
+    }
+    
     .channels {
       flex-grow: 1;
-
-      .list-group-item {
-        border-radius: 0;
-      }
     }
 
     .direct-messsages {
       flex-grow: 1;
-      .list-group-item {
-        border-radius: 0;
-      }
     }
   }
 
@@ -144,13 +149,14 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
 
 .chat-bar {
   display: flex;
-    min-height: 40px;
+  min-height: 40px;
 
 }
 
 .message-input {
   width: 100%;
   flex-grow: 1;
+  border: none;
 }
 
 #message-submit-button {
