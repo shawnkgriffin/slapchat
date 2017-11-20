@@ -16,7 +16,7 @@ const MyMapComponent = withScriptjs(
   withGoogleMap(props => (
     <GoogleMap
       defaultZoom={13}
-      defaultCenter={{ lat: 50.093284, lng: -122.93494 }}
+      defaultCenter={{ lat: 50.093284, lng: -122.93494 }} // Whistler
     >
       {props.markers.map((marker, index) => (
         <Marker
@@ -101,7 +101,7 @@ class Map extends Component {
   };
 
   render() {
-    const markers = this.props.slapMap.markers || [];
+    const markers = this.props.markers || [];
     this.props.users.forEach(user =>
       markers.push({
         label: user.name,

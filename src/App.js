@@ -14,6 +14,8 @@ class App extends Component {
       channel_messages: [],
       messages: [],
       channels: [],
+      markers: [],
+      layers: [],
       loading: false,
       currentUser: null,
       currentChannel: null,
@@ -39,6 +41,9 @@ class App extends Component {
     this.socket.emit("channel_messages.get", {
       user: 0
     });
+    this.socket.emit("markers.get", {
+      user: 0
+    });
     this.socket.on("users", users => {
       this.setState({ users: users, currentUser: users[0].id });
       console.log("users", users[0].id);
@@ -51,7 +56,6 @@ class App extends Component {
       this.setState({ direct_messages: direct_messages });
     });
     this.socket.on("channel_messages", channel_messages => {
-      console.log("CHANNEL_MESSAGES", channel_messages);
       channel_messages.type = "channel_messages";
       this.setState({ channel_messages: channel_messages });
     });
@@ -59,6 +63,12 @@ class App extends Component {
       this.setState({
         channel_messages: this.state.channel_messages.concat(channel_message)
       });
+    });
+    this.socket.on("markers", markers => {
+      this.setState({ markers: markers });
+    });
+    this.socket.on("layers", layers => {
+      this.setState({ layers: layers });
     });
   }
 
@@ -111,11 +121,11 @@ class App extends Component {
                 direct_messages={this.state.direct_messages}
                 onNewMessage={this.onNewMessage}
               />
-              {/* <Map
+              <Map
                 sendServer={this.sendServer}
-                // slapMap={this.state.slapMap}
+                markers={this.state.markers}
                 users={this.state.users}
-              /> */}
+              />
             </section>
           )}
         </main>
