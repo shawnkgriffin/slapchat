@@ -94,17 +94,46 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
   display: flex;
   flex-direction: column;
   background-color: #ECF0F1;
-  min-width: 400px;
+  width: 400px;
 
   .messages-container {
     flex-grow: 1;
-    padding: 20px;
     overflow-y: scroll;
 
     .message {
-      padding: 5px;
+      display:flex;
+      padding: 3px 10px;
+      background-color: red;
+      border: solid black 1px;
+      // overflow-wrap: normal;
+    }
+    
+    .message-info-and-content {
+      display: flex;
+      flex-direction: column;
+      // flex-grow: 1;
+      background-color: chartreuse;
+      overflow-wrap: normal;
+    }
+    .message-info {
+      display: flex;
+      background: white;
     }
 
+    .message-content {
+      flex-grow: 1;
+      display: flex;
+      background-color: yellow;
+      overflow-wrap: normal;
+    }
+
+    .left-of-message {
+      padding-right: 10px;
+    }
+
+    .avatar {
+      border-radius: 5px;
+    }
   }
 }
 
