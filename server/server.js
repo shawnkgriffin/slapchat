@@ -96,9 +96,9 @@ io.sockets.on("connection", socket => {
     knex
       .insert(channel_message)
       .into("channel_messages")
-      .returning("id")
-      .then(id => {
-        channel_message.id = id;
+      .returning("content")
+      .then(content => {
+        channel_message.content = content;
         io.sockets.emit("channel_message.post", channel_message);
       });
   });

@@ -54,13 +54,11 @@ class App extends Component {
       channel_messages.type = "channel_messages";
       this.setState({ channel_messages: channel_messages });
     });
-
-    // TODO fix this.
-    // this.socket.on("channel_message.post", channel_message => {
-    //   this.setState({
-    //     channel_messages: this.state.channel_messages.push(channel_message)
-    //   });
-    // });
+    this.socket.on("channel_message.post", channel_message => {
+      this.setState({
+        channel_messages: this.state.channel_messages.concat(channel_message)
+      });
+    });
   }
 
   // when we get a new message, send it to the server
