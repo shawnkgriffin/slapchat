@@ -6,7 +6,7 @@ function User({ user }) {
       <img
         className="Avatar test2"
         src={user.profile.image_24}
-        alt={user.name}
+        alt=""
         style={{ width: 24, height: 24 }}
       />
       <span className="user-username">{user.name}</span>
