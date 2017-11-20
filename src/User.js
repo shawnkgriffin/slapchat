@@ -5,12 +5,11 @@ function User({ user }) {
     <li className="user list-group-item">
       <img
         className="direct-message-list-avatar"
-        src={user.profile.image_24}
+        src={user.avatar}
         alt=""
         style={{ width: 24, height: 24 }}
       />
-      <span className="user-username">{user.name}</span>
-      <span className="user-content">{user.text}</span>
+      <span className="user-username">{user.display_name}</span>
     </li>
   );
 }

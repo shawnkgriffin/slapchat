@@ -10,10 +10,14 @@ class App extends Component {
     super(props);
     this.state = {
       users: [],
+      direct_messages: [],
+      channel_messages: [],
       messages: [],
       channels: [],
-      loading: true,
-      currentUser: ""
+      loading: false,
+      currentUser: null,
+      currentChannel: null,
+      currentDirectMessage: null
     };
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
@@ -22,11 +26,38 @@ class App extends Component {
   //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io("localhost:3001");
-    this.socket.on("state", slapState => {
+
+    this.socket.emit("users.get", {
+      user: 0
+    });
+    this.socket.emit("channels.get", {
+      user: 0
+    });
+    this.socket.emit("direct_messages.get", {
+      user: 0
+    });
+    this.socket.emit("channel_messages.get", {
+      user: 0
+    });
+    this.socket.on("users", users => {
+      this.setState({ users: users, currentUser: users[0].id });
+      console.log("users", users[0].id);
+    });
+    this.socket.on("channels", channels => {
+      this.setState({ channels: channels, currentChannel: channels[0].id });
+      console.log("channels", channels[0].id);
+    });
+    this.socket.on("direct_messages", direct_messages => {
+      this.setState({ direct_messages: direct_messages });
+    });
+    this.socket.on("channel_messages", channel_messages => {
+      console.log("CHANNEL_MESSAGES", channel_messages);
+      channel_messages.type = "channel_messages";
+      this.setState({ channel_messages: channel_messages });
+    });
+    this.socket.on("channel_message.post", channel_message => {
       this.setState({
-        ...slapState,
-        loading: false,
-        currentUser: slapState.users[0]
+        channel_messages: this.state.channel_messages.concat(channel_message)
       });
     });
   }
@@ -35,13 +66,27 @@ class App extends Component {
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
     // Send the msg object as a JSON-formatted string.
-    this.socket.emit("chat.postmessage", {
-      channel: this.state.channels[0].id, // TODO should use the selected channel or userid.
-      user: this.state.currentUser.id,
-      name: this.state.currentUser.name,
-      avatar: this.state.currentUser.profile.image_24, // TODO rationalize and simplify the avatar to single image for us
-      text: content
-    });
+    let action =
+      this.state.currentChannel != null
+        ? "channel_message.post"
+        : "direct_message.post";
+    let payload = {};
+
+    if (action === "channel_message.post") {
+      payload = {
+        sender_user_id: this.state.currentUser,
+        channel_id: this.state.currentChannel,
+        content: content
+      };
+    } else {
+      payload = {
+        sender_user_id: this.state.currentUser,
+        recipient_user_id: this.state.currentDirectMessage,
+        content: content
+      };
+    }
+    console.log("onNewMessage", action, payload);
+    this.socket.emit(action, payload);
   };
 
   // When a lower level component needs to send something to the server
@@ -52,7 +97,6 @@ class App extends Component {
   };
 
   render() {
-    console.log("SLAPSTATE", this.state);
     return (
       <div className="fixed-container">
         <SideBar users={this.state.users} channels={this.state.channels} />
@@ -63,14 +107,15 @@ class App extends Component {
           ) : (
             <section className="messages-and-map">
               <MessageList
-                messages={this.state.messages}
+                channel_messages={this.state.channel_messages}
+                direct_messages={this.state.direct_messages}
                 onNewMessage={this.onNewMessage}
               />
-              <Map
+              {/* <Map
                 sendServer={this.sendServer}
-                slapMap={this.state.slapMap}
+                // slapMap={this.state.slapMap}
                 users={this.state.users}
-              />
+              /> */}
             </section>
           )}
         </main>

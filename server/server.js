@@ -1,3 +1,8 @@
+require("dotenv").config();
+
+const ENV = process.env.ENV || "development";
+const knexConfig = require("../db/.knex/knexfile.js");
+const knex = require("knex")(knexConfig[ENV]);
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
@@ -10,7 +15,6 @@ let connections = [];
 // TODO refactor into a require file.
 
 let state = require("./seed.js");
-console.log(state.seed);
 
 server.listen(process.env.PORT || 3001);
 
@@ -34,12 +38,78 @@ io.sockets.on("connection", socket => {
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
-  //Recieve Messages
-  socket.on("chat.postmessage", message => {
-    message.id = uuidv4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
-    state.seed.messages.push(message);
-    io.sockets.emit("state", state.seed);
-    console.log("chat.postmessage", message);
+  //Get Users
+  socket.on("users.get", user => {
+    knex
+      .select()
+      .from("users")
+      .then(users => {
+        socket.emit("users", users);
+      });
+  });
+
+  // Get Channels
+  socket.on("channels.get", channel => {
+    knex
+      .select()
+      .from("channels")
+      .then(channels => {
+        socket.emit("channels", channels);
+      });
+  });
+
+  //Get Direct_Messages
+  socket.on("direct_messages.get", direct_message => {
+    knex("direct_messages")
+      .join("users", "direct_messages.sender_user_id", "=", "users.id")
+      .select(
+        "direct_messages.sender_user_id",
+        "direct_messages.recipient_user_id",
+        "direct_messages.content",
+        "users.id",
+        "users.first_name",
+        "users.last_name",
+        "users.display_name",
+        "users.email",
+        "users.avatar"
+      )
+      .then(direct_messages => {
+        socket.emit("direct_messages", direct_messages);
+      });
+  });
+
+  //Post Direct_Messages
+  socket.on("direct_message.post", direct_message => {
+    knex
+      .insert(direct_message)
+      .into("direct_messages")
+      .returning("id")
+      .then(id => {
+        direct_message.id = id;
+        io.sockets.emit("direct_message.post", direct_message);
+      });
+  });
+
+  //Post Channel_Message
+  socket.on("channel_message.post", channel_message => {
+    console.log("channel_message.post", channel_message);
+    knex
+      .insert(channel_message)
+      .into("channel_messages")
+      .returning("content")
+      .then(content => {
+        channel_message.content = content;
+        io.sockets.emit("channel_message.post", channel_message);
+      });
+  });
+
+  //Get Channel_Messages
+  socket.on("channel_messages.get", channel_message => {
+    knex("channel_messages")
+      .join("users", "channel_messages.sender_user_id", "=", "users.id")
+      .then(channel_messages => {
+        socket.emit("channel_messages", channel_messages);
+      });
   });
 
   //Marker moves
