@@ -4,7 +4,11 @@ function Message({ message }) {
   return (
     <div className="message">
       <div className="left-of-message">
-        <img className="avatar" src={message.avatar} alt={message.name} />
+        <img
+          className="message-avatar"
+          src={message.avatar}
+          alt={message.name}
+        />
       </div>
       <div className="message-info-and-content">
         <div className="message-info">

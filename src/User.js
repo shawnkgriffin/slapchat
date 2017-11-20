@@ -4,7 +4,7 @@ function User({ user }) {
   return (
     <li className="user list-group-item">
       <img
-        className="Avatar test2"
+        className="direct-message-list-avatar"
         src={user.profile.image_24}
         alt=""
         style={{ width: 24, height: 24 }}
