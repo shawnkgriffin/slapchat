@@ -15,7 +15,9 @@ class App extends Component {
       messages: [],
       channels: [],
       loading: false,
-      currentUser: null
+      currentUser: null,
+      currentChannel: null,
+      currentDirectMessage: null
     };
     this.onNewMessage = this.onNewMessage.bind(this);
   }
@@ -53,10 +55,12 @@ class App extends Component {
     //   content: "text"
     // });
     this.socket.on("users", users => {
-      this.setState({ users: users });
+      this.setState({ users: users, currentUser: users[0].id });
+      console.log("users", users[0].id);
     });
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels });
+      this.setState({ channels: channels, currentChannel: channels[0].id });
+      console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -64,19 +68,40 @@ class App extends Component {
     this.socket.on("channel_messages", channel_messages => {
       this.setState({ channel_messages: channel_messages });
     });
+
+    // TODO fix this.
+    // this.socket.on("channel_message.post", channel_message => {
+    //   this.setState({
+    //     channel_messages: this.state.channel_messages.push(channel_message)
+    //   });
+    // });
   }
 
   // when we get a new message, send it to the server
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
     // Send the msg object as a JSON-formatted string.
-    this.socket.emit("chat.postmessage", {
-      channel: this.state.channels[0].id, // TODO should use the selected channel or userid.
-      user: this.state.currentUser.id,
-      name: this.state.currentUser.name,
-      avatar: this.state.currentUser.profile.image_24, // TODO rationalize and simplify the avatar to single image for us
-      text: content
-    });
+    let action =
+      this.state.currentChannel != null
+        ? "channel_message.post"
+        : "direct_message.post";
+    let payload = {};
+
+    if (action === "channel_message.post") {
+      payload = {
+        sender_user_id: this.state.currentUser,
+        channel_id: this.state.currentChannel,
+        content: content
+      };
+    } else {
+      payload = {
+        sender_user_id: this.state.currentUser,
+        recipient_user_id: this.state.currentDirectMessage,
+        content: content
+      };
+    }
+    console.log("onNewMessage", action, payload);
+    this.socket.emit(action, payload);
   };
 
   render() {
