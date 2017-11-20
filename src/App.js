@@ -23,13 +23,7 @@ class App extends Component {
   //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io("localhost:3001");
-    // this.socket.on("state", slapState => {
-    //   this.setState({
-    //     ...slapState,
-    //     loading: false,
-    //     currentUser: slapState.users[0]
-    //   });
-    // });
+
     this.socket.emit("users.get", {
       user: 0
     });
@@ -42,16 +36,6 @@ class App extends Component {
     this.socket.emit("channel_messages.get", {
       user: 0
     });
-    // this.socket.emit("direct_message.post", {
-    //   sender_user_id: 2,
-    //   recipient_user_id: 3,
-    //   content: "text"
-    // });
-    // this.socket.emit("channel_message.post", {
-    //   sender_user_id: 2,
-    //   channel_id: 3,
-    //   content: "text"
-    // });
     this.socket.on("users", users => {
       this.setState({ users: users });
     });
@@ -62,21 +46,24 @@ class App extends Component {
       this.setState({ direct_messages: direct_messages });
     });
     this.socket.on("channel_messages", channel_messages => {
+      console.log("CHANNEL_MESSAGES", channel_messages);
+      channel_messages.type = "channel_messages";
       this.setState({ channel_messages: channel_messages });
     });
   }
-
-  // when we get a new message, send it to the server
-  // this will be called from the ChatBar component when a user presses the enter key.
-  onNewMessage = function onNewMessage(content) {
-    // Send the msg object as a JSON-formatted string.
-    this.socket.emit("chat.postmessage", {
-      channel: this.state.channels[0].id, // TODO should use the selected channel or userid.
-      user: this.state.currentUser.id,
-      name: this.state.currentUser.name,
-      avatar: this.state.currentUser.profile.image_24, // TODO rationalize and simplify the avatar to single image for us
-      text: content
-    });
+  onNewMessage = function onNewMessage(message) {
+    console.log("MESSAGE TYPE", message);
+    message.type === "direct_message"
+      ? this.socket.emit("direct_message.post", {
+          sender_user_id: 41,
+          recipient_user_id: 42,
+          content: message.content
+        })
+      : this.socket.emit("channel_message.post", {
+          sender_user_id: 41,
+          channel_id: 16,
+          content: message.content
+        });
   };
 
   render() {

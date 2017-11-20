@@ -74,7 +74,6 @@ io.sockets.on("connection", socket => {
         "users.avatar"
       )
       .then(direct_messages => {
-        console.log("DM", direct_messages);
         socket.emit("direct_messages", direct_messages);
       });
   });
@@ -107,16 +106,9 @@ io.sockets.on("connection", socket => {
   socket.on("channel_messages.get", channel_message => {
     knex("channel_messages")
       .join("users", "channel_messages.sender_user_id", "=", "users.id")
-      .then(channels => {
-        socket.emit("channel_messages", channels);
+      .then(channel_messages => {
+        socket.emit("channel_messages", channel_messages);
       });
-  });
-
-  //Recieve Messages
-  socket.on("chat.postmessage", message => {
-    message.id = uuidv4(); // -> '110ec58a-a0f2-4ac4-8393-c866d813b8d1'
-    state.seed.messages.push(message);
-    io.sockets.emit("state", state.seed);
   });
 
   // User moves
