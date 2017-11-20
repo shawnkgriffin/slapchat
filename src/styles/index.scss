@@ -15,9 +15,12 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
   left: 0;
   bottom: 0;
   right: 0;
+  
+ 
 
   .side-bar {
     background-color: #A0D468;
+    background-color: #FFF;
     display: flex;
     flex-direction: column;
     min-width: 200px;
@@ -25,14 +28,32 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
 
     .user-info {
       min-height: 60px;
+      display: flex;
+      align-items: center;
     }
 
-    .channels {
-      flex-grow: 2;
+
+    .side-bar-nav {
+        overflow-y: scroll;
+        flex-grow: 1;
     }
-    
+    .list-group {
+      margin-bottom: 0;
+      // border-style: none;
+    }
+    .channels {
+      flex-grow: 1;
+
+      .list-group-item {
+        border-radius: 0;
+      }
+    }
+
     .direct-messsages {
-      flex-grow: 2;
+      flex-grow: 1;
+      .list-group-item {
+        border-radius: 0;
+      }
     }
   }
 
@@ -44,49 +65,56 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
     .nav-bar {
       display: flex;
       background-color: #BE90D4;
-      color: #34495E;
+      padding: 5px;
       min-height: 60px;
       align-items: center;
     }
-    
+
     .messages-and-map {
       display: flex;
       flex-grow: 1;
 
       .map-container {
-        background-color: #3498DB;
         flex-grow: 1;
       }
 
-      .message-interface {
-        display: flex;
-        flex-direction: column;
-        background-color: #ECF0F1;
-        min-width: 400px;
-      
-        .messages-container {
-          flex-grow: 1;
-          padding: 20px; 
 
-          .message {
-            padding: 5px;
-          }
-
-          .chat-bar {
-            display: flex;
-
-            #message-input {
-              min-height: 40px;
-              flex-grow: 1;
-            }
-
-            button {
-              border-radius: 0;  
-              margin: 0;
-            }
-          }
-        }
-      }
     }
   }
+}
+
+.message-interface {
+  display: flex;
+  flex-direction: column;
+  background-color: #ECF0F1;
+  min-width: 400px;
+
+  .messages-container {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: scroll;
+
+    .message {
+      padding: 5px;
+    }
+
+  }
+}
+
+
+
+.chat-bar {
+  display: flex;
+    min-height: 40px;
+
+}
+
+.message-input {
+  width: 100%;
+  flex-grow: 1;
+}
+
+#message-submit-button {
+  border-radius: 0;
+  margin: 0;
 }

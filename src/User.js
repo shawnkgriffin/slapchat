@@ -2,7 +2,7 @@ import React from "react";
 
 function User({ user }) {
   return (
-    <div className="user list-group-item">
+    <li className="user list-group-item">
       <img
         className="Avatar test2"
         src={user.profile.image_24}
@@ -11,7 +11,7 @@ function User({ user }) {
       />
       <span className="user-username">{user.name}</span>
       <span className="user-content">{user.text}</span>
-    </div>
+    </li>
   );
 }
 
