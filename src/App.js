@@ -23,6 +23,7 @@ class App extends Component {
     };
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
+    this.onChannelCallback = this.onChannelCallback.bind(this);
   }
 
   //RECIVES STATE DATA
@@ -126,10 +127,18 @@ class App extends Component {
     this.socket.emit(action, payload);
   };
 
+  onChannelCallback = function onChannelCallback() {
+    console.log("Channel Callback");
+  };
+
   render() {
     return (
       <div className="fixed-container">
-        <SideBar users={this.state.users} channels={this.state.channels} />
+        <SideBar
+          onChannelCallback={this.onChannelCallback}
+          users={this.state.users}
+          channels={this.state.channels}
+        />
         <main className="nav-and-content">
           <NavBar currentUser={this.state.currentUser} />
           {this.state.loading ? (

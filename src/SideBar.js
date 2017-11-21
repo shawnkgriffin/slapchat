@@ -11,7 +11,10 @@ class SideBar extends Component {
         <div className="side-bar-nav">
           <section className="channels">
             <span className="side-bar-section-header">Channels</span>
-            <Channels channels={this.props.channels} />
+            <Channels
+              onChannelCallback={this.props.onChannelCallback}
+              channels={this.props.channels}
+            />
           </section>
           <section className="direct-messsages">
             <span className="side-bar-section-header">Direct Messages</span>

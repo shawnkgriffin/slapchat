@@ -1,8 +1,13 @@
 import React from "react";
 
-function Channel({ channel }) {
+function Channel({ channel, onChannelCallback }) {
   return (
-    <li className="channel-channelname list-group-item">{channel.name}</li>
+    <li
+      onClick={onChannelCallback}
+      className="channel-channelname list-group-item"
+    >
+      {channel.name}
+    </li>
   );
 }
 
