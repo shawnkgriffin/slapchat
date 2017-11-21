@@ -78,7 +78,7 @@ class App extends Component {
       this.setState({ layers: layers });
     });
     this.socket.on("user.move", data => {
-      this.setState({ users: data.position });
+      console.log("user.move", data);
     });
   }
 

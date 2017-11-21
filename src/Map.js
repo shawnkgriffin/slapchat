@@ -104,8 +104,11 @@ class Map extends Component {
     const markers = this.props.markers || [];
     this.props.users.forEach(user =>
       markers.push({
-        label: user.name,
-        position: user.position,
+        label: user.display_name,
+        position: {
+          lat: 50.093284 + (Math.random() - 0.5) * 0.075, // calculated to keep them in the map area.
+          lng: -122.93494 + (Math.random() - 0.5) * 0.075
+        },
         icon: SERVER + "skiing-blue.png"
       })
     );
