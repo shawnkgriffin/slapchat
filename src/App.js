@@ -51,7 +51,7 @@ class App extends Component {
       user: 0
     });
     this.socket.on("users", users => {
-      this.setState({ users: users, currentUser: users[0].id });
+      this.setState({ users: users, currentUser: users[0] });
       console.log("users", users[0].id);
     });
     this.socket.on("channels", channels => {
@@ -67,8 +67,18 @@ class App extends Component {
     });
     this.socket.on("channel_message.post", channel_message => {
       console.log("channel_message.post", channel_message);
+      channel_message.avatar = this.state.currentUser.avatar;
+      channel_message.display_name = this.state.currentUser.display_name;
       this.setState({
         channel_messages: this.state.channel_messages.concat(channel_message)
+      });
+    });
+    this.socket.on("direct_message.post", direct_message => {
+      console.log("direct_message.post", direct_message);
+      direct_message.avatar = this.state.currentUser.avatar;
+      direct_message.display_name = this.state.currentUser.display_name;
+      this.setState({
+        direct_messages: this.state.direct_messages.concat(direct_message)
       });
     });
     this.socket.on("markers", markers => {
@@ -94,7 +104,7 @@ class App extends Component {
 
     if (action === "channel_message.post") {
       payload = {
-        sender_user_id: this.state.currentUser,
+        sender_user_id: this.state.currentUser.id,
         channel_id: this.state.currentChannel,
         content: content
       };

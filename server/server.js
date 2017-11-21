@@ -117,6 +117,7 @@ io.sockets.on("connection", socket => {
   });
   //Post Direct_Messages
   socket.on("direct_message.post", direct_message => {
+    console.log("direct_message.post", direct_message);
     knex
       .insert(direct_message)
       .into("direct_messages")
@@ -129,12 +130,13 @@ io.sockets.on("connection", socket => {
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
+    console.log("channel_message.post", channel_message);
     knex
       .insert(channel_message)
       .into("channel_messages")
-      .returning("content")
-      .then(content => {
-        channel_message.content = content;
+      .returning("id")
+      .then(id => {
+        channel_message.id = id;
         io.sockets.emit("channel_message.post", channel_message);
       });
   });

@@ -14,7 +14,6 @@ class ChatBar extends Component {
       this.setState({ content: "" });
       this.props.onNewMessage(this.state.content);
     }
-    console.log(this.state);
   }
 
   // need an on change event
