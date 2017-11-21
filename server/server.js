@@ -44,6 +44,15 @@ io.sockets.on("connection", socket => {
       .select()
       .from("users")
       .then(users => {
+        users.forEach(user => {
+          let latLng = user.location
+            .substr(1)
+            .slice(0, -1)
+            .split(", ")
+            .map(str => Number(str));
+          user.position = { lat: latLng[0], lng: latLng[1] };
+        });
+        console.log("users", users);
         socket.emit("users", users);
       });
   });

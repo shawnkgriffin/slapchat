@@ -105,10 +105,7 @@ class Map extends Component {
     this.props.users.forEach(user =>
       markers.push({
         label: user.display_name,
-        position: {
-          lat: 50.093284 + (Math.random() - 0.5) * 0.075, // calculated to keep them in the map area.
-          lng: -122.93494 + (Math.random() - 0.5) * 0.075
-        },
+        position: user.position,
         icon: SERVER + "skiing-blue.png"
       })
     );
