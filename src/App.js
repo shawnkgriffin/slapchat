@@ -133,6 +133,8 @@ class App extends Component {
     console.log("Channel Callback", channel);
     // set the messages container to point to the current channel
     this.setState({
+      currentChannel: channel.id,
+      currentDirectMessage: null,
       messages: this.state.channel_messages.filter(
         channel_message => channel_message.channel_id === channel.id
       )
@@ -144,6 +146,8 @@ class App extends Component {
     console.log("User Callback", user);
     // set the messages container to point to the current channel
     this.setState({
+      currentChannel: null,
+      currentDirectMessage: user.id,
       messages: this.state.direct_messages.filter(
         direct_message =>
           (direct_message.sender_user_id === this.state.currentUser.id &&
