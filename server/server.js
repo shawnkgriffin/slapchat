@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const ENV = process.env.ENV || "development";
-const knexConfig = require("../db/.knex/knexfile.js");
+const knexConfig = require("../knexfile.js");
 const knex = require("knex")(knexConfig[ENV]);
 const express = require("express");
 const app = express();
@@ -19,7 +19,7 @@ let state = require("./seed.js");
 server.listen(process.env.PORT || 3001);
 
 console.log("/public", __dirname + "/public");
-app.use(express.static("public"));
+app.use(express.static("./server/public"));
 
 //Index HTML is for debugging
 app.get("/", (req, res) => {
