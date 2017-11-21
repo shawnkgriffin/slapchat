@@ -9,10 +9,12 @@ exports.up = function(knex, Promise) {
       table.string("email");
       table.string("avatar");
       table.string("location");
+      table.timestamps(true, true);
     })
     .createTable("layers", function(table) {
       table.increments("id").primary();
       table.string("layer_name");
+      table.timestamps(true, true);
     })
     .createTable("markers", function(table) {
       table.increments("id").primary();
@@ -30,11 +32,13 @@ exports.up = function(knex, Promise) {
       table.string("label");
       table.string("icon");
       table.boolean("draggable");
+      table.timestamps(true, true);
     })
     .createTable("channels", function(table) {
       table.increments("id").primary();
       table.string("name");
       table.boolean("private");
+      table.timestamps(true, true);
     })
     .createTable("direct_messages", function(table) {
       table.increments("id").primary();
@@ -49,6 +53,7 @@ exports.up = function(knex, Promise) {
         .inTable("users")
         .onDelete("CASCADE");
       table.string("content");
+      table.timestamps(true, true);
     })
     .createTable("channel_messages", function(table) {
       table.increments("id").primary();
@@ -63,6 +68,7 @@ exports.up = function(knex, Promise) {
         .inTable("channels")
         .onDelete("CASCADE");
       table.string("content");
+      table.timestamps(true, true);
     })
     .createTable("location_data", function(table) {
       table.increments("id").primary();
@@ -72,6 +78,7 @@ exports.up = function(knex, Promise) {
         .inTable("users")
         .onDelete("CASCADE");
       table.string("location");
+      table.timestamps(true, true);
     })
     .createTable("user_channels", function(table) {
       table.increments("id").primary();
@@ -85,6 +92,7 @@ exports.up = function(knex, Promise) {
         .references("id")
         .inTable("channels")
         .onDelete("CASCADE");
+      table.timestamps(true, true);
     });
 };
 

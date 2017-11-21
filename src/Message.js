@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 
 function Message({ message }) {
@@ -13,7 +14,9 @@ function Message({ message }) {
       <div className="message-info-and-content">
         <div className="message-info">
           <span className="message-username">{message.display_name}</span>
-          <span className="message-time">4:21</span>
+          <span className="message-time">
+            {moment(message.created_at).fromNow()}
+          </span>
         </div>
         <span className="message-content">{message.content}</span>
       </div>
