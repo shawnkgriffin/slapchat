@@ -7,7 +7,7 @@ class SideBar extends Component {
   render() {
     return (
       <div className="side-bar">
-        <UserInfo />
+        <UserInfo currentUser={this.props.currentUser} />
         <div className="side-bar-nav">
           <section className="channels">
             <span className="side-bar-section-header">Channels</span>

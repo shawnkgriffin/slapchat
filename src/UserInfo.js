@@ -4,8 +4,10 @@ class UserInfo extends Component {
   render() {
     return (
       <section className="user-info">
-        <div>DeBarge:</div>
-        <div>Patrol</div>
+        <div>
+          {this.props.currentUser ? this.props.currentUser.display_name : "?"}
+        </div>
+        <div />
       </section>
     );
   }

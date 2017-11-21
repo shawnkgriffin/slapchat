@@ -131,7 +131,7 @@ class App extends Component {
       <div className="fixed-container">
         <SideBar users={this.state.users} channels={this.state.channels} />
         <main className="nav-and-content">
-          <NavBar />
+          <NavBar currentUser={this.state.currentUser} />
           {this.state.loading ? (
             <div>Loading</div>
           ) : (
