@@ -24,6 +24,7 @@ class App extends Component {
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
+    this.onUserCallback = this.onUserCallback.bind(this);
   }
 
   //RECIVES STATE DATA
@@ -130,6 +131,25 @@ class App extends Component {
   //this callback is when the user clicks on a channel
   onChannelCallback = function onChannelCallback(channel) {
     console.log("Channel Callback", channel);
+    // set the messages container to point to the current channel
+    this.setState({
+      messages: this.state.channel_messages.filter(
+        channel_message => channel_message.channel_id === channel.id
+      )
+    });
+  };
+
+  //this callback is when the user clicks on a channel
+  onUserCallback = function onUserCallback(user) {
+    console.log("User Callback", user);
+    // set the messages container to point to the current channel
+    this.setState({
+      messages: this.state.direct_messages.filter(
+        direct_message =>
+          direct_message.sender_user_id === user.id ||
+          direct_message.recipient_user_id === user.id
+      )
+    });
   };
 
   render() {
@@ -137,6 +157,7 @@ class App extends Component {
       <div className="fixed-container">
         <SideBar
           onChannelCallback={this.onChannelCallback}
+          onUserCallback={this.onUserCallback}
           users={this.state.users}
           channels={this.state.channels}
         />
@@ -147,8 +168,7 @@ class App extends Component {
           ) : (
             <section className="messages-and-map">
               <MessageList
-                channel_messages={this.state.channel_messages}
-                direct_messages={this.state.direct_messages}
+                messages={this.state.messages}
                 onNewMessage={this.onNewMessage}
               />
               <Map

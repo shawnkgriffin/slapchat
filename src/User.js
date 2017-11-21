@@ -1,8 +1,11 @@
 import React from "react";
 
-function User({ user }) {
+function User({ user, onUserCallback }) {
   return (
-    <li className="user list-group-item">
+    <li
+      className="user list-group-item"
+      onClick={userState => onUserCallback(user, userState)}
+    >
       <img
         className="direct-message-list-avatar"
         src={user.avatar}

@@ -18,7 +18,10 @@ class SideBar extends Component {
           </section>
           <section className="direct-messsages">
             <span className="side-bar-section-header">Direct Messages</span>
-            <Users users={this.props.users} />
+            <Users
+              onUserCallback={this.props.onUserCallback}
+              users={this.props.users}
+            />
           </section>
         </div>
       </div>
