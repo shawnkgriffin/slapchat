@@ -8,6 +8,7 @@ exports.up = function(knex, Promise) {
       table.string("display_name");
       table.string("email");
       table.string("avatar");
+      table.string("location");
     })
     .createTable("layers", function(table) {
       table.increments("id").primary();
@@ -88,6 +89,8 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema
+    .dropTable("markers")
+    .dropTable("layers")
     .dropTable("user_channels")
     .dropTable("location_data")
     .dropTable("channel_messages")
