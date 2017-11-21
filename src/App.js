@@ -31,6 +31,7 @@ class App extends Component {
   componentDidMount() {
     this.socket = io("localhost:3001");
 
+    // successful login will cause everything to fill
     this.socket.emit("user.login", {
       email: "shawn@shawngriffin.com",
       password: "slapme"
