@@ -68,25 +68,64 @@ class App extends Component {
       this.setState({ channel_messages: channel_messages });
     });
 
-    // if we get a new message
+    // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
       console.log("channel_message.post", channel_message);
+      channel_message.avatar = this.state.users.find(
+        user => user.id === channel_message.sender_user_id
+      ).avatar;
+      channel_message.display_name = this.state.users.find(
+        user => user.id === channel_message.sender_user_id
+      ).display_name;
+      let channel_messages = this.state.channel_messages.concat(
+        channel_message
+      );
       this.setState({
-        channel_messages: this.state.channel_messages.concat([channel_message])
+        channel_messages: channel_messages
       });
       // check to see if we need to upate the message list
-      if (channel_message.id === this.state.currentChannel)
+      if (channel_message.channel_id === this.state.currentChannel)
         this.setState({
-          messages: this.state.messages.concat([channel_message])
+          messages: channel_messages.filter(
+            channel_message => channel_message.id === this.state.currentChannel
+          )
         });
     });
+
+    // Receive a direct message
     this.socket.on("direct_message.post", direct_message => {
       console.log("direct_message.post", direct_message);
-      direct_message.avatar = this.state.currentUser.avatar;
-      direct_message.display_name = this.state.currentUser.display_name;
+      direct_message.avatar = this.state.users.find(
+        user => user.id === direct_message.sender_user_id
+      ).avatar;
+      direct_message.display_name = this.state.users.find(
+        user => user.id === direct_message.sender_user_id
+      ).display_name;
+      let direct_messages = this.state.direct_messages.concat([direct_message]);
       this.setState({
-        direct_messages: this.state.direct_messages.concat(direct_message)
+        direct_messages: direct_messages
       });
+
+      // check to see if we need to update the message list
+      // logic is sender id = current direct message && recipient = currentUser or
+      // sended id = current user && recipient === current direct message
+      if (
+        (direct_message.sender_user_id === this.state.currentDirectMessage &&
+          direct_message.recipient_user_id === this.state.currentUser.id) ||
+        (direct_message.sender_user_id === this.state.currentUser.id &&
+          direct_message.recipient_user_id === this.state.currentDirectMessage)
+      )
+        this.setState({
+          messages: direct_messages.filter(
+            message =>
+              (direct_message.sender_id === this.state.currentDirectMessage &&
+                direct_message.recipient_user_id ===
+                  this.state.currentUser.id) ||
+              (direct_message.sender_id === this.state.currentUser.id &&
+                direct_message.recipient_user_id ===
+                  this.state.currentDirectMessage)
+          )
+        });
     });
     this.socket.on("markers", markers => {
       this.setState({ markers: markers });
@@ -117,7 +156,7 @@ class App extends Component {
       };
     } else {
       payload = {
-        sender_user_id: this.state.currentUser,
+        sender_user_id: this.state.currentUser.id,
         recipient_user_id: this.state.currentDirectMessage,
         content: content
       };

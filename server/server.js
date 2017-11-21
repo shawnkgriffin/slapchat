@@ -125,6 +125,7 @@ io.sockets.on("connection", socket => {
       .then(id => {
         direct_message.id = id;
         io.sockets.emit("direct_message.post", direct_message);
+        console.log("emit(direct_message.post", direct_message);
       });
   });
 
