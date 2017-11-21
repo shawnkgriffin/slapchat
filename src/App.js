@@ -67,13 +67,18 @@ class App extends Component {
       channel_messages.type = "channel_messages";
       this.setState({ channel_messages: channel_messages });
     });
+
+    // if we get a new message
     this.socket.on("channel_message.post", channel_message => {
       console.log("channel_message.post", channel_message);
-      channel_message.avatar = this.state.currentUser.avatar;
-      channel_message.display_name = this.state.currentUser.display_name;
       this.setState({
-        channel_messages: this.state.channel_messages.concat(channel_message)
+        channel_messages: this.state.channel_messages.concat([channel_message])
       });
+      // check to see if we need to upate the message list
+      if (channel_message.id === this.state.currentChannel)
+        this.setState({
+          messages: this.state.messages.concat([channel_message])
+        });
     });
     this.socket.on("direct_message.post", direct_message => {
       console.log("direct_message.post", direct_message);
