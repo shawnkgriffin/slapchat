@@ -127,8 +127,9 @@ class App extends Component {
     this.socket.emit(action, payload);
   };
 
-  onChannelCallback = function onChannelCallback() {
-    console.log("Channel Callback");
+  //this callback is when the user clicks on a channel
+  onChannelCallback = function onChannelCallback(channel) {
+    console.log("Channel Callback", channel);
   };
 
   render() {
