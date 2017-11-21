@@ -31,30 +31,17 @@ class App extends Component {
   componentDidMount() {
     this.socket = io("localhost:3001");
 
-    this.socket.emit("users.get", {
-      user: 0
+    this.socket.emit("user.login", {
+      email: "shawn@shawngriffin.com",
+      password: "slapme"
     });
-    this.socket.emit("layers.get", {
-      user: 0
-    });
-    this.socket.emit("markers.get", {
-      user: 0
-    });
-    this.socket.emit("channels.get", {
-      user: 0
-    });
-    this.socket.emit("direct_messages.get", {
-      user: 0
-    });
-    this.socket.emit("channel_messages.get", {
-      user: 0
-    });
-    this.socket.emit("markers.get", {
-      user: 0
-    });
+
     this.socket.on("users", users => {
-      this.setState({ users: users, currentUser: users[0] });
+      this.setState({ users: users });
       console.log("users", users[0].id);
+    });
+    this.socket.on("user.logged_in", user => {
+      this.setState({ currentUser: user });
     });
     this.socket.on("channels", channels => {
       this.setState({ channels: channels, currentChannelId: channels[0].id });
