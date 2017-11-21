@@ -94,6 +94,14 @@ io.sockets.on("connection", socket => {
       .select()
       .from("markers")
       .then(markers => {
+        markers.forEach(marker => {
+          let latLng = marker.location
+            .substr(1)
+            .slice(0, -1)
+            .split(", ")
+            .map(str => Number(str));
+          marker.position = { lat: latLng[0], lng: latLng[1] };
+        });
         console.log("MARKERS", markers);
         socket.emit("markers", markers);
       });
@@ -140,11 +148,7 @@ io.sockets.on("connection", socket => {
   // User moves
   socket.on("user.move", data => {
     console.log("user.move", data.user, data.position);
-    state.seed.users.forEach(user => {
-      if (user.id === data.user) {
-        user.position = data.position;
-      }
-    });
-    io.sockets.emit("state", state.seed);
+    // TODO save to locations.
+    io.sockets.emit("user.move", data);
   });
 });
