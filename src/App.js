@@ -17,9 +17,9 @@ class App extends Component {
       markers: [],
       layers: [],
       loading: false,
-      currentUser: null,
-      currentChannel: null,
-      currentDirectMessage: null
+      currentUser: null, // this is a user object
+      currentChannelId: null, //this is a channel ID
+      currentDirectMessageId: null //
     };
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
@@ -57,7 +57,7 @@ class App extends Component {
       console.log("users", users[0].id);
     });
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels, currentChannel: channels[0].id });
+      this.setState({ channels: channels, currentChannelId: channels[0].id });
       console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
@@ -84,10 +84,11 @@ class App extends Component {
         channel_messages: channel_messages
       });
       // check to see if we need to upate the message list
-      if (channel_message.channel_id === this.state.currentChannel)
+      if (channel_message.channel_id === this.state.currentChannelId)
         this.setState({
           messages: channel_messages.filter(
-            channel_message => channel_message.id === this.state.currentChannel
+            channel_message =>
+              channel_message.id === this.state.currentChannelId
           )
         });
     });
@@ -110,20 +111,21 @@ class App extends Component {
       // logic is sender id = current direct message && recipient = currentUser or
       // sended id = current user && recipient === current direct message
       if (
-        (direct_message.sender_user_id === this.state.currentDirectMessage &&
+        (direct_message.sender_user_id === this.state.currentDirectMessageId &&
           direct_message.recipient_user_id === this.state.currentUser.id) ||
         (direct_message.sender_user_id === this.state.currentUser.id &&
-          direct_message.recipient_user_id === this.state.currentDirectMessage)
+          direct_message.recipient_user_id ===
+            this.state.currentDirectMessageId)
       )
         this.setState({
           messages: direct_messages.filter(
             message =>
-              (direct_message.sender_id === this.state.currentDirectMessage &&
+              (direct_message.sender_id === this.state.currentDirectMessageId &&
                 direct_message.recipient_user_id ===
                   this.state.currentUser.id) ||
               (direct_message.sender_id === this.state.currentUser.id &&
                 direct_message.recipient_user_id ===
-                  this.state.currentDirectMessage)
+                  this.state.currentDirectMessageId)
           )
         });
     });
@@ -143,7 +145,7 @@ class App extends Component {
   onNewMessage = function onNewMessage(content) {
     // Send the msg object as a JSON-formatted string.
     let action =
-      this.state.currentChannel != null
+      this.state.currentChannelId != null
         ? "channel_message.post"
         : "direct_message.post";
     let payload = {};
@@ -151,13 +153,13 @@ class App extends Component {
     if (action === "channel_message.post") {
       payload = {
         sender_user_id: this.state.currentUser.id,
-        channel_id: this.state.currentChannel,
+        channel_id: this.state.currentChannelId,
         content: content
       };
     } else {
       payload = {
         sender_user_id: this.state.currentUser.id,
-        recipient_user_id: this.state.currentDirectMessage,
+        recipient_user_id: this.state.currentDirectMessageId,
         content: content
       };
     }
@@ -177,8 +179,8 @@ class App extends Component {
     console.log("Channel Callback", channel);
     // set the messages container to point to the current channel
     this.setState({
-      currentChannel: channel.id,
-      currentDirectMessage: null,
+      currentChannelId: channel.id,
+      currentDirectMessageId: null,
       messages: this.state.channel_messages.filter(
         channel_message => channel_message.channel_id === channel.id
       )
@@ -190,8 +192,8 @@ class App extends Component {
     console.log("User Callback", user);
     // set the messages container to point to the current channel
     this.setState({
-      currentChannel: null,
-      currentDirectMessage: user.id,
+      currentChannelId: null,
+      currentDirectMessageId: user.id,
       messages: this.state.direct_messages.filter(
         direct_message =>
           (direct_message.sender_user_id === this.state.currentUser.id &&
