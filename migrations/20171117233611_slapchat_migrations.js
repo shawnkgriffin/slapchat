@@ -29,6 +29,7 @@ exports.up = function(knex, Promise) {
       table.string("location");
       table.string("label");
       table.string("icon");
+      table.boolean("draggable");
     })
     .createTable("channels", function(table) {
       table.increments("id").primary();

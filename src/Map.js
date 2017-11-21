@@ -27,17 +27,23 @@ const MyMapComponent = withScriptjs(
         />
       ))}
       <DrawingManager
-        defaultDrawingMode={window.google.maps.drawing.OverlayType.CIRCLE}
         defaultOptions={{
           drawingControl: true,
           drawingControlOptions: {
             position: window.google.maps.ControlPosition.TOP_CENTER,
             drawingModes: [
+              window.google.maps.drawing.OverlayType.MARKER,
               window.google.maps.drawing.OverlayType.CIRCLE,
               window.google.maps.drawing.OverlayType.POLYGON,
               window.google.maps.drawing.OverlayType.POLYLINE,
               window.google.maps.drawing.OverlayType.RECTANGLE
             ]
+          },
+          markerOptions: {
+            clickable: true,
+            draggable: true,
+            editable: true,
+            zIndex: 1
           },
           circleOptions: {
             fillColor: "#f91616",
