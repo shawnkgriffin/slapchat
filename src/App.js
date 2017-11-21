@@ -162,6 +162,7 @@ class App extends Component {
           onUserCallback={this.onUserCallback}
           users={this.state.users}
           channels={this.state.channels}
+          currentUser={this.state.currentUser}
         />
         <main className="nav-and-content">
           <NavBar currentUser={this.state.currentUser} />

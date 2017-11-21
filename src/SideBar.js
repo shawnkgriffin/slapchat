@@ -21,6 +21,7 @@ class SideBar extends Component {
             <Users
               onUserCallback={this.props.onUserCallback}
               users={this.props.users}
+              currentUser={this.props.currentUser}
             />
           </section>
         </div>
