@@ -1,7 +1,12 @@
 import React from "react";
 import Channel from "./Channel.js";
 
-function Channels({ channels, onChannelCallback }) {
+function Channels({
+  channels,
+  onChannelCallback,
+  activeUserId,
+  activeChannelId
+}) {
   return (
     <ul className="list-group">
       {channels.map(channel => {
@@ -10,6 +15,8 @@ function Channels({ channels, onChannelCallback }) {
             onChannelCallback={onChannelCallback}
             key={channel.id}
             channel={channel}
+            activeChannelId={activeChannelId}
+            activeUserId={activeUserId}
           />
         );
       })}
