@@ -3,8 +3,12 @@ import {
   withScriptjs,
   withGoogleMap,
   GoogleMap,
-  Marker
+  Marker,
+  TrafficLayer
 } from "react-google-maps";
+const {
+  SearchBox
+} = require("react-google-maps/lib/components/places/SearchBox");
 const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
@@ -18,6 +22,7 @@ const MyMapComponent = withScriptjs(
       defaultZoom={13}
       defaultCenter={{ lat: 50.093284, lng: -122.93494 }} // Whistler
     >
+      <TrafficLayer autoUpdate />
       {props.markers.map((marker, index) => (
         <Marker
           onClick={markerState => props.onMarkerClick(marker, markerState)}
@@ -26,6 +31,30 @@ const MyMapComponent = withScriptjs(
           {...marker}
         />
       ))}
+      <SearchBox
+        ref={props.onSearchBoxMounted}
+        bounds={props.bounds}
+        controlPosition={window.google.maps.ControlPosition.TOP_LEFT}
+        onPlacesChanged={props.onPlacesChanged}
+      >
+        <input
+          type="text"
+          placeholder="Search locations..."
+          style={{
+            boxSizing: `border-box`,
+            border: `1px solid transparent`,
+            width: `240px`,
+            height: `32px`,
+            marginTop: `10px`,
+            padding: `0 12px`,
+            borderRadius: `3px`,
+            boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
+            fontSize: `14px`,
+            outline: `none`,
+            textOverflow: `ellipses`
+          }}
+        />
+      </SearchBox>
       <DrawingManager
         defaultOptions={{
           drawingControl: true,
@@ -111,13 +140,13 @@ class Map extends Component {
     this.props.sendServer("marker.move", marker);
   };
   onCircleComplete = e => {
-    console.log("onCircleComplete", e);
+    console.log("onCircleComplete", e.center.lat(), e.center.lng(), e.radius);
   };
   onMarkerComplete = e => {
-    console.log("onMarkerComplete", e);
+    console.log("onMarkerComplete", e.position.lat(), e.position.lng());
   };
   onPolygonComplete = e => {
-    console.log("onPolygonComplete", e);
+    console.log("onPolygonComplete", e.getPaths().getArray()[0]);
   };
   onPolylineComplete = e => {
     console.log("onPolylineComplete", e);
