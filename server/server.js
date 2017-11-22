@@ -11,11 +11,6 @@ const uuidv4 = require("uuid/v4");
 
 let connections = [];
 
-// Set up the seed database
-// TODO refactor into a require file.
-
-let state = require("./seed.js");
-
 server.listen(process.env.PORT || 3001);
 
 console.log("/public", __dirname + "/public");
@@ -30,7 +25,6 @@ app.get("/", (req, res) => {
 io.sockets.on("connection", socket => {
   connections.push(socket);
   console.log("Connected: %s sockets connected", connections.length);
-  io.sockets.emit("state", state.seed);
 
   //Disconnect
   socket.on("disconnect", data => {
@@ -38,8 +32,10 @@ io.sockets.on("connection", socket => {
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
-  //Get Users
-  socket.on("users.get", user => {
+  ///////////////////////////////////////////////////////////////////////////
+  // Define all the user data functions here for closure.
+  // getUsers is called at the beginning to load all the users for a newly logged in person
+  function getUsers(user) {
     knex
       .select()
       .from("users")
@@ -55,20 +51,25 @@ io.sockets.on("connection", socket => {
         console.log("users", users);
         socket.emit("users", users);
       });
-  });
+  }
 
-  // Get Channels
-  socket.on("channels.get", channel => {
+  // Get all the channels for a user
+  function getChannels(user) {
     knex
       .select()
       .from("channels")
       .then(channels => {
         socket.emit("channels", channels);
       });
-  });
-
-  //Get Direct_Messages
-  socket.on("direct_messages.get", direct_message => {
+  }
+  function getChannelMessages(user) {
+    knex("channel_messages")
+      .join("users", "channel_messages.sender_user_id", "=", "users.id")
+      .then(channel_messages => {
+        socket.emit("channel_messages", channel_messages);
+      });
+  }
+  function getDirectMessages(user) {
     knex("direct_messages")
       .join("users", "direct_messages.sender_user_id", "=", "users.id")
       .select(
@@ -85,20 +86,17 @@ io.sockets.on("connection", socket => {
       .then(direct_messages => {
         socket.emit("direct_messages", direct_messages);
       });
-  });
-  //Get Layers
-  socket.on("layers.get", layer => {
+  }
+
+  function getLayers(user) {
     knex
       .select()
       .from("layers")
       .then(layers => {
-        console.log("LAYERS", layers);
         socket.emit("layers", layers);
       });
-  });
-
-  //Get Markers
-  socket.on("markers.get", marker => {
+  }
+  function getMarkers(user) {
     knex
       .select()
       .from("markers")
@@ -111,10 +109,69 @@ io.sockets.on("connection", socket => {
             .map(str => Number(str));
           marker.position = { lat: latLng[0], lng: latLng[1] };
         });
-        console.log("MARKERS", markers);
         socket.emit("markers", markers);
       });
+  }
+
+  ///////////////////////////////////////////////////////////////////////////
+  // Here is all the socket state information.
+  socket.on("user.login", user => {
+    // for now retrieve the user information
+    knex("users")
+      .where({ email: user.email })
+      .select()
+      .then(users => {
+        console.log(users);
+        if (users.length == 0) {
+          socket.emit("user.login_error");
+        } else {
+          let user = users[0];
+          let latLng = user.location
+            .substr(1)
+            .slice(0, -1)
+            .split(", ")
+            .map(str => Number(str));
+          user.position = { lat: latLng[0], lng: latLng[1] };
+          console.log("user.logged_in", user);
+          socket.emit("user.logged_in", user);
+
+          // User is logged in, send them the user info,
+          // existing users, channels, messages, maps and markers
+          getUsers(user);
+          getChannels(user);
+          getDirectMessages(user);
+          getChannelMessages(user);
+          getLayers(user);
+
+          getMarkers(user);
+        }
+      });
   });
+
+  //Get Users
+  socket.on("users.get", user => {
+    getUsers(user);
+  });
+
+  // Get Channels
+  socket.on("channels.get", user => {
+    getChannels(user);
+  });
+
+  //Get Direct_Messages
+  socket.on("direct_messages.get", user => {
+    getDirectMessages(user);
+  });
+  //Get Layers
+  socket.on("layers.get", user => {
+    getLayers(user);
+  });
+
+  //Get Markers
+  socket.on("markers.get", user => {
+    getMarkers(user);
+  });
+
   //Post Direct_Messages
   socket.on("direct_message.post", direct_message => {
     console.log("direct_message.post", direct_message);
@@ -143,12 +200,8 @@ io.sockets.on("connection", socket => {
   });
 
   //Get Channel_Messages
-  socket.on("channel_messages.get", channel_message => {
-    knex("channel_messages")
-      .join("users", "channel_messages.sender_user_id", "=", "users.id")
-      .then(channel_messages => {
-        socket.emit("channel_messages", channel_messages);
-      });
+  socket.on("channel_messages.get", user => {
+    getChannelMessages(user);
   });
 
   //Marker moves

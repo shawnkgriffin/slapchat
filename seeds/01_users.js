@@ -10,7 +10,7 @@ exports.seed = function(knex, Promise) {
           location: `(${50.093284 +
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
-          email: "shawn@shawn.shawn",
+          email: "shawn@shawngriffin.com",
           avatar: "http://localhost:3001/avatars/shawn.jpg"
         }),
         knex("users").insert({

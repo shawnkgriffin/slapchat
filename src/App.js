@@ -5,6 +5,8 @@ import Map from "./Map.js";
 import MessageList from "./MessageList.js";
 import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
+import Login from "./Login.js";
+import Register from "./Register.js";
 
 class App extends Component {
   constructor(props) {
@@ -22,40 +24,31 @@ class App extends Component {
       currentChannelId: null, //this is a channel ID
       currentDirectMessageId: null //
     };
+
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
     this.onUserCallback = this.onUserCallback.bind(this);
+    this.sendNewLogin = this.sendNewLogin.bind(this);
+    this.sendNewRegister = this.sendNewRegister.bind(this);
   }
 
   //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io("localhost:3001");
 
-    this.socket.emit("users.get", {
-      user: 0
+    // successful login will cause everything to fill
+    this.socket.emit("user.login", {
+      email: "shawn@shawngriffin.com",
+      password: "slapme"
     });
-    this.socket.emit("layers.get", {
-      user: 0
-    });
-    this.socket.emit("markers.get", {
-      user: 0
-    });
-    this.socket.emit("channels.get", {
-      user: 0
-    });
-    this.socket.emit("direct_messages.get", {
-      user: 0
-    });
-    this.socket.emit("channel_messages.get", {
-      user: 0
-    });
-    this.socket.emit("markers.get", {
-      user: 0
-    });
+
     this.socket.on("users", users => {
-      this.setState({ users: users, currentUser: users[0] });
+      this.setState({ users: users });
       console.log("users", users[0].id);
+    });
+    this.socket.on("user.logged_in", user => {
+      this.setState({ currentUser: user });
     });
     this.socket.on("channels", channels => {
       this.setState({ channels: channels });
@@ -158,7 +151,13 @@ class App extends Component {
       console.log("user.move", userPosition);
     });
   }
+  sendNewRegister(newRegister) {
+    console.log("NEW REGISTER", newRegister);
+  }
 
+  sendNewLogin(newLogin) {
+    console.log("NEW LOGIN", newLogin);
+  }
   // when we get a new message, send it to the server
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
@@ -182,14 +181,12 @@ class App extends Component {
         content: content
       };
     }
-    console.log("onNewMessage", action, payload);
     this.socket.emit(action, payload);
   };
 
   // When a lower level component needs to send something to the server
   // it calls sendServer(action, payload)
   sendServer = function sendServer(action, payload) {
-    console.log("sendServer", action, payload);
     this.socket.emit(action, payload);
   };
 
@@ -232,6 +229,8 @@ class App extends Component {
   render() {
     return (
       <div className="fixed-container">
+        <Login sendNewLogin={this.sendNewLogin} />
+        <Register sendNewRegister={this.sendNewRegister} />
         <SideBar
           onChannelCallback={this.onChannelCallback}
           onUserCallback={this.onUserCallback}
