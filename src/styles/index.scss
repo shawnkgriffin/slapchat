@@ -60,7 +60,8 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       box-shadow: none;
     }
 
-    .list-group-item:hover {
+    .list-group-item:hover,
+    .list-group-item.active-user {
       background-color: ghostwhite;
       font-style: italic;
       font-weight: bold;

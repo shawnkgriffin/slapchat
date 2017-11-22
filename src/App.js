@@ -58,7 +58,7 @@ class App extends Component {
       console.log("users", users[0].id);
     });
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels, currentChannelId: channels[0].id });
+      this.setState({ channels: channels });
       console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
@@ -211,7 +211,6 @@ class App extends Component {
     console.log("User Callback", user);
     // set the messages container to point to the current channel
     this.setState({
-      viewingUserId: user.id,
       currentChannelId: null,
       currentDirectMessageId: user.id,
       messages: this.state.direct_messages.filter(
@@ -239,6 +238,8 @@ class App extends Component {
           users={this.state.users}
           channels={this.state.channels}
           currentUser={this.state.currentUser}
+          activeUserId={this.state.currentDirectMessageId}
+          activeChannelId={this.state.currentChannelId}
         />
         <main className="nav-and-content">
           <NavBar currentUser={this.state.currentUser} />

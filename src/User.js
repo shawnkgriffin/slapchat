@@ -1,9 +1,12 @@
 import React from "react";
 
-function User({ user, onUserCallback }) {
+function User({ user, onUserCallback, activeUserId }) {
+  console.log(activeUserId);
+  const isActive = activeUserId === user.id ? "active-user" : "";
+  const userClass = `user list-group-item ${isActive}`;
   return (
     <li
-      className="user list-group-item"
+      className={userClass}
       onClick={userState => onUserCallback(user, userState)}
     >
       <img
