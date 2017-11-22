@@ -33,10 +33,7 @@
     "knex": "^0.14.0",
     "knex-logger": "^0.1.0",
     "lint-staged": "^5.0.0",
-<<<<<<< HEAD
     "moment": "^2.19.2",
-=======
->>>>>>> 12a88668b809cab547ba0852b1ebb253a12d734f
     "node-sass": "^4.6.1",
     "object-assign": "4.1.1",
     "pg": "^7.4.0",
