@@ -77,6 +77,10 @@ const MyMapComponent = withScriptjs(
           }
         }}
         onCircleComplete={props.onCircleComplete}
+        onMarkerComplete={props.onMarkerComplete}
+        onPolygonComplete={props.onPolygonComplete}
+        onPolylineComplete={props.onPolylineComplete}
+        onRectangleComplete={props.onRectangleComplete}
       />
     </GoogleMap>
   ))
@@ -109,6 +113,18 @@ class Map extends Component {
   onCircleComplete = e => {
     console.log("onCircleComplete", e);
   };
+  onMarkerComplete = e => {
+    console.log("onMarkerComplete", e);
+  };
+  onPolygonComplete = e => {
+    console.log("onPolygonComplete", e);
+  };
+  onPolylineComplete = e => {
+    console.log("onPolylineComplete", e);
+  };
+  onRectangleComplete = e => {
+    console.log("onRectangleComplete", e);
+  };
 
   render() {
     const markers = this.props.markers || [];
@@ -130,6 +146,10 @@ class Map extends Component {
           onMarkerClick={this.handleMarkerClick}
           onDragEnd={this.handleDragEnd}
           onCircleComplete={this.onCircleComplete}
+          onMarkerComplete={this.onMarkerComplete}
+          onPolygonComplete={this.onPolygonComplete}
+          onPolylineComplete={this.onPolylineComplete}
+          onRectangleComplete={this.onRectangleComplete}
           markers={markers}
         />
       </div>
