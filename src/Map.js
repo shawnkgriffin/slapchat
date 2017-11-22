@@ -154,6 +154,9 @@ class Map extends Component {
   onRectangleComplete = e => {
     console.log("onRectangleComplete", e);
   };
+  onPlacesChanged = e => {
+    console.log("onPlacesChanged", e);
+  };
 
   render() {
     const markers = this.props.markers || [];
@@ -179,6 +182,7 @@ class Map extends Component {
           onPolygonComplete={this.onPolygonComplete}
           onPolylineComplete={this.onPolylineComplete}
           onRectangleComplete={this.onRectangleComplete}
+          onPlacesChanged={this.onPlacesChanged}
           markers={markers}
         />
       </div>
