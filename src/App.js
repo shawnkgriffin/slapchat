@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { animateScroll } from "react-scroll";
 import io from "socket.io-client";
 import Map from "./Map.js";
 import MessageList from "./MessageList.js";
@@ -116,7 +117,7 @@ class App extends Component {
         (direct_message.sender_user_id === this.state.currentUser.id &&
           direct_message.recipient_user_id ===
             this.state.currentDirectMessageId)
-      )
+      ) {
         this.setState({
           messages: direct_messages.filter(
             message =>
@@ -128,6 +129,24 @@ class App extends Component {
                   this.state.currentDirectMessageId)
           )
         });
+        this.setState(
+          {
+            currentChannelId: null,
+            currentDirectMessageId: direct_message.recipient_user_id,
+            messages: this.state.direct_messages.filter(
+              direct_message =>
+                (direct_message.sender_user_id === this.state.currentUser.id &&
+                  direct_message.recipient_user_id ===
+                    direct_message.recipient_user_id) ||
+                (direct_message.sender_user_id ===
+                  direct_message.recipient_user_id &&
+                  direct_message.recipient_user_id ===
+                    this.state.currentUser.id)
+            )
+          },
+          this.scrollToBottom
+        );
+      }
     });
     this.socket.on("markers", markers => {
       this.setState({ markers: markers });
@@ -192,6 +211,7 @@ class App extends Component {
     console.log("User Callback", user);
     // set the messages container to point to the current channel
     this.setState({
+      viewingUserId: user.id,
       currentChannelId: null,
       currentDirectMessageId: user.id,
       messages: this.state.direct_messages.filter(
@@ -203,6 +223,12 @@ class App extends Component {
       )
     });
   };
+
+  scrollToBottom() {
+    animateScroll.scrollToBottom({
+      containerId: "messages-container"
+    });
+  }
 
   render() {
     return (
