@@ -4,6 +4,8 @@ import Map from "./Map.js";
 import MessageList from "./MessageList.js";
 import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
+import Login from "./Login.js";
+import Register from "./Register.js";
 
 class App extends Component {
   constructor(props) {
@@ -17,12 +19,15 @@ class App extends Component {
       markers: [],
       layers: [],
       loading: false,
-      currentUser: null,
+      currentUser: "",
       currentChannel: null,
       currentDirectMessage: null
     };
+
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
+    this.sendNewLogin = this.sendNewLogin.bind(this);
+    this.sendNewRegister = this.sendNewRegister.bind(this);
   }
 
   //RECIVES STATE DATA
@@ -52,11 +57,9 @@ class App extends Component {
     });
     this.socket.on("users", users => {
       this.setState({ users: users, currentUser: users[0].id });
-      console.log("users", users[0].id);
     });
     this.socket.on("channels", channels => {
       this.setState({ channels: channels, currentChannel: channels[0].id });
-      console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -66,7 +69,6 @@ class App extends Component {
       this.setState({ channel_messages: channel_messages });
     });
     this.socket.on("channel_message.post", channel_message => {
-      console.log("channel_message.post", channel_message);
       this.setState({
         channel_messages: this.state.channel_messages.concat(channel_message)
       });
@@ -81,7 +83,13 @@ class App extends Component {
       this.setState({ users: data.position });
     });
   }
+  sendNewRegister(newRegister) {
+    console.log("NEW REGISTER", newRegister);
+  }
 
+  sendNewLogin(newLogin) {
+    console.log("NEW LOGIN", newLogin);
+  }
   // when we get a new message, send it to the server
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
@@ -105,39 +113,34 @@ class App extends Component {
         content: content
       };
     }
-    console.log("onNewMessage", action, payload);
     this.socket.emit(action, payload);
   };
 
   // When a lower level component needs to send something to the server
   // it calls sendServer(action, payload)
   sendServer = function sendServer(action, payload) {
-    console.log("sendServer", action, payload);
     this.socket.emit(action, payload);
   };
-
   render() {
     return (
       <div className="fixed-container">
+        <Login sendNewLogin={this.sendNewLogin} />
+        <Register sendNewRegister={this.sendNewRegister} />
         <SideBar users={this.state.users} channels={this.state.channels} />
         <main className="nav-and-content">
           <NavBar />
-          {this.state.loading ? (
-            <div>Loading</div>
-          ) : (
-            <section className="messages-and-map">
-              <MessageList
-                channel_messages={this.state.channel_messages}
-                direct_messages={this.state.direct_messages}
-                onNewMessage={this.onNewMessage}
-              />
-              <Map
-                sendServer={this.sendServer}
-                markers={this.state.markers}
-                users={this.state.users}
-              />
-            </section>
-          )}
+          <section className="messages-and-map">
+            <MessageList
+              channel_messages={this.state.channel_messages}
+              direct_messages={this.state.direct_messages}
+              onNewMessage={this.onNewMessage}
+            />
+            <Map
+              sendServer={this.sendServer}
+              markers={this.state.markers}
+              users={this.state.users}
+            />
+          </section>
         </main>
       </div>
     );

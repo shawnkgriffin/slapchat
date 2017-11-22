@@ -3,7 +3,6 @@ import Message from "./Message.js";
 import ChatBar from "./ChatBar.js";
 
 function MessageList({ channel_messages, direct_messages, onNewMessage }) {
-  console.log("CHANNEL MESSAFGES", channel_messages);
   return (
     <section className="message-interface">
       <div className="messages-container">
