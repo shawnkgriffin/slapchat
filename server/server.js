@@ -16,7 +16,6 @@ server.listen(process.env.PORT || 3001);
 console.log("/public", __dirname + "/public");
 app.use(express.static("./server/public"));
 
-//Index HTML is for debugging
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
@@ -24,11 +23,13 @@ app.get("/", (req, res) => {
 //Socket on connect
 io.sockets.on("connection", socket => {
   connections.push(socket);
+  let isLoggedIn = false;
   console.log("Connected: %s sockets connected", connections.length);
 
   //Disconnect
   socket.on("disconnect", data => {
     connections.splice(connections.indexOf(socket), 1);
+    isLoggedIn = false;
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
@@ -48,7 +49,6 @@ io.sockets.on("connection", socket => {
             .map(str => Number(str));
           user.position = { lat: latLng[0], lng: latLng[1] };
         });
-        console.log("users", users);
         socket.emit("users", users);
       });
   }
@@ -115,24 +115,32 @@ io.sockets.on("connection", socket => {
 
   ///////////////////////////////////////////////////////////////////////////
   // Here is all the socket state information.
+  // socket.on("user.register", user => {
+  //   knex
+  //     .insert(user)
+  //     .into("users")
+  //     .returning("id");.then(id => {
+
+  //     })
+  // });
   socket.on("user.login", user => {
     // for now retrieve the user information
     knex("users")
       .where({ email: user.email })
       .select()
       .then(users => {
-        console.log(users);
         if (users.length == 0) {
           socket.emit("user.login_error");
         } else {
+          isLoggedIn = true;
           let user = users[0];
+          console.log("HERE", user);
           let latLng = user.location
             .substr(1)
             .slice(0, -1)
             .split(", ")
             .map(str => Number(str));
           user.position = { lat: latLng[0], lng: latLng[1] };
-          console.log("user.logged_in", user);
           socket.emit("user.logged_in", user);
 
           // User is logged in, send them the user info,
@@ -147,73 +155,74 @@ io.sockets.on("connection", socket => {
         }
       });
   });
+  if (isLoggedIn) {
+    //Get Users
+    socket.on("users.get", user => {
+      getUsers(user);
+    });
 
-  //Get Users
-  socket.on("users.get", user => {
-    getUsers(user);
-  });
+    // Get Channels
+    socket.on("channels.get", user => {
+      getChannels(user);
+    });
 
-  // Get Channels
-  socket.on("channels.get", user => {
-    getChannels(user);
-  });
+    //Get Direct_Messages
+    socket.on("direct_messages.get", user => {
+      getDirectMessages(user);
+    });
+    //Get Layers
+    socket.on("layers.get", user => {
+      getLayers(user);
+    });
 
-  //Get Direct_Messages
-  socket.on("direct_messages.get", user => {
-    getDirectMessages(user);
-  });
-  //Get Layers
-  socket.on("layers.get", user => {
-    getLayers(user);
-  });
+    //Get Markers
+    socket.on("markers.get", user => {
+      getMarkers(user);
+    });
 
-  //Get Markers
-  socket.on("markers.get", user => {
-    getMarkers(user);
-  });
+    //Post Direct_Messages
+    socket.on("direct_message.post", direct_message => {
+      console.log("direct_message.post", direct_message);
+      knex
+        .insert(direct_message)
+        .into("direct_messages")
+        .returning("id")
+        .then(id => {
+          direct_message.id = id;
+          io.sockets.emit("direct_message.post", direct_message);
+          console.log("emit(direct_message.post", direct_message);
+        });
+    });
 
-  //Post Direct_Messages
-  socket.on("direct_message.post", direct_message => {
-    console.log("direct_message.post", direct_message);
-    knex
-      .insert(direct_message)
-      .into("direct_messages")
-      .returning("id")
-      .then(id => {
-        direct_message.id = id;
-        io.sockets.emit("direct_message.post", direct_message);
-        console.log("emit(direct_message.post", direct_message);
-      });
-  });
+    //Post Channel_Message
+    socket.on("channel_message.post", channel_message => {
+      console.log("channel_message.post", channel_message);
+      knex
+        .insert(channel_message)
+        .into("channel_messages")
+        .returning("id")
+        .then(id => {
+          channel_message.id = id;
+          io.sockets.emit("channel_message.post", channel_message);
+        });
+    });
 
-  //Post Channel_Message
-  socket.on("channel_message.post", channel_message => {
-    console.log("channel_message.post", channel_message);
-    knex
-      .insert(channel_message)
-      .into("channel_messages")
-      .returning("id")
-      .then(id => {
-        channel_message.id = id;
-        io.sockets.emit("channel_message.post", channel_message);
-      });
-  });
+    //Get Channel_Messages
+    socket.on("channel_messages.get", user => {
+      getChannelMessages(user);
+    });
 
-  //Get Channel_Messages
-  socket.on("channel_messages.get", user => {
-    getChannelMessages(user);
-  });
+    //Marker moves
+    socket.on("marker.move", marker => {
+      console.log("marker.move", marker);
+      io.sockets.emit("marker.move", marker);
+    });
 
-  //Marker moves
-  socket.on("marker.move", marker => {
-    console.log("marker.move", marker);
-    io.sockets.emit("marker.move", marker);
-  });
-
-  // User moves
-  socket.on("user.move", data => {
-    console.log("user.move", data.user, data.position);
-    // TODO save to locations.
-    io.sockets.emit("user.move", data);
-  });
+    // User moves
+    socket.on("user.move", data => {
+      console.log("user.move", data.user, data.position);
+      // TODO save to locations.
+      io.sockets.emit("user.move", data);
+    });
+  }
 });

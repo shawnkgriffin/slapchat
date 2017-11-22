@@ -19,9 +19,9 @@ class App extends Component {
       markers: [],
       layers: [],
       loading: false,
-      currentUser: null, // this is a user object
-      currentChannelId: null, //this is a channel ID
-      currentDirectMessageId: null //
+      currentUser: null,
+      currentChannelId: null,
+      currentDirectMessageId: null
     };
 
     this.onNewMessage = this.onNewMessage.bind(this);
@@ -37,10 +37,6 @@ class App extends Component {
     this.socket = io("localhost:3001");
 
     // successful login will cause everything to fill
-    this.socket.emit("user.login", {
-      email: "shawn@shawngriffin.com",
-      password: "slapme"
-    });
 
     this.socket.on("users", users => {
       this.setState({ users: users });
@@ -63,7 +59,6 @@ class App extends Component {
 
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
-      console.log("channel_message.post", channel_message);
       channel_message.avatar = this.state.users.find(
         user => user.id === channel_message.sender_user_id
       ).avatar;
@@ -100,9 +95,6 @@ class App extends Component {
         direct_messages: direct_messages
       });
 
-      // check to see if we need to update the message list
-      // logic is sender id = current direct message && recipient = currentUser or
-      // sended id = current user && recipient === current direct message
       if (
         (direct_message.sender_user_id === this.state.currentDirectMessageId &&
           direct_message.recipient_user_id === this.state.currentUser.id) ||
@@ -133,12 +125,13 @@ class App extends Component {
     });
   }
   sendNewRegister(newRegister) {
-    console.log("NEW REGISTER", newRegister);
+    this.socket.emit("user.register", newRegister);
   }
 
   sendNewLogin(newLogin) {
-    console.log("NEW LOGIN", newLogin);
+    this.socket.emit("user.login", newLogin);
   }
+
   // when we get a new message, send it to the server
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
@@ -202,6 +195,16 @@ class App extends Component {
   };
 
   render() {
+    if (this.state.currentUser === null) {
+      return (
+        <div>
+          <h1> Welcome to Slap! </h1>
+          <Login sendNewLogin={this.sendNewLogin} />
+          <Register sendNewRegister={this.sendNewRegister} />
+        </div>
+      );
+    }
+
     return (
       <div className="fixed-container">
         <Login sendNewLogin={this.sendNewLogin} />

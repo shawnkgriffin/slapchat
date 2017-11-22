@@ -5,13 +5,21 @@ import App from "./App.js";
 
 const customStyles = {
   content: {
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
     top: "50%",
     left: "50%",
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    color: "rgba(255, 255, 255, 1)"
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)"
   }
+};
+const textStyle = {
+  color: "black"
 };
 class Login extends React.Component {
   constructor(props) {
@@ -61,6 +69,7 @@ class Login extends React.Component {
       password: this.state.password
     };
     this.props.sendNewLogin(newLogin);
+    this.closeModal();
   }
 
   render() {
@@ -77,24 +86,26 @@ class Login extends React.Component {
           <h2 ref={subtitle => (this.subtitle = subtitle)}>Login</h2>
           <form>
             <ul>
-              <li>
-                <input
-                  id="email"
-                  placeholder="email"
-                  value={this.state.value}
-                  onChange={this.handleEmailChange}
-                />
-              </li>
-              <li>
-                <input
-                  id="password"
-                  placeholder="password"
-                  value={this.state.value}
-                  onChange={this.handlePasswordChange}
-                />
-              </li>
+              <input
+                style={textStyle}
+                id="email"
+                type="text"
+                placeholder="email"
+                value={this.state.value}
+                onChange={this.handleEmailChange}
+              />
+              <br />
+              <br />
+              <input
+                style={textStyle}
+                id="password"
+                type="password"
+                placeholder="password"
+                value={this.state.value}
+                onChange={this.handlePasswordChange}
+              />
             </ul>
-            <button value={this.state} onClick={this.handleSubmit}>
+            <button style={textStyle} onClick={this.handleSubmit}>
               Submit
             </button>
           </form>
