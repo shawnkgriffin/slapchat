@@ -76,6 +76,7 @@ const MyMapComponent = withScriptjs(
             zIndex: 1
           }
         }}
+        onCircleComplete={props.onCircleComplete}
       />
     </GoogleMap>
   ))
@@ -105,6 +106,9 @@ class Map extends Component {
     };
     this.props.sendServer("marker.move", marker);
   };
+  onCircleComplete = e => {
+    console.log("onCircleComplete", e);
+  };
 
   render() {
     const markers = this.props.markers || [];
@@ -125,6 +129,7 @@ class Map extends Component {
           mapElement={<div style={{ height: `100%` }} />}
           onMarkerClick={this.handleMarkerClick}
           onDragEnd={this.handleDragEnd}
+          onCircleComplete={this.onCircleComplete}
           markers={markers}
         />
       </div>
