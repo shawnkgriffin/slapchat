@@ -93,7 +93,6 @@ io.sockets.on("connection", socket => {
       .select()
       .from("layers")
       .then(layers => {
-        console.log("LAYERS", layers);
         socket.emit("layers", layers);
       });
   }
@@ -110,7 +109,6 @@ io.sockets.on("connection", socket => {
             .map(str => Number(str));
           marker.position = { lat: latLng[0], lng: latLng[1] };
         });
-        console.log("MARKERS", markers);
         socket.emit("markers", markers);
       });
   }
