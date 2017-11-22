@@ -97,19 +97,29 @@ io.sockets.on("connection", socket => {
       });
   }
   function getMarkers(user) {
-    knex
+    knex("markers")
       .select()
-      .from("markers")
       .then(markers => {
+        console.log("getMarkers", markers);
         markers.forEach(marker => {
-          let latLng = marker.location
-            .substr(1)
-            .slice(0, -1)
-            .split(", ")
-            .map(str => Number(str));
-          marker.position = { lat: latLng[0], lng: latLng[1] };
+          marker.position = { lat: marker.point.x, lng: marker.point.y };
+          console.log("position", marker.position);
         });
         socket.emit("markers", markers);
+      });
+  }
+
+  function markerMove(marker) {
+    console.log("marker.move", marker);
+    knex("markers")
+      .where("id", "=", marker.id)
+      .update({
+        point: knex.raw(`point(${marker.position.lat},${marker.position.lng})`)
+      })
+      .then(point => {
+        marker.position = { lat: point.x, lng: point.y };
+        console.log("marker.move", marker);
+        io.sockets.emit("marker.move", marker);
       });
   }
 
@@ -206,8 +216,7 @@ io.sockets.on("connection", socket => {
 
   //Marker moves
   socket.on("marker.move", marker => {
-    console.log("marker.move", marker);
-    io.sockets.emit("marker.move", marker);
+    markerMove(marker);
   });
 
   // User moves
