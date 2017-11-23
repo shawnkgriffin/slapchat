@@ -8,6 +8,7 @@ class UserInfo extends Component {
         <div>
           <img
             className="user-info-avatar"
+            alt=""
             src={this.props.currentUser ? this.props.currentUser.avatar : "?"}
           />
           {this.props.currentUser ? this.props.currentUser.display_name : "?"}
