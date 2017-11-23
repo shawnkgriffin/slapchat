@@ -194,14 +194,9 @@ class Map extends Component {
   };
   onCircleDragEnd = (circle, circleState) => {
     console.log("onCircleDragEnd", circle);
-    // let circle = {
-    //   label: "Danger",
-    //   description: "Avalanche hazard, do not approach",
-    //   lat: e.center.lat(),
-    //   lng: e.center.lng(),
-    //   radius: e.radius
-    // };
-    // this.props.sendServer("circle.create", circle);
+    circle.lat = circleState.latLng.lat();
+    circle.lng = circleState.latLng.lng();
+    this.props.sendServer("circle.move", circle);
   };
   onMarkerComplete = e => {
     console.log("onMarkerComplete", e.position.lat(), e.position.lng());
