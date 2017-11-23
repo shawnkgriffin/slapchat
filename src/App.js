@@ -85,6 +85,14 @@ class App extends Component {
               channel_message.id === this.state.currentChannelId
           )
         });
+      this.setState({
+        currentChannelId: this.state.currentChannelId,
+        currentDirectMessageId: null,
+        messages: this.state.channel_messages.filter(
+          channel_message =>
+            channel_message.channel_id === this.state.currentChannelId
+        )
+      });
     });
 
     // Receive a direct message
