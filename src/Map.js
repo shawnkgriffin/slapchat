@@ -221,16 +221,7 @@ class Map extends Component {
 
   render() {
     const markers = this.props.markers || [];
-    this.props.users.forEach(user =>
-      markers.push({
-        icon: SERVER + "skiing-blue.png",
-        position: user.position,
-        label: user.display_name,
-        type: "USER",
-        draggable: true,
-        userId: user.id
-      })
-    );
+
     return (
       <div className="map-container">
         <MyMapComponent

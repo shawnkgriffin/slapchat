@@ -152,12 +152,18 @@ class App extends Component {
     this.socket.on("markers", markers => {
       this.setState({ markers: markers });
     });
+    this.socket.on("marker.add", marker => {
+      this.setState({ markers: this.state.markers.concat([marker]) });
+    });
+    this.socket.on("marker.move", newMarker => {
+      this.setState({
+        markers: this.state.markers.map(marker => {
+          return marker.id === newMarker.id ? newMarker : marker;
+        })
+      });
+    });
     this.socket.on("circles", circles => {
       this.setState({ circles: circles });
-    });
-    this.socket.on("marker.add", marker => {
-      console.log("marker.add", marker);
-      this.setState({ markers: this.state.markers.concat([marker]) });
     });
     this.socket.on("circle.add", circle => {
       this.setState({ circles: this.state.circles.concat([circle]) });
@@ -295,7 +301,6 @@ class App extends Component {
                 sendServer={this.sendServer}
                 markers={this.state.markers}
                 circles={this.state.circles}
-                users={this.state.users}
               />
             </section>
           )}

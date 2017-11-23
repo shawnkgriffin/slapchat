@@ -99,6 +99,8 @@ io.sockets.on("connection", socket => {
         socket.emit("layers", layers);
       });
   }
+
+  // Markers
   function getMarkers(user) {
     knex("markers")
       .select()
@@ -107,28 +109,6 @@ io.sockets.on("connection", socket => {
           marker.position = { lat: marker.lat, lng: marker.lng };
         });
         socket.emit("markers", markers);
-      });
-  }
-  function getCircles(user) {
-    knex("circles")
-      .select()
-      .then(circles => {
-        circles.forEach(circle => {
-          circle.center = { lat: circle.lat, lng: circle.lng };
-        });
-        socket.emit("circles", circles);
-      });
-  }
-
-  function markerMove(marker) {
-    knex("markers")
-      .where("id", "=", marker.id)
-      .update({
-        lat: marker.lat,
-        lng: marker.lng
-      })
-      .then(numRows => {
-        io.sockets.emit("marker.move", marker);
       });
   }
 
@@ -153,6 +133,41 @@ io.sockets.on("connection", socket => {
         newMarker.position = { lat: newMarker.lat, lng: newMarker.lng };
         console.log("markerAdd", newMarker);
         io.sockets.emit("marker.add", newMarker);
+      });
+  }
+  function markerMove(marker) {
+    knex("markers")
+      .where("id", "=", marker.id)
+      .returning([
+        "id",
+        "label",
+        "lat",
+        "lng",
+        "owner_user_id",
+        "icon",
+        "type",
+        "draggable"
+      ])
+      .update({
+        lat: marker.lat,
+        lng: marker.lng
+      })
+      .then(markerArray => {
+        let movedMarker = markerArray[0];
+        movedMarker.position = { lat: movedMarker.lat, lng: movedMarker.lng };
+        io.sockets.emit("marker.move", movedMarker);
+      });
+  }
+
+  // Circles
+  function getCircles(user) {
+    knex("circles")
+      .select()
+      .then(circles => {
+        circles.forEach(circle => {
+          circle.center = { lat: circle.lat, lng: circle.lng };
+        });
+        socket.emit("circles", circles);
       });
   }
   function circleMove(circle) {
