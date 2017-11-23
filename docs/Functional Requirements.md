@@ -32,26 +32,26 @@ Each client manages it's own state using redux and simple middleware. The state 
 - [ ] Redux - state machine management (stretch)
 
 ## Database 
- - [ ] Mongo DB
+ - [ ] Postgres 
+ - [ ] PostgresGIS (stretch)
 
 
 ## Chat Features (Core)
-- [ ] Conversation - display, select, read, create, update, delete
-- [ ] Channel - display, select, read, create, update, delete
-- [ ] Conversations - Messages sent on a channel or 1-1 are only visible on that channel. 
-- [ ] Direct messages (1-1) - display, select, read, create, update, delete
+- [X] Channels - display, select, read, update
+- [ ] Messages - Messages sent on a channel or 1-1 are only visible on that channel. 
+- [X] Direct messages (1-1) - display, select, read,  update
 - [ ] Notifications
-- [ ] User avatar
+- [X] User avatar
 - [ ] URL display with link to click
 - [ ] png, jpg, gif display with link to click
 - [ ] emoticons
-- [ ] Real time updates
+- [X] Real time updates
 - [ ] Search functionality
 - [ ] Tags, keywords & @mentions
 - [ ] User changes in name, avatar or status are immediately reflected in all clients
-- [ ] Notifications are styled differently from chat messages
-- [ ] Header will display the count of connected users
-- [ ] When the number of connected users changes, this count will be updated for all connected users
+- [X] Notifications are styled differently from chat messages
+- [ ] User status (logged in or not) is shown in the sidebar.
+- [X] Messages sent when user is logged off are stored for later retrieval
  
 
  ## Chat Features (stretch)
@@ -102,7 +102,7 @@ Each client manages it's own state using redux and simple middleware. The state 
  ## Map Features
  ### Users
  - [ ] User location is tracked and sent by the client to the server. 
- - [ ] All users can see the location of any active user on their map.
+ - [X] All users can see the location of any active user on their map.
  - [ ] When a user moves, the client will dynamically update the location on the map. 
  ### Map
 - [ ] users can see a list of the available layers
@@ -112,18 +112,19 @@ Each client manages it's own state using redux and simple middleware. The state 
 - [ ] users can edit pins
 - [ ] each pin can have: a title, description, and image
 - [ ] the icons for pins are customizable
-- [ ] a layer can contain many circles
-- [ ] users can create circles
+- [X] a layer can contain many circles
+- [x] users can create circles
 - [ ] users can edit circles
-- [ ] a layer can contain many polygons (including triangle, rectangle...)
+- [X] a layer can contain many polygons (including triangle, rectangle...)
 - [ ] users can create polygons
 - [ ] users can edit polygons
-- [ ] users can create maps
-- [ ] users can modify maps (add, edit, remove points)
+- [ ] users can create layers
+- [ ] users can modify layers (add, edit, remove points)
 - [ ] users can favourite a layer
-- [ ] users have profiles, indicating their favourite maps and maps they've contributed to
-- [ ] use http://leafletjs.com/ or https://developers.google.com/maps/
-- [ ] users can toggle maps on/off by a side panel on the display.
+- [ ] users have profiles, indicating layers they've contributed to
+- [ ] users have profiles, indicating their favourite layers 
+- [X] use http://leafletjs.com/ or https://developers.google.com/maps/
+- [ ] users can toggle layers on/off by a side panel on the display.
 
 ## Extensions:
 - [ ] Using redux, history can be rolled back to any point for a client. 
@@ -136,38 +137,31 @@ Each client manages it's own state using redux and simple middleware. The state 
 ## Behaviour Requirements
 - [ ] When any connected user sends a chat message, all connected users receive and display the message
 - [ ] When any connected user changes their name, all connected users are notified of the name change
-  - [ ] Notifications are styled differently from chat messages
-- [ ] Header will display the count of connected users
-- [ ] When the number of connected users changes, this count will be updated for all connected users
-- [ ] (STRETCH) Different users' names will each be coloured differently
-- [ ] Bonus: the colouring is consistent between connected user instances 
-- [ ] or is calculated algorithmically based on their name,
-- [ ] or is manually selectable by users, or any other interesting approach!
 ## Technical Specifications
 ### Stack:
 
-- [ ] Webpack with Babel, JSX, ES6, webpack dev server (comes with boilerplate)
-- [ ] WebSockets using Node package ws on the server-side, and native WebSocket on client side
-- [ ] ReactJS
+- [X] Webpack with Babel, JSX, ES6, webpack dev server (comes with boilerplate)
+- [X] WebSockets using Node package ws on the server-side, and native WebSocket on client side
+- [X] ReactJS
 - [ ] React Native
 - [ ] Redux
 
 ### React component guidelines:
 
-- [ ] A single root component (e.g. App) should be responsible for the main application state, as well as communication with the WebSocket server
-- [ ] A message list component renders the chat log (chat messages and system notifications)
-- [ ] A chat bar component provides an input field for changing your username and an input field for sending messages. These input fields do not need to be React-style "controlled inputs", although they can be.
+- [X] A single root component (e.g. App) should be responsible for the main application state, as well as communication with the WebSocket server
+- [X] A message list component renders the chat log (chat messages and system notifications)
+- [X] A chat bar component provides an input field for changing your username and an input field for sending messages. These input fields do not need to be React-style "controlled inputs", although they can be.
 ### Client websocket behaviour:
 
-- [ ] opens a websocket connection as soon as the App component is mounted
-- [ ] the connection stays open until the client closes the page (or otherwise disconnects)
-- [ ] sends chat messages and (name change) notifications initiated by the current user
-- [ ] handles broadcast messages (chat, notifications, user count) from the server and may alter state accordingly
+- [X] opens a websocket connection as soon as the App component is mounted
+- [X] the connection stays open until the client closes the page (or otherwise disconnects)
+- [X] sends chat messages and (name change) notifications initiated by the current user
+- [X] handles broadcast messages (chat, notifications, user count) from the server and may alter state accordingly
 ### Websocket server specs:
 
-- [ ] The Chatty client app and Chatty websocket server are separate Node apps each with their own package.json
-- [ ] It's a simple server using express and ws
-- [ ] The server should send and receive JSON-encoded messages
+- [X] The Chatty client app and Chatty websocket server are separate Node apps each with their own package.json
+- [X] It's a simple server using express and sockets.io
+- [X] The server should send and receive JSON-encoded messages
 #### When a client sends a message:
 - [ ] the server should determine what to do based on the message's type property
 - [ ] it should construct a message to send back in response with a corresponding type and a generated unique id (e.g. a UUID)
