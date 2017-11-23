@@ -25,6 +25,14 @@ class App extends Component {
       currentDirectMessageId: null //
     };
 
+    if (location.hostname === "localhost") {
+      this.connectionString = "http://localhost:3001";
+    } else {
+      this.connectionString = `${location.protocol}//${
+        location.hostname
+      }:${location.port || (location.protocol === "https:" ? 443 : 80)}`;
+    }
+
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
@@ -36,15 +44,7 @@ class App extends Component {
   //RECIVES STATE DATA
   componentDidMount() {
     /* eslint-disable no-restricted-globals */
-    let connectionString;
-    if (location.hostname === "localhost") {
-      connectionString = "http://localhost:3001";
-    } else {
-      connectionString = `${location.protocol}//${
-        location.hostname
-      }:${location.port || (location.protocol === "https:" ? 443 : 80)}`;
-    }
-    this.socket = io(connectionString);
+    this.socket = io(this.connectionString);
     /* eslint-enable no-restricted-globals */
 
     this.socket.on("connect", () => {
@@ -267,6 +267,7 @@ class App extends Component {
                 sendServer={this.sendServer}
                 markers={this.state.markers}
                 users={this.state.users}
+                staticPath={this.connectionString}
               />
             </section>
           )}

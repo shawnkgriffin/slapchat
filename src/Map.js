@@ -13,9 +13,6 @@ const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
-const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
-// const GOOGLE_MAPS_KEY = "AIzaSyBFL2uwAAg3ymHvkirWLapG5yaV3mTFEzY"; // TODO fix this in .env
-
 const MyMapComponent = withScriptjs(
   withGoogleMap(props => (
     <GoogleMap
@@ -162,7 +159,7 @@ class Map extends Component {
     const markers = this.props.markers || [];
     this.props.users.forEach(user =>
       markers.push({
-        icon: SERVER + "skiing-blue.png",
+        icon: `${this.staticPath}/skiing-blue.png`,
         position: user.position,
         label: user.display_name
       })
