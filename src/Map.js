@@ -190,7 +190,7 @@ class Map extends Component {
       lng: e.center.lng(),
       radius: e.radius
     };
-    this.props.sendServer("circle.create", circle);
+    this.props.sendServer("circle.add", circle);
   };
   onCircleDragEnd = (circle, circleState) => {
     console.log("onCircleDragEnd", circle);

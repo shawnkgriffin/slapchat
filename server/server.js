@@ -134,13 +134,25 @@ io.sockets.on("connection", socket => {
 
   function markerAdd(marker) {
     knex("markers")
+      .returning([
+        "id",
+        "label",
+        "lat",
+        "lng",
+        "owner_user_id",
+        "icon",
+        "type",
+        "draggable"
+      ])
       .insert({
         lat: marker.lat,
         lng: marker.lng
       })
-      .then(id => {
-        marker.id = id;
-        io.sockets.emit("marker.add", marker);
+      .then(markerArray => {
+        let newMarker = markerArray[0];
+        newMarker.position = { lat: newMarker.lat, lng: newMarker.lng };
+        console.log("markerAdd", newMarker);
+        io.sockets.emit("marker.add", newMarker);
       });
   }
   function circleMove(circle) {
@@ -154,9 +166,20 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("circle.move", circle);
       });
   }
-  function circleCreate(circle) {
-    console.log("circleCreate(", circle);
+  function circleAdd(circle) {
+    console.log("circleAdd(", circle);
     knex("circles")
+      .returning([
+        "id",
+        "lat",
+        "lng",
+        "radius",
+        "owner_user_id",
+        "label",
+        "description",
+        "type",
+        "draggable"
+      ])
       .insert({
         label: circle.label,
         description: circle.description,
@@ -164,9 +187,10 @@ io.sockets.on("connection", socket => {
         lng: circle.lng,
         radius: circle.radius
       })
-      .then(id => {
-        circle.id = id;
-        io.sockets.emit("circle.create", circle);
+      .then(circleArray => {
+        let newCircle = circleArray[0];
+        newCircle.center = { lat: newCircle.lat, lng: newCircle.lng };
+        io.sockets.emit("circle.add", newCircle);
       });
   }
   ///////////////////////////////////////////////////////////////////////////
@@ -278,8 +302,8 @@ io.sockets.on("connection", socket => {
   });
 
   // Circle functions
-  socket.on("circle.create", circle => {
-    circleCreate(circle);
+  socket.on("circle.add", circle => {
+    circleAdd(circle);
   });
 
   socket.on("circles.get", user => {

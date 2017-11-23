@@ -155,6 +155,13 @@ class App extends Component {
     this.socket.on("circles", circles => {
       this.setState({ circles: circles });
     });
+    this.socket.on("marker.add", marker => {
+      console.log("marker.add", marker);
+      this.setState({ markers: this.state.markers.concat([marker]) });
+    });
+    this.socket.on("circle.add", circle => {
+      this.setState({ circles: this.state.circles.concat([circle]) });
+    });
     this.socket.on("layers", layers => {
       this.setState({ layers: layers });
     });
