@@ -42,12 +42,7 @@ io.sockets.on("connection", socket => {
       .from("users")
       .then(users => {
         users.forEach(user => {
-          let latLng = user.location
-            .substr(1)
-            .slice(0, -1)
-            .split(", ")
-            .map(str => Number(str));
-          user.position = { lat: latLng[0], lng: latLng[1] };
+          user.position = { lat: user.lat, lng: user.lng };
         });
         socket.emit("users", users);
       });
@@ -97,19 +92,28 @@ io.sockets.on("connection", socket => {
       });
   }
   function getMarkers(user) {
-    knex
+    knex("markers")
       .select()
-      .from("markers")
       .then(markers => {
+        console.log("getMarkers", markers);
         markers.forEach(marker => {
-          let latLng = marker.location
-            .substr(1)
-            .slice(0, -1)
-            .split(", ")
-            .map(str => Number(str));
-          marker.position = { lat: latLng[0], lng: latLng[1] };
+          marker.position = { lat: marker.lat, lng: marker.lng };
+          console.log("position", marker.position);
         });
         socket.emit("markers", markers);
+      });
+  }
+
+  function markerMove(marker) {
+    knex("markers")
+      .where("id", "=", marker.id)
+      .update({
+        lat: marker.lat,
+        lng: marker.lng
+      })
+      .then(numRows => {
+        marker.position = { lat: marker.lat, lng: marker.lng };
+        io.sockets.emit("marker.move", marker);
       });
   }
 
@@ -136,12 +140,9 @@ io.sockets.on("connection", socket => {
         } else {
           isLoggedIn = true;
           let user = users[0];
-          let latLng = user.location
-            .substr(1)
-            .slice(0, -1)
-            .split(", ")
-            .map(str => Number(str));
-          user.position = { lat: latLng[0], lng: latLng[1] };
+
+          user.position = { lat: user.lat, lng: user.lng };
+          console.log("user.logged_in", user);
           socket.emit("user.logged_in", user);
 
           // User is logged in, send them the user info,
@@ -156,6 +157,7 @@ io.sockets.on("connection", socket => {
         }
       });
   });
+
   if (isLoggedIn) {
     //Get Users
     socket.on("users.get", user => {
@@ -215,8 +217,7 @@ io.sockets.on("connection", socket => {
 
     //Marker moves
     socket.on("marker.move", marker => {
-      console.log("marker.move", marker);
-      io.sockets.emit("marker.move", marker);
+      markerMove(marker);
     });
 
     // User moves

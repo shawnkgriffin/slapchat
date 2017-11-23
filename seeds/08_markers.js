@@ -12,7 +12,8 @@ exports.seed = function(knex, Promise) {
         knex("markers").insert({
           layer_id: queryResult[0][0].id,
           owner_user_id: queryResult[1][0].id,
-          location: "(50.089577, -122.931307 )",
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           draggable: true,
           label: "Accidents",
           icon: "http://localhost:3001/avalanche1.png"
@@ -20,7 +21,8 @@ exports.seed = function(knex, Promise) {
         knex("markers").insert({
           layer_id: queryResult[0][1].id,
           owner_user_id: queryResult[1][1].id,
-          location: "(50.074817, -122.9369727)",
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           label: "Items Needing Repair",
           draggable: true,
           icon: "http://localhost:3001/school.png"
@@ -28,7 +30,8 @@ exports.seed = function(knex, Promise) {
         knex("markers").insert({
           layer_id: queryResult[0][2].id,
           owner_user_id: queryResult[1][2].id,
-          location: "(50.097066, -122.953452)",
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           draggable: true,
           label: "Sasquatch",
           icon: "http://localhost:3001/avalanche1.png"
