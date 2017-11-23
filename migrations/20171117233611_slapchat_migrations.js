@@ -124,13 +124,13 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema
-    .dropTable("circles")
-    .dropTable("markers")
-    .dropTable("layers")
-    .dropTable("user_channels")
-    .dropTable("location_data")
-    .dropTable("channel_messages")
-    .dropTable("direct_messages")
-    .dropTable("channels")
-    .dropTable("users");
+    .dropTableIfExists("circles")
+    .dropTableIfExists("markers")
+    .dropTableIfExists("layers")
+    .dropTableIfExists("user_channels")
+    .dropTableIfExists("location_data")
+    .dropTableIfExists("channel_messages")
+    .dropTableIfExists("direct_messages")
+    .dropTableIfExists("channels")
+    .dropTableIfExists("users");
 };
