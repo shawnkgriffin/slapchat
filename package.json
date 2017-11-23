@@ -70,7 +70,7 @@
     ]
   },
   "scripts": {
-    "heroku_postbuild": "npm run build && node server/server.js",
+    "heroku-postbuild": "npm run build",
     "precommit": "lint-staged",
     "start": "concurrently 'node scripts/start.js' 'node server/server.js'",
     "build": "node scripts/build.js",

@@ -11,13 +11,16 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const uuidv4 = require("uuid/v4");
+const path = require("path");
 
 let connections = [];
 
+const staticPath = path.resolve(__dirname, "..", "build");
+
 server.listen(process.env.PORT || 3001);
 
-console.log("/public", __dirname + "/public");
-app.use(express.static("./server/public"));
+console.log("/public", staticPath);
+app.use(express.static(staticPath));
 
 if (ENV === "development") {
   //Index HTML is for debugging
