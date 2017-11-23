@@ -11,7 +11,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "shawn@shawngriffin.com",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/shawn.jpg"
         }),
         knex("users").insert({
@@ -22,7 +23,8 @@ exports.seed = function(knex, Promise) {
           location: `(${50.093284 +
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/scott.jpg"
         }),
         knex("users").insert({
@@ -33,7 +35,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "jess@jess.jess",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/Jessica.jpg"
         }),
         knex("users").insert({
@@ -44,7 +47,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "tony@tony.tony",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/tony.png"
         }),
         knex("users").insert({
@@ -55,7 +59,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "bob@bob.bob",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/bob.jpg"
         }),
         knex("users").insert({
@@ -66,7 +71,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "finn@finn.finn",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/finn.png"
         }),
         knex("users").insert({
@@ -77,7 +83,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "greg@greg.greg",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/greg.jpg"
         }),
         knex("users").insert({
@@ -88,7 +95,8 @@ exports.seed = function(knex, Promise) {
             (Math.random() - 0.5) * 0.05}, ${-122.93494 +
             (Math.random() - 0.5) * 0.05})`,
           email: "travis@travis.travis",
-          password: "Shawn",
+          password:
+            "$2a$10$zzINBZ6fwhOtJWduwSRkcexHGZyuUkXTxGgHSSgsSwn6U4AdxMO.O",
           avatar: "http://localhost:3001/avatars/travis.jpg"
         })
       ]);

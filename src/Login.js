@@ -1,7 +1,6 @@
-import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import React from "react";
 import Modal from "react-modal";
-import App from "./App.js";
+import bcrypt from "bcrypt";
 
 const customStyles = {
   content: {
@@ -68,6 +67,7 @@ class Login extends React.Component {
       email: this.state.email,
       password: this.state.password
     };
+    console.log("NEW LOGIN", newLogin);
     this.props.sendNewLogin(newLogin);
     this.closeModal();
   }
@@ -105,7 +105,7 @@ class Login extends React.Component {
                 onChange={this.handlePasswordChange}
               />
             </ul>
-            <button style={textStyle} onClick={this.handleSubmit}>
+            <button type="button" style={textStyle} onClick={this.handleSubmit}>
               Submit
             </button>
           </form>

@@ -124,17 +124,18 @@ io.sockets.on("connection", socket => {
   //     })
   // });
   socket.on("user.login", user => {
-    // for now retrieve the user information
+    const password = user.password;
     knex("users")
       .where({ email: user.email })
       .select()
       .then(users => {
         if (users.length == 0) {
-          socket.emit("user.login_error");
+          socket.emit("user.login_email_error");
+        } else if (password !== users[0].password) {
+          socket.emit("user.login_pass_error");
         } else {
           isLoggedIn = true;
           let user = users[0];
-          console.log("HERE", user);
           let latLng = user.location
             .substr(1)
             .slice(0, -1)

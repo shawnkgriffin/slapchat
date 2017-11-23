@@ -6,7 +6,12 @@ import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
+import bcrypt from "bcrypt";
 
+const textStyle = {
+  color: "red",
+  fontstyle: "italic"
+};
 class App extends Component {
   constructor(props) {
     super(props);
@@ -21,9 +26,9 @@ class App extends Component {
       loading: false,
       currentUser: null,
       currentChannelId: null,
-      currentDirectMessageId: null
+      currentDirectMessageId: null,
+      isAuth: ""
     };
-
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
@@ -40,14 +45,13 @@ class App extends Component {
 
     this.socket.on("users", users => {
       this.setState({ users: users });
-      console.log("users", users[0].id);
     });
     this.socket.on("user.logged_in", user => {
-      this.setState({ currentUser: user });
+      this.setState({ currentUser: user, isAuth: "" });
     });
+
     this.socket.on("channels", channels => {
       this.setState({ channels: channels, currentChannelId: channels[0].id });
-      console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -83,7 +87,6 @@ class App extends Component {
 
     // Receive a direct message
     this.socket.on("direct_message.post", direct_message => {
-      console.log("direct_message.post", direct_message);
       direct_message.avatar = this.state.users.find(
         user => user.id === direct_message.sender_user_id
       ).avatar;
@@ -120,8 +123,13 @@ class App extends Component {
     this.socket.on("layers", layers => {
       this.setState({ layers: layers });
     });
-    this.socket.on("user.move", userPosition => {
-      console.log("user.move", userPosition);
+    this.socket.on("user.move", userPosition => {});
+
+    this.socket.on("user.login_pass_error", () => {
+      this.setState({ isAuth: "Incorrect Email or Password" });
+    });
+    this.socket.on("user.login_email_error", () => {
+      this.setState({ isAuth: "Incorrect Email or Password" });
     });
   }
   sendNewRegister(newRegister) {
@@ -166,7 +174,6 @@ class App extends Component {
 
   //this callback is when the user clicks on a channel
   onChannelCallback = function onChannelCallback(channel) {
-    console.log("Channel Callback", channel);
     // set the messages container to point to the current channel
     this.setState({
       currentChannelId: channel.id,
@@ -179,7 +186,6 @@ class App extends Component {
 
   //this callback is when the user clicks on a channel
   onUserCallback = function onUserCallback(user) {
-    console.log("User Callback", user);
     // set the messages container to point to the current channel
     this.setState({
       currentChannelId: null,
@@ -196,19 +202,27 @@ class App extends Component {
 
   render() {
     if (this.state.currentUser === null) {
-      return (
-        <div>
-          <h1> Welcome to Slap! </h1>
-          <Login sendNewLogin={this.sendNewLogin} />
-          <Register sendNewRegister={this.sendNewRegister} />
-        </div>
-      );
+      if (this.state.isAuth !== "") {
+        return (
+          <div>
+            <h1> Welcome to Slap </h1>
+            <span style={textStyle}>{this.state.isAuth}</span>
+            <Login sendNewLogin={this.sendNewLogin} />
+            <Register sendNewRegister={this.sendNewRegister} />
+          </div>
+        );
+      } else {
+        return (
+          <div>
+            <h1> Welcome to Slap! </h1>
+            <Login sendNewLogin={this.sendNewLogin} />
+            <Register sendNewRegister={this.sendNewRegister} />
+          </div>
+        );
+      }
     }
-
     return (
       <div className="fixed-container">
-        <Login sendNewLogin={this.sendNewLogin} />
-        <Register sendNewRegister={this.sendNewRegister} />
         <SideBar
           onChannelCallback={this.onChannelCallback}
           onUserCallback={this.onUserCallback}
