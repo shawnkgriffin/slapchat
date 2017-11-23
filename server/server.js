@@ -14,7 +14,6 @@ server.listen(process.env.PORT || 3001);
 
 app.use(express.static("./server/public"));
 
-//Index HTML is for debugging
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
@@ -22,11 +21,13 @@ app.get("/", (req, res) => {
 //Socket on connect
 io.sockets.on("connection", socket => {
   connections.push(socket);
+  let isLoggedIn = false;
   console.log("Connected: %s sockets connected", connections.length);
 
   //Disconnect
   socket.on("disconnect", data => {
     connections.splice(connections.indexOf(socket), 1);
+    isLoggedIn = false;
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
@@ -170,15 +171,26 @@ io.sockets.on("connection", socket => {
   }
   ///////////////////////////////////////////////////////////////////////////
   // Here is all the socket state information.
+  // socket.on("user.register", user => {
+  //   knex
+  //     .insert(user)
+  //     .into("users")
+  //     .returning("id");.then(id => {
+
+  //     })
+  // });
   socket.on("user.login", user => {
-    // for now retrieve the user information
+    const password = user.password;
     knex("users")
       .where({ email: user.email })
       .select()
       .then(users => {
         if (users.length == 0) {
-          socket.emit("user.login_error");
+          socket.emit("user.login_email_error");
+        } else if (password !== users[0].password) {
+          socket.emit("user.login_pass_error");
         } else {
+          isLoggedIn = true;
           let user = users[0];
 
           user.position = { lat: user.lat, lng: user.lng };
