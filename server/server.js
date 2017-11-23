@@ -19,10 +19,12 @@ server.listen(process.env.PORT || 3001);
 console.log("/public", __dirname + "/public");
 app.use(express.static("./server/public"));
 
-//Index HTML is for debugging
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+if (ENV === "development") {
+  //Index HTML is for debugging
+  app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+  });
+}
 
 //Socket on connect
 io.sockets.on("connection", socket => {
