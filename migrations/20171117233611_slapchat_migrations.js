@@ -103,12 +103,12 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema
-    .dropTable("markers")
-    .dropTable("layers")
     .dropTable("user_channels")
     .dropTable("location_data")
     .dropTable("channel_messages")
     .dropTable("direct_messages")
     .dropTable("channels")
+    .dropTable("markers")
+    .dropTable("layers")
     .dropTable("users");
 };
