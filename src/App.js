@@ -53,7 +53,6 @@ class App extends Component {
 
     this.socket.on("channels", channels => {
       this.setState({ channels: channels });
-      console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -68,7 +67,6 @@ class App extends Component {
       if (channel_message.content.indexOf("!alert") !== -1) {
         alert(channel_message.content);
       }
-      console.log("channel_message.post", channel_message);
       channel_message.avatar = this.state.users.find(
         user => user.id === channel_message.sender_user_id
       ).avatar;
@@ -114,18 +112,6 @@ class App extends Component {
       this.setState({
         direct_messages: direct_messages
       });
-      console.log(
-        "sender:" +
-          direct_message.sender_user_id +
-          "is:" +
-          this.state.currentDirectMessageId
-      );
-      console.log(
-        "rec:" +
-          direct_message.recipient_user_id +
-          "is:" +
-          this.state.currentUser.id
-      );
       if (
         (direct_message.sender_user_id === this.state.currentDirectMessageId &&
           direct_message.recipient_user_id === this.state.currentUser.id) ||
@@ -214,13 +200,11 @@ class App extends Component {
     }
 
     this.socket.emit(action, payload);
-    console.log("ALMOST", action, "PAY", payload);
   };
 
   // When a lower level component needs to send something to the server
   // it calls sendServer(action, payload)
   sendServer = function sendServer(action, payload) {
-    console.log(`sendServer(${action}, ${payload})`);
     this.socket.emit(action, payload);
   };
 
