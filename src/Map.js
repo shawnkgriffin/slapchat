@@ -199,7 +199,12 @@ class Map extends Component {
     this.props.sendServer("circle.move", circle);
   };
   onMarkerComplete = e => {
+    this.props.sendServer("marker.add", {
+      lat: e.position.lat(),
+      lng: e.position.lng()
+    });
     console.log("onMarkerComplete", e.position.lat(), e.position.lng());
+    // TODO delete the marker
   };
   onPolygonComplete = e => {
     console.log("onPolygonComplete", e.getPaths().getArray()[0]);
