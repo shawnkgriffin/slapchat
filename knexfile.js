@@ -20,7 +20,7 @@ module.exports = {
 
   production: {
     client: "postgresql",
-    connetion: process.env.DATABASE_URL,
+    connection: process.env.DATABASE_URL,
     // connection: {
     //   // database: process.env.DB_DATABASE,
     //   database:
