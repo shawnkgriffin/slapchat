@@ -2,6 +2,10 @@
   "name": "slapchat",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "6.12.0",
+    "npm": "5.5.1"
+  },
   "dependencies": {
     "autoprefixer": "7.1.6",
     "babel-core": "6.26.0",
@@ -24,6 +28,7 @@
     "eslint-plugin-flowtype": "2.39.1",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "5.1.1",
+    "eslint-plugin-prettier": "^2.3.1",
     "eslint-plugin-react": "7.4.0",
     "express": "^4.16.2",
     "extract-text-webpack-plugin": "3.0.2",
@@ -48,8 +53,8 @@
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.1.1",
     "react-google-maps": "^9.2.2",
-    "react-scroll": "^1.6.4",
     "react-modal": "^3.1.2",
+    "react-scroll": "^1.6.4",
     "sass-loader": "^6.0.6",
     "socket.io": "^2.0.4",
     "style-loader": "0.19.0",
@@ -68,8 +73,9 @@
     ]
   },
   "scripts": {
+    "heroku-postbuild": "npm run build",
     "precommit": "lint-staged",
-    "start": "node scripts/start.js",
+    "start": "concurrently 'node scripts/start.js' 'node server/server.js'",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
@@ -116,6 +122,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "concurrently": "^3.5.1",
     "eslint-plugin-prettier": "^2.3.1",
     "prettier": "^1.8.2"
   }
