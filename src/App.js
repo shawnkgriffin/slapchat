@@ -64,6 +64,9 @@ class App extends Component {
 
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
+      if (channel_message.content.indexOf("!alert") !== -1) {
+        alert(channel_message.content);
+      }
       console.log("channel_message.post", channel_message);
       channel_message.avatar = this.state.users.find(
         user => user.id === channel_message.sender_user_id
@@ -97,7 +100,9 @@ class App extends Component {
 
     // Receive a direct message
     this.socket.on("direct_message.post", direct_message => {
-      console.log("direct_message.post", direct_message);
+      if (direct_message.content.indexOf("!alert") !== -1) {
+        alert(direct_message.content);
+      }
       direct_message.avatar = this.state.users.find(
         user => user.id === direct_message.sender_user_id
       ).avatar;
