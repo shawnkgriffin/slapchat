@@ -1,7 +1,6 @@
 import React from "react";
 
 function User({ user, onUserCallback, activeUserId }) {
-  console.log(activeUserId);
   const isActive = activeUserId === user.id ? "active-user" : "";
   const userClass = `user list-group-item ${isActive}`;
   return (
