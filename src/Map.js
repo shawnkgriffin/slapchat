@@ -44,22 +44,24 @@ const MyMapComponent = withScriptjs(
         paths={[polygon]}
         strokeColor="#f91616"
         strokeOpacity={0.8}
-        strokeWeight={1}
+        strokeWeight={0.5}
         fillColor="#f91616"
         fillOpacity={0.35}
         clickable={true}
-        editable={true}
+        draggable={false}
+        onDragEnd={polygonState => props.onDragEnd(polygon, polygonState)}
       />
       <Circle
-        center={{ lat: 50.093284, lng: -122.93494 }}
+        center={{ lat: 50.092393210938795, lng: -122.98893123865128 }}
         strokeColor="#f91616"
         strokeOpacity={0.8}
-        strokeWeight={1}
-        radius={100}
+        strokeWeight={0.5}
+        radius={461.5005410780072}
         fillColor="#f91616"
         fillOpacity={0.35}
         clickable={true}
-        editable={true}
+        draggable={true}
+        onDragEnd={circleState => props.onDragEnd("circle", circleState)}
       />
       <SearchBox
         ref={props.onSearchBoxMounted}
@@ -151,23 +153,14 @@ class Map extends Component {
     this.handleDragEnd = this.handleDragEnd.bind(this);
   }
 
+  // Marker events
   handleMarkerClick = (marker, markerState) => {
     console.log("google:", window.google);
     console.log("handleMarkerClick", marker, markerState);
   };
   handleDragEnd = (marker, markerState) => {
-    console.log(
-      "handleDragEnd",
-      marker,
-      markerState.latLng.lat(),
-      markerState.latLng.lng(),
-      markerState
-    );
     marker.lat = markerState.latLng.lat();
     marker.lng = markerState.latLng.lng();
-
-    console.log("handleDragEnd", marker);
-
     this.props.sendServer("marker.move", marker);
   };
   onCircleComplete = e => {

@@ -7,7 +7,6 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io").listen(server);
-const uuidv4 = require("uuid/v4");
 
 let connections = [];
 
@@ -113,6 +112,19 @@ io.sockets.on("connection", socket => {
       });
   }
 
+  function circleCreate(circle){
+    console.log("circleCreate(",circle)
+    knex("circles").insert({
+      label: circle.label,
+      description: circle.description,
+      lat: circle.lat,
+      lng: circle.lng,
+      radius: circle.radius
+    }).then(id => {
+      circle.id = id;
+      io.sockets.emit("circle.create", circle);
+    });
+  }
   ///////////////////////////////////////////////////////////////////////////
   // Here is all the socket state information.
   socket.on("user.login", user => {
@@ -207,5 +219,7 @@ io.sockets.on("connection", socket => {
   });
 
   // Circle functions
-  
+  socket.on("circle.create", circle => {
+    circleCreate(circle);
+  })
 });

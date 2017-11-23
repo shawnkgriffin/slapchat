@@ -37,6 +37,26 @@ exports.up = function(knex, Promise) {
       table.boolean("draggable");
       table.timestamps(true, true);
     })
+    .createTable("circles", function(table) {
+      table.increments("id").primary();
+      table.float("lat");
+      table.float("lng");
+      table.float("radius");
+      table
+        .integer("layer_id")
+        .references("id")
+        .inTable("layers")
+        .onDelete("CASCADE");
+      table
+        .integer("owner_user_id")
+        .references("id")
+        .inTable("users")
+        .onDelete("CASCADE");
+      table.string("label");
+      table.string("description");
+      table.boolean("draggable");
+      table.timestamps(true, true);
+    })
     .createTable("channels", function(table) {
       table.increments("id").primary();
       table.string("name");
@@ -103,6 +123,7 @@ exports.up = function(knex, Promise) {
 
 exports.down = function(knex, Promise) {
   return knex.schema
+    .dropTable("circles")
     .dropTable("markers")
     .dropTable("layers")
     .dropTable("user_channels")

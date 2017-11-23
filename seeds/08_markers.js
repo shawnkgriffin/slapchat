@@ -1,5 +1,5 @@
 exports.seed = function(knex, Promise) {
-  return knex("user_channels")
+  return knex("markers")
     .del()
     .then(() => {
       return Promise.all([
