@@ -16,7 +16,6 @@ const {
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
 const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
-// const GOOGLE_MAPS_KEY = "AIzaSyBFL2uwAAg3ymHvkirWLapG5yaV3mTFEzY"; // TODO fix this in .env
 
 const polygon = [
   { lat: 50.114806, lng: -122.892426 },
@@ -48,21 +47,23 @@ const MyMapComponent = withScriptjs(
         fillColor="#f91616"
         fillOpacity={0.35}
         clickable={true}
-        draggable={false}
+        draggable={true}
         onDragEnd={polygonState => props.onDragEnd(polygon, polygonState)}
       />
-      <Circle
-        center={{ lat: 50.092393210938795, lng: -122.98893123865128 }}
-        strokeColor="#f91616"
-        strokeOpacity={0.8}
-        strokeWeight={0.5}
-        radius={461.5005410780072}
-        fillColor="#f91616"
-        fillOpacity={0.35}
-        clickable={true}
-        draggable={true}
-        onDragEnd={circleState => props.onDragEnd("circle", circleState)}
-      />
+      {props.circles.map((circle, index) => (
+        <Circle
+          center={circle.center}
+          strokeColor="#f91616"
+          strokeOpacity={0.8}
+          strokeWeight={0.5}
+          radius={circle.radius}
+          fillColor="#f91616"
+          fillOpacity={0.35}
+          clickable={true}
+          draggable={true}
+          onDragEnd={circleState => props.onDragEnd(circle, circleState)}
+        />
+      ))}
       <SearchBox
         ref={props.onSearchBoxMounted}
         bounds={props.bounds}
@@ -216,6 +217,7 @@ class Map extends Component {
           onRectangleComplete={this.onRectangleComplete}
           onPlacesChanged={this.onPlacesChanged}
           markers={markers}
+          circles={this.props.circles}
         />
       </div>
     );

@@ -18,6 +18,7 @@ class App extends Component {
       messages: [],
       channels: [],
       markers: [],
+      circles: [],
       layers: [],
       loading: false,
       currentUser: null, // this is a user object
@@ -151,6 +152,9 @@ class App extends Component {
     this.socket.on("markers", markers => {
       this.setState({ markers: markers });
     });
+    this.socket.on("circles", circles => {
+      this.setState({ circles: circles });
+    });
     this.socket.on("layers", layers => {
       this.setState({ layers: layers });
     });
@@ -261,6 +265,7 @@ class App extends Component {
               <Map
                 sendServer={this.sendServer}
                 markers={this.state.markers}
+                circles={this.state.circles}
                 users={this.state.users}
               />
             </section>

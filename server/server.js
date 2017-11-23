@@ -98,6 +98,16 @@ io.sockets.on("connection", socket => {
         socket.emit("markers", markers);
       });
   }
+  function getCircles(user) {
+    knex("circles")
+      .select()
+      .then(circles => {
+        circles.forEach(circle => {
+          circle.center = { lat: circle.lat, lng: circle.lng };
+        });
+        socket.emit("circles", circles);
+      });
+  }
 
   function markerMove(marker) {
     knex("markers")
@@ -111,19 +121,32 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("marker.move", marker);
       });
   }
-
-  function circleCreate(circle){
-    console.log("circleCreate(",circle)
-    knex("circles").insert({
-      label: circle.label,
-      description: circle.description,
-      lat: circle.lat,
-      lng: circle.lng,
-      radius: circle.radius
-    }).then(id => {
-      circle.id = id;
-      io.sockets.emit("circle.create", circle);
-    });
+  function circleMove(circle) {
+    knex("circles")
+      .where("id", "=", circle.id)
+      .update({
+        lat: circle.center.lat,
+        lng: circle.center.lng,
+        radius: circle.radius
+      })
+      .then(numRows => {
+        io.sockets.emit("circle.move", circle);
+      });
+  }
+  function circleCreate(circle) {
+    console.log("circleCreate(", circle);
+    knex("circles")
+      .insert({
+        label: circle.label,
+        description: circle.description,
+        lat: circle.lat,
+        lng: circle.lng,
+        radius: circle.radius
+      })
+      .then(id => {
+        circle.id = id;
+        io.sockets.emit("circle.create", circle);
+      });
   }
   ///////////////////////////////////////////////////////////////////////////
   // Here is all the socket state information.
@@ -148,8 +171,8 @@ io.sockets.on("connection", socket => {
           getDirectMessages(user);
           getChannelMessages(user);
           getLayers(user);
-
           getMarkers(user);
+          getCircles(user);
         }
       });
   });
@@ -221,5 +244,12 @@ io.sockets.on("connection", socket => {
   // Circle functions
   socket.on("circle.create", circle => {
     circleCreate(circle);
-  })
+  });
+
+  socket.on("circles.get", user => {
+    getCircles(user);
+  });
+  socket.on("circle.move", circle => {
+    circleMove(circle);
+  });
 });
