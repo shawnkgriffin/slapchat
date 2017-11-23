@@ -267,7 +267,6 @@ class App extends Component {
                 sendServer={this.sendServer}
                 markers={this.state.markers}
                 users={this.state.users}
-                staticPath={this.connectionString}
               />
             </section>
           )}
