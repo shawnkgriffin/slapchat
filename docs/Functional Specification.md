@@ -1,16 +1,15 @@
-# Functional Requirements
-slap (slack + maps) is a program that integrates the best of slack with the ability to share locations on a map. 
+# Functional Specification
+slapChat (slack + maps) is a program that integrates the best of slack with the ability to share locations on a map. 
 
 # System Architecture
-The system uses redux to manage the state of both the server and the client.
 All communication is by web sockets. 
 State changes are sent by each client to the server. The server updates it's internal state using redux. The server will either send the message to all clients or it will send the updated state (tbd).
 ![System Layout](https://github.com/shawnkgriffin/slap/blob/master/docs/slap%20system.png "System Layout")
 ## State Description
-Each client manages it's own state using redux and simple middleware. The state consists of the following major components
+Each client manages it's own state. The state consists of the following major components
 * Map
   * Users - [{name, current_location, avatar}]
-  * Pins - {location, description, title, icon, picture}
+  * Markers - {location, description, title, icon, picture}
   * Circles - {location, radius, description, title, icon, picture}
   * Polygons - array of locations, description, title, icon, picture}
   * Layers - {name, [pins], [circles], [polygons]}
@@ -24,15 +23,15 @@ Each client manages it's own state using redux and simple middleware. The state 
 ## Client 
 - [ ] Android - React Native
 - [ ] iOS - React Native
-- [ ] Web - React
+- [X] Web - React
 - [ ] Redux - state machine management for all client environments.
 
 ## Server 
-- [ ] Express Server
+- [X] Express Server
 - [ ] Redux - state machine management (stretch)
 
 ## Database 
- - [ ] Postgres 
+ - [X] Postgres 
  - [ ] PostgresGIS (stretch)
 
 
@@ -104,6 +103,9 @@ Each client manages it's own state using redux and simple middleware. The state 
  - [ ] User location is tracked and sent by the client to the server. 
  - [X] All users can see the location of any active user on their map.
  - [ ] When a user moves, the client will dynamically update the location on the map. 
+ - [ ] For demonstration and testing, a bot updates the user positions
+ - [ ] For demonstration and testing, a bot can send alerts
+ - [ ] For demonstration and testing, a bot can reply to message
  ### Map
 - [ ] users can see a list of the available layers
 - [ ] users can view a layer
