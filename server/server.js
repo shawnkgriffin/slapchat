@@ -130,6 +130,18 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("marker.move", marker);
       });
   }
+
+  function markerAdd(marker) {
+    knex("markers")
+      .insert({
+        lat: marker.lat,
+        lng: marker.lng
+      })
+      .then(id => {
+        marker.id = id;
+        io.sockets.emit("marker.add", marker);
+      });
+  }
   function circleMove(circle) {
     knex("circles")
       .where("id", "=", circle.id)
@@ -241,6 +253,10 @@ io.sockets.on("connection", socket => {
   //Marker functions
   socket.on("marker.move", marker => {
     markerMove(marker);
+  });
+
+  socket.on("marker.add", marker => {
+    markerAdd(marker);
   });
 
   // User functions

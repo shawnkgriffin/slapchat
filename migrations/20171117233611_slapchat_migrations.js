@@ -32,10 +32,10 @@ exports.up = function(knex, Promise) {
         .references("id")
         .inTable("users")
         .onDelete("CASCADE");
-      table.string("label");
-      table.string("icon");
+      table.string("label").defaultTo("New Marker");
+      table.string("icon").defaultTo("http://localhost:3001/skiing-red.png");
       table.string("type").defaultTo("MARKER");
-      table.boolean("draggable");
+      table.boolean("draggable").defaultTo(true);
       table.timestamps(true, true);
     })
     .createTable("circles", function(table) {
