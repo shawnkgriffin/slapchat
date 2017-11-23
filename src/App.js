@@ -25,6 +25,7 @@ class App extends Component {
       currentDirectMessageId: null //
     };
 
+    /* eslint-disable no-restricted-globals */
     if (location.hostname === "localhost") {
       this.connectionString = "http://localhost:3001";
     } else {
@@ -32,6 +33,7 @@ class App extends Component {
         location.hostname
       }:${location.port || (location.protocol === "https:" ? 443 : 80)}`;
     }
+    /* eslint-enable no-restricted-globals */
 
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
@@ -43,9 +45,7 @@ class App extends Component {
 
   //RECIVES STATE DATA
   componentDidMount() {
-    /* eslint-disable no-restricted-globals */
     this.socket = io(this.connectionString);
-    /* eslint-enable no-restricted-globals */
 
     this.socket.on("connect", () => {
       console.info("connected to web socket");
