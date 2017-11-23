@@ -44,7 +44,17 @@ io.sockets.on("connection", socket => {
         socket.emit("users", users);
       });
   }
-
+  function userMove(user) {
+    knex("users")
+      .where("id", "=", user.id)
+      .update({
+        lat: user.lat,
+        lng: user.lng
+      })
+      .then(numRows => {
+        io.sockets.emit("user.move", user);
+      });
+  }
   // Get all the channels for a user
   function getChannels(user) {
     knex
@@ -117,7 +127,6 @@ io.sockets.on("connection", socket => {
         lng: marker.lng
       })
       .then(numRows => {
-        marker.position = { lat: marker.lat, lng: marker.lng };
         io.sockets.emit("marker.move", marker);
       });
   }
@@ -236,9 +245,9 @@ io.sockets.on("connection", socket => {
   });
 
   // User functions
-  socket.on("user.move", data => {
-    // TODO save to locations.
-    io.sockets.emit("user.move", data);
+  // user.move contains id=userId and lat, lng of new position
+  socket.on("user.move", user => {
+    userMove(user);
   });
 
   // Circle functions
