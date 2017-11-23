@@ -7,7 +7,6 @@ import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
-import bcrypt from "bcrypt";
 
 const textStyle = {
   color: "red",
