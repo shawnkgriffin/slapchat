@@ -35,7 +35,12 @@ class App extends Component {
 
   //RECIVES STATE DATA
   componentDidMount() {
-    this.socket = io(`http://${location.hostname}:${location.port || 80}`); // eslint-disable-line no-restricted-globals
+    /* eslint-disable no-restricted-globals */
+    this.socket = io(
+      `${location.protocol}//${location.hostname}:${location.port ||
+        (location.protocol === "https:" ? 443 : 80)}`
+    );
+    /* eslint-enable no-restricted-globals */
 
     // successful login will cause everything to fill
     this.socket.emit("user.login", {
