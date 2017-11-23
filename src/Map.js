@@ -61,7 +61,7 @@ const MyMapComponent = withScriptjs(
           fillOpacity={0.35}
           clickable={true}
           draggable={true}
-          onDragEnd={circleState => props.onDragEnd(circle, circleState)}
+          onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
         />
       ))}
       <SearchBox
@@ -152,6 +152,8 @@ class Map extends Component {
     super(props);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.onCircleDragEnd = this.onCircleDragEnd.bind(this);
+    this.onCircleComplete = this.onCircleComplete.bind(this);
   }
 
   // Marker events
@@ -189,6 +191,17 @@ class Map extends Component {
       radius: e.radius
     };
     this.props.sendServer("circle.create", circle);
+  };
+  onCircleDragEnd = (circle, circleState) => {
+    console.log("onCircleDragEnd", circle);
+    // let circle = {
+    //   label: "Danger",
+    //   description: "Avalanche hazard, do not approach",
+    //   lat: e.center.lat(),
+    //   lng: e.center.lng(),
+    //   radius: e.radius
+    // };
+    // this.props.sendServer("circle.create", circle);
   };
   onMarkerComplete = e => {
     console.log("onMarkerComplete", e.position.lat(), e.position.lng());
@@ -229,6 +242,7 @@ class Map extends Component {
           onMarkerClick={this.handleMarkerClick}
           onDragEnd={this.handleDragEnd}
           onCircleComplete={this.onCircleComplete}
+          onCircleDragEnd={this.onCircleDragEnd}
           onMarkerComplete={this.onMarkerComplete}
           onPolygonComplete={this.onPolygonComplete}
           onPolylineComplete={this.onPolylineComplete}
