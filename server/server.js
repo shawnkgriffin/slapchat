@@ -134,9 +134,8 @@ io.sockets.on("connection", socket => {
     knex("circles")
       .where("id", "=", circle.id)
       .update({
-        lat: circle.center.lat,
-        lng: circle.center.lng,
-        radius: circle.radius
+        lat: circle.lat,
+        lng: circle.lng
       })
       .then(numRows => {
         io.sockets.emit("circle.move", circle);
