@@ -264,6 +264,12 @@ class App extends Component {
       if (this.state.isAuth !== "") {
         return (
           <div>
+            <video id="bgvid" autoPlay loop muted>
+              <source
+                src="./server/public/avatars/Planet.mp4"
+                type="video/mp4"
+              />
+            </video>
             <h1> Welcome to Slap </h1>
             <span style={textStyle}>{this.state.isAuth}</span>
             <Login sendNewLogin={this.sendNewLogin} />

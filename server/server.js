@@ -291,5 +291,6 @@ io.sockets.on("connection", socket => {
   socket.on("user.move", data => {
     // TODO save to locations.
     io.sockets.emit("user.move", data);
+    });
   });
 });
