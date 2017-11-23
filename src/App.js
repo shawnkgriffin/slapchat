@@ -45,7 +45,6 @@ class App extends Component {
 
     this.socket.on("users", users => {
       this.setState({ users: users });
-      console.log("users", users[0].id);
     });
     this.socket.on("user.logged_in", user => {
       this.setState({ currentUser: user });

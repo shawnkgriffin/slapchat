@@ -13,7 +13,6 @@ let connections = [];
 
 server.listen(process.env.PORT || 3001);
 
-console.log("/public", __dirname + "/public");
 app.use(express.static("./server/public"));
 
 //Index HTML is for debugging
@@ -43,7 +42,6 @@ io.sockets.on("connection", socket => {
         users.forEach(user => {
           user.position = { lat: user.lat, lng: user.lng };
         });
-        console.log("users", users);
         socket.emit("users", users);
       });
   }
@@ -95,10 +93,8 @@ io.sockets.on("connection", socket => {
     knex("markers")
       .select()
       .then(markers => {
-        console.log("getMarkers", markers);
         markers.forEach(marker => {
           marker.position = { lat: marker.lat, lng: marker.lng };
-          console.log("position", marker.position);
         });
         socket.emit("markers", markers);
       });
@@ -125,14 +121,12 @@ io.sockets.on("connection", socket => {
       .where({ email: user.email })
       .select()
       .then(users => {
-        console.log(users);
         if (users.length == 0) {
           socket.emit("user.login_error");
         } else {
           let user = users[0];
 
           user.position = { lat: user.lat, lng: user.lng };
-          console.log("user.logged_in", user);
           socket.emit("user.logged_in", user);
 
           // User is logged in, send them the user info,
@@ -174,7 +168,6 @@ io.sockets.on("connection", socket => {
 
   //Post Direct_Messages
   socket.on("direct_message.post", direct_message => {
-    console.log("direct_message.post", direct_message);
     knex
       .insert(direct_message)
       .into("direct_messages")
@@ -182,13 +175,11 @@ io.sockets.on("connection", socket => {
       .then(id => {
         direct_message.id = id;
         io.sockets.emit("direct_message.post", direct_message);
-        console.log("emit(direct_message.post", direct_message);
       });
   });
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
-    console.log("channel_message.post", channel_message);
     knex
       .insert(channel_message)
       .into("channel_messages")
@@ -204,15 +195,17 @@ io.sockets.on("connection", socket => {
     getChannelMessages(user);
   });
 
-  //Marker moves
+  //Marker functions
   socket.on("marker.move", marker => {
     markerMove(marker);
   });
 
-  // User moves
+  // User functions
   socket.on("user.move", data => {
-    console.log("user.move", data.user, data.position);
     // TODO save to locations.
     io.sockets.emit("user.move", data);
   });
+
+  // Circle functions
+  
 });
