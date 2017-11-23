@@ -7,9 +7,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Shawn",
           last_name: "Griffin",
           display_name: "Dispatch",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "shawn@shawngriffin.com",
           avatar: "http://localhost:3001/avatars/shawn.jpg"
         }),
@@ -18,18 +17,16 @@ exports.seed = function(knex, Promise) {
           last_name: "Scotty",
           display_name: "Scotty",
           email: "scott@scott.scott",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           avatar: "http://localhost:3001/avatars/scott.jpg"
         }),
         knex("users").insert({
           first_name: "Jessica",
           last_name: "Jones",
           display_name: "Jessie",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "jess@jess.jess",
           avatar: "http://localhost:3001/avatars/Jessica.jpg"
         }),
@@ -37,9 +34,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Anthony",
           last_name: "Soprano",
           display_name: "Tony",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "tony@tony.tony",
           avatar: "http://localhost:3001/avatars/tony.png"
         }),
@@ -47,9 +43,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Bob",
           last_name: "Maintien",
           display_name: "Bob",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "bob@bob.bob",
           avatar: "http://localhost:3001/avatars/bob.jpg"
         }),
@@ -57,9 +52,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Finn",
           last_name: "Hiltner",
           display_name: "Finny",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "finn@finn.finn",
           avatar: "http://localhost:3001/avatars/finn.png"
         }),
@@ -67,9 +61,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Greg",
           last_name: "Sugiyama",
           display_name: "Greg",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "greg@greg.greg",
           avatar: "http://localhost:3001/avatars/greg.jpg"
         }),
@@ -77,9 +70,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Travis",
           last_name: "Kothlow",
           display_name: "Trav",
-          location: `(${50.093284 +
-            (Math.random() - 0.5) * 0.05}, ${-122.93494 +
-            (Math.random() - 0.5) * 0.05})`,
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "travis@travis.travis",
           avatar: "http://localhost:3001/avatars/travis.jpg"
         })

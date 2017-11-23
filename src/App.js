@@ -168,6 +168,7 @@ class App extends Component {
   // When a lower level component needs to send something to the server
   // it calls sendServer(action, payload)
   sendServer = function sendServer(action, payload) {
+    console.log(`sendServer(${action}, ${payload})`);
     this.socket.emit(action, payload);
   };
 

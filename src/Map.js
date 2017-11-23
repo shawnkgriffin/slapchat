@@ -133,10 +133,11 @@ class Map extends Component {
       markerState.latLng.lng(),
       markerState
     );
-    marker.position = {
-      lat: markerState.latLng.lat(),
-      lng: markerState.latLng.lng()
-    };
+    marker.lat = markerState.latLng.lat();
+    marker.lng = markerState.latLng.lng();
+
+    console.log("handleDragEnd", marker);
+
     this.props.sendServer("marker.move", marker);
   };
   onCircleComplete = e => {

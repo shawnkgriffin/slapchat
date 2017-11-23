@@ -9,7 +9,8 @@ exports.up = function(knex, Promise) {
       table.string("email");
       table.string("password");
       table.string("avatar");
-      table.string("location");
+      table.float("lat");
+      table.float("lng");
       table.timestamps(true, true);
     })
     .createTable("layers", function(table) {
@@ -19,6 +20,8 @@ exports.up = function(knex, Promise) {
     })
     .createTable("markers", function(table) {
       table.increments("id").primary();
+      table.float("lat");
+      table.float("lng");
       table
         .integer("layer_id")
         .references("id")
@@ -29,7 +32,6 @@ exports.up = function(knex, Promise) {
         .references("id")
         .inTable("users")
         .onDelete("CASCADE");
-      table.string("location");
       table.string("label");
       table.string("icon");
       table.boolean("draggable");
@@ -73,6 +75,8 @@ exports.up = function(knex, Promise) {
     })
     .createTable("location_data", function(table) {
       table.increments("id").primary();
+      table.float("lat");
+      table.float("lng");
       table
         .integer("user_id")
         .references("id")

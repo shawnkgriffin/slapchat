@@ -41,12 +41,7 @@ io.sockets.on("connection", socket => {
       .from("users")
       .then(users => {
         users.forEach(user => {
-          let latLng = user.location
-            .substr(1)
-            .slice(0, -1)
-            .split(", ")
-            .map(str => Number(str));
-          user.position = { lat: latLng[0], lng: latLng[1] };
+          user.position = { lat: user.lat, lng: user.lng };
         });
         console.log("users", users);
         socket.emit("users", users);
@@ -102,7 +97,7 @@ io.sockets.on("connection", socket => {
       .then(markers => {
         console.log("getMarkers", markers);
         markers.forEach(marker => {
-          marker.position = { lat: marker.point.x, lng: marker.point.y };
+          marker.position = { lat: marker.lat, lng: marker.lng };
           console.log("position", marker.position);
         });
         socket.emit("markers", markers);
@@ -110,15 +105,14 @@ io.sockets.on("connection", socket => {
   }
 
   function markerMove(marker) {
-    console.log("marker.move", marker);
     knex("markers")
       .where("id", "=", marker.id)
       .update({
-        point: knex.raw(`point(${marker.position.lat},${marker.position.lng})`)
+        lat: marker.lat,
+        lng: marker.lng
       })
-      .then(point => {
-        marker.position = { lat: point.x, lng: point.y };
-        console.log("marker.move", marker);
+      .then(numRows => {
+        marker.position = { lat: marker.lat, lng: marker.lng };
         io.sockets.emit("marker.move", marker);
       });
   }
@@ -136,12 +130,8 @@ io.sockets.on("connection", socket => {
           socket.emit("user.login_error");
         } else {
           let user = users[0];
-          let latLng = user.location
-            .substr(1)
-            .slice(0, -1)
-            .split(", ")
-            .map(str => Number(str));
-          user.position = { lat: latLng[0], lng: latLng[1] };
+
+          user.position = { lat: user.lat, lng: user.lng };
           console.log("user.logged_in", user);
           socket.emit("user.logged_in", user);
 
