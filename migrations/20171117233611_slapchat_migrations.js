@@ -33,6 +33,7 @@ exports.up = function(knex, Promise) {
         .inTable("users")
         .onDelete("CASCADE");
       table.string("label").defaultTo("New Marker");
+      table.string("description").defaultTo("Description");
       table.string("icon").defaultTo("http://localhost:3001/skiing-red.png");
       table.string("type").defaultTo("MARKER");
       table.boolean("draggable").defaultTo(true);
@@ -53,8 +54,8 @@ exports.up = function(knex, Promise) {
         .references("id")
         .inTable("users")
         .onDelete("CASCADE");
-      table.string("label");
-      table.string("description");
+      table.string("label").defaultTo("New Circle");
+      table.string("description").defaultTo("Zone");
       table.boolean("draggable").defaultTo(true);
       table.timestamps(true, true);
     })

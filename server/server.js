@@ -177,7 +177,6 @@ io.sockets.on("connection", socket => {
         "owner_user_id",
         "label",
         "description",
-        "type",
         "draggable"
       ])
       .insert({
