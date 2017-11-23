@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { animateScroll } from "react-scroll";
 import io from "socket.io-client";
 import Map from "./Map.js";
 import MessageList from "./MessageList.js";
@@ -50,7 +51,7 @@ class App extends Component {
       this.setState({ currentUser: user });
     });
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels, currentChannelId: channels[0].id });
+      this.setState({ channels: channels });
       console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
@@ -84,6 +85,14 @@ class App extends Component {
               channel_message.id === this.state.currentChannelId
           )
         });
+      this.setState({
+        currentChannelId: this.state.currentChannelId,
+        currentDirectMessageId: null,
+        messages: this.state.channel_messages.filter(
+          channel_message =>
+            channel_message.channel_id === this.state.currentChannelId
+        )
+      });
     });
 
     // Receive a direct message
@@ -109,7 +118,7 @@ class App extends Component {
         (direct_message.sender_user_id === this.state.currentUser.id &&
           direct_message.recipient_user_id ===
             this.state.currentDirectMessageId)
-      )
+      ) {
         this.setState({
           messages: direct_messages.filter(
             message =>
@@ -121,6 +130,24 @@ class App extends Component {
                   this.state.currentDirectMessageId)
           )
         });
+        this.setState(
+          {
+            currentChannelId: null,
+            currentDirectMessageId: direct_message.recipient_user_id,
+            messages: this.state.direct_messages.filter(
+              direct_message =>
+                (direct_message.sender_user_id === this.state.currentUser.id &&
+                  direct_message.recipient_user_id ===
+                    direct_message.recipient_user_id) ||
+                (direct_message.sender_user_id ===
+                  direct_message.recipient_user_id &&
+                  direct_message.recipient_user_id ===
+                    this.state.currentUser.id)
+            )
+          },
+          this.scrollToBottom
+        );
+      }
     });
     this.socket.on("markers", markers => {
       this.setState({ markers: markers });
@@ -202,6 +229,12 @@ class App extends Component {
     });
   };
 
+  scrollToBottom() {
+    animateScroll.scrollToBottom({
+      containerId: "messages-container"
+    });
+  }
+
   render() {
     return (
       <div className="fixed-container">
@@ -213,6 +246,8 @@ class App extends Component {
           users={this.state.users}
           channels={this.state.channels}
           currentUser={this.state.currentUser}
+          activeUserId={this.state.currentDirectMessageId}
+          activeChannelId={this.state.currentChannelId}
         />
         <main className="nav-and-content">
           <NavBar currentUser={this.state.currentUser} />

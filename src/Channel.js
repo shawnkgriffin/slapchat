@@ -1,10 +1,17 @@
 import React from "react";
 
-function Channel({ channel, onChannelCallback }) {
+function Channel({
+  channel,
+  onChannelCallback,
+  activeUserId,
+  activeChannelId
+}) {
+  const isActive = activeChannelId === channel.id ? "active-user" : "";
+  const channelClass = `channel-channelname list-group-item ${isActive}`;
   return (
     <li
       onClick={channelState => onChannelCallback(channel, channelState)}
-      className="channel-channelname list-group-item"
+      className={channelClass}
     >
       {channel.name}
     </li>

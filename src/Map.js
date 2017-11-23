@@ -163,9 +163,9 @@ class Map extends Component {
     const markers = this.props.markers || [];
     this.props.users.forEach(user =>
       markers.push({
-        label: user.display_name,
+        icon: SERVER + "skiing-blue.png",
         position: user.position,
-        icon: SERVER + "skiing-blue.png"
+        label: user.display_name
       })
     );
     return (

@@ -14,6 +14,8 @@ class SideBar extends Component {
             <Channels
               onChannelCallback={this.props.onChannelCallback}
               channels={this.props.channels}
+              activeChannelId={this.props.activeChannelId}
+              activeUserId={this.props.activeUserId}
             />
           </section>
           <section className="direct-messsages">
@@ -21,6 +23,7 @@ class SideBar extends Component {
             <Users
               onUserCallback={this.props.onUserCallback}
               users={this.props.users}
+              activeUserId={this.props.activeUserId}
               currentUser={this.props.currentUser}
             />
           </section>
