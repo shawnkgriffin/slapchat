@@ -74,6 +74,15 @@ exports.seed = function(knex, Promise) {
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "travis@travis.travis",
           avatar: "http://localhost:3001/avatars/travis.jpg"
+        }),
+        knex("users").insert({
+          first_name: "BB",
+          last_name: "8",
+          display_name: "BB8",
+          lat: 50.093284 + (Math.random() - 0.5) * 0.05,
+          lng: -122.93494 + (Math.random() - 0.5) * 0.05,
+          email: "bb8@starwars.com",
+          avatar: "http://localhost:3001/avatars/bb8.png"
         })
       ]);
     });
