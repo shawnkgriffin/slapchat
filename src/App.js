@@ -35,7 +35,7 @@ class App extends Component {
 
   //RECIVES STATE DATA
   componentDidMount() {
-    this.socket = io("localhost:3001");
+    this.socket = io(`http://${location.hostname}:${location.port || 80}`); // eslint-disable-line no-restricted-globals
 
     // successful login will cause everything to fill
     this.socket.emit("user.login", {
