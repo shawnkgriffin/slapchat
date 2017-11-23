@@ -34,6 +34,7 @@ exports.up = function(knex, Promise) {
         .onDelete("CASCADE");
       table.string("label");
       table.string("icon");
+      table.string("type").defaultTo("MARKER");
       table.boolean("draggable");
       table.timestamps(true, true);
     })
@@ -54,7 +55,7 @@ exports.up = function(knex, Promise) {
         .onDelete("CASCADE");
       table.string("label");
       table.string("description");
-      table.boolean("draggable");
+      table.boolean("draggable").defaultTo(true);
       table.timestamps(true, true);
     })
     .createTable("channels", function(table) {
