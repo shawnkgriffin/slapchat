@@ -72,7 +72,7 @@
   "scripts": {
     "heroku_postbuild": "npm run build && node server/server.js",
     "precommit": "lint-staged",
-    "start": "node scripts/start.js",
+    "start": "concurrently 'node scripts/start.js' 'node server/server.js'",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom"
   },
@@ -119,6 +119,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "concurrently": "^3.5.1",
     "eslint-plugin-prettier": "^2.3.1",
     "prettier": "^1.8.2"
   }

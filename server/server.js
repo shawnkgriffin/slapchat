@@ -1,12 +1,15 @@
-require("dotenv").config();
-
 const ENV = process.env.NODE_ENV || "development";
+
+if (ENV === "development") {
+  require("dotenv").config();
+}
+
 const knexConfig = require("../knexfile.js");
 const knex = require("knex")(knexConfig[ENV]);
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
+const io = require("socket.io")(server);
 const uuidv4 = require("uuid/v4");
 
 let connections = [];
@@ -116,6 +119,8 @@ io.sockets.on("connection", socket => {
   ///////////////////////////////////////////////////////////////////////////
   // Here is all the socket state information.
   socket.on("user.login", user => {
+    console.log("user.login");
+    console.dir(user, { colors: true });
     // for now retrieve the user information
     knex("users")
       .where({ email: user.email })
@@ -150,6 +155,7 @@ io.sockets.on("connection", socket => {
 
   //Get Users
   socket.on("users.get", user => {
+    console.log("Here", user);
     getUsers(user);
   });
 

@@ -36,16 +36,24 @@ class App extends Component {
   //RECIVES STATE DATA
   componentDidMount() {
     /* eslint-disable no-restricted-globals */
-    this.socket = io(
-      `${location.protocol}//${location.hostname}:${location.port ||
-        (location.protocol === "https:" ? 443 : 80)}`
-    );
+    let connectionString;
+    if (location.hostname === "localhost") {
+      connectionString = "http://localhost:3001";
+    } else {
+      connectionString = `${location.protocol}//${
+        location.hostname
+      }:${location.port || (location.protocol === "https:" ? 443 : 80)}`;
+    }
+    this.socket = io(connectionString);
     /* eslint-enable no-restricted-globals */
 
-    // successful login will cause everything to fill
-    this.socket.emit("user.login", {
-      email: "shawn@shawngriffin.com",
-      password: "slapme"
+    this.socket.on("connect", () => {
+      console.info("connected to web socket");
+      // successful login will cause everything to fill
+      this.socket.emit("user.login", {
+        email: "shawn@shawngriffin.com",
+        password: "slapme"
+      });
     });
 
     this.socket.on("users", users => {
