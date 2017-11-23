@@ -160,9 +160,24 @@ class Map extends Component {
     console.log("handleMarkerClick", marker, markerState);
   };
   handleDragEnd = (marker, markerState) => {
-    marker.lat = markerState.latLng.lat();
-    marker.lng = markerState.latLng.lng();
-    this.props.sendServer("marker.move", marker);
+    switch (marker.type) {
+      case "MARKER":
+        marker.lat = markerState.latLng.lat();
+        marker.lng = markerState.latLng.lng();
+        this.props.sendServer("marker.move", marker);
+        break;
+      case "USER":
+        let user = {
+          id: marker.userId,
+          lat: markerState.latLng.lat(),
+
+          lng: markerState.latLng.lng()
+        };
+        this.props.sendServer("user.move", user);
+        break;
+      default:
+        console.log("unexpected type", marker.type);
+    }
   };
   onCircleComplete = e => {
     console.log("onCircleComplete", e.center.lat(), e.center.lng(), e.radius);
@@ -197,7 +212,10 @@ class Map extends Component {
       markers.push({
         icon: SERVER + "skiing-blue.png",
         position: user.position,
-        label: user.display_name
+        label: user.display_name,
+        type: "USER",
+        draggable: true,
+        userId: user.id
       })
     );
     return (
