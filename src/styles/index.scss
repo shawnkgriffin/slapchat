@@ -158,7 +158,9 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
     }
   }
 }
-
+input:-webkit-autofill {
+    -webkit-box-shadow: inset 0 0 0px 9999px white;
+}
 
 
 .chat-bar {

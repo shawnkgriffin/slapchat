@@ -3,13 +3,21 @@ import Modal from "react-modal";
 
 const customStyles = {
   content: {
+    backgroundColor: "rgba(255, 255, 255, 0.6)",
     top: "50%",
     left: "50%",
     right: "auto",
     bottom: "auto",
     marginRight: "-50%",
-    transform: "translate(-50%, -50%)"
+    transform: "translate(-50%, -50%)",
+    color: "rgba(255, 255, 255, 1)"
+  },
+  overlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.75)"
   }
+};
+const buttonStyle = {
+  color: "black"
 };
 class Register extends React.Component {
   constructor(props) {
@@ -89,6 +97,7 @@ class Register extends React.Component {
       avatar: this.state.avatar
     };
     this.props.sendNewRegister(newRegister);
+    this.closeModal();
   }
 
   render() {
@@ -105,56 +114,56 @@ class Register extends React.Component {
           <h2 ref={subtitle => (this.subtitle = subtitle)}>Register</h2>
           <form>
             <ul>
-              <li>
-                <input
-                  id="email"
-                  placeholder="email"
-                  value={this.state.value}
-                  onChange={this.handleEmailChange}
-                />
-              </li>
-              <li>
-                <input
-                  id="password"
-                  placeholder="password"
-                  value={this.state.value}
-                  onChange={this.handlePasswordChange}
-                />
-              </li>
-              <li>
-                <input
-                  id="first name"
-                  placeholder="first name"
-                  value={this.state.value}
-                  onChange={this.handleFirstNameChange}
-                />
-              </li>
-              <li>
-                <input
-                  id="last name"
-                  placeholder="last name"
-                  value={this.state.value}
-                  onChange={this.handleLastNameChange}
-                />
-              </li>
-              <li>
-                <input
-                  id="display name"
-                  placeholder="username"
-                  value={this.state.value}
-                  onChange={this.handleDisplayNameChange}
-                />
-              </li>
-              <li>
-                <input
-                  id="avatar"
-                  placeholder="avatar url"
-                  value={this.state.value}
-                  onChange={this.handleAvatarChange}
-                />
-              </li>
+              <br />
+              <input
+                id="email"
+                placeholder="email"
+                value={this.state.value}
+                onChange={this.handleEmailChange}
+              />
+              <br />
+              <br />
+              <input
+                id="password"
+                placeholder="password"
+                value={this.state.value}
+                onChange={this.handlePasswordChange}
+              />
+              <br />
+              <br />
+              <input
+                id="first name"
+                placeholder="first name"
+                value={this.state.value}
+                onChange={this.handleFirstNameChange}
+              />
+              <br />
+              <br />
+              <input
+                id="last name"
+                placeholder="last name"
+                value={this.state.value}
+                onChange={this.handleLastNameChange}
+              />
+              <br />
+              <br />
+              <input
+                id="display name"
+                placeholder="username"
+                value={this.state.value}
+                onChange={this.handleDisplayNameChange}
+              />
+              <br />
+              <br />
+              <input
+                id="avatar"
+                placeholder="avatar url"
+                value={this.state.value}
+                onChange={this.handleAvatarChange}
+              />
+              <br />
             </ul>
-            <button value={this.state} onClick={this.handleSubmit}>
+            <button style={buttonStyle} onClick={this.handleSubmit}>
               Submit
             </button>
           </form>

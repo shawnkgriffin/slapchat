@@ -10,6 +10,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "shawn@shawngriffin.com",
+          password: "test",
           avatar: "http://localhost:3001/avatars/shawn.jpg"
         }),
         knex("users").insert({
@@ -28,6 +29,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "jess@jess.jess",
+          password: "test",
           avatar: "http://localhost:3001/avatars/Jessica.jpg"
         }),
         knex("users").insert({
@@ -37,6 +39,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "tony@tony.tony",
+          password: "test",
           avatar: "http://localhost:3001/avatars/tony.png"
         }),
         knex("users").insert({
@@ -46,6 +49,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "bob@bob.bob",
+          password: "test",
           avatar: "http://localhost:3001/avatars/bob.jpg"
         }),
         knex("users").insert({
@@ -55,6 +59,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "finn@finn.finn",
+          password: "test",
           avatar: "http://localhost:3001/avatars/finn.png"
         }),
         knex("users").insert({
@@ -64,6 +69,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "greg@greg.greg",
+          password: "test",
           avatar: "http://localhost:3001/avatars/greg.jpg"
         }),
         knex("users").insert({
@@ -73,6 +79,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           email: "travis@travis.travis",
+          password: "test",
           avatar: "http://localhost:3001/avatars/travis.jpg"
         }),
         knex("users").insert({
