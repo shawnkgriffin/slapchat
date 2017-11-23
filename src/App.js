@@ -136,13 +136,13 @@ class App extends Component {
             currentDirectMessageId: direct_message.recipient_user_id,
             messages: this.state.direct_messages.filter(
               direct_message =>
+                (direct_message.sender_user_id ===
+                  this.state.currentDirectMessageId &&
+                  direct_message.recipient_user_id ===
+                    this.state.currentUser.id) ||
                 (direct_message.sender_user_id === this.state.currentUser.id &&
                   direct_message.recipient_user_id ===
-                    direct_message.recipient_user_id) ||
-                (direct_message.sender_user_id ===
-                  direct_message.recipient_user_id &&
-                  direct_message.recipient_user_id ===
-                    this.state.currentUser.id)
+                    this.state.currentDirectMessageId)
             )
           },
           this.scrollToBottom
