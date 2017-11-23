@@ -95,10 +95,8 @@ io.sockets.on("connection", socket => {
     knex("markers")
       .select()
       .then(markers => {
-        console.log("getMarkers", markers);
         markers.forEach(marker => {
           marker.position = { lat: marker.lat, lng: marker.lng };
-          console.log("position", marker.position);
         });
         socket.emit("markers", markers);
       });
@@ -142,7 +140,6 @@ io.sockets.on("connection", socket => {
           let user = users[0];
 
           user.position = { lat: user.lat, lng: user.lng };
-          console.log("user.logged_in", user);
           socket.emit("user.logged_in", user);
 
           // User is logged in, send them the user info,
@@ -152,79 +149,73 @@ io.sockets.on("connection", socket => {
           getDirectMessages(user);
           getChannelMessages(user);
           getLayers(user);
-
           getMarkers(user);
         }
       });
   });
 
-  if (isLoggedIn) {
-    //Get Users
-    socket.on("users.get", user => {
-      getUsers(user);
-    });
+  //Get Users
+  socket.on("users.get", user => {
+    getUsers(user);
+  });
 
-    // Get Channels
-    socket.on("channels.get", user => {
-      getChannels(user);
-    });
+  // Get Channels
+  socket.on("channels.get", user => {
+    getChannels(user);
+  });
 
-    //Get Direct_Messages
-    socket.on("direct_messages.get", user => {
-      getDirectMessages(user);
-    });
-    //Get Layers
-    socket.on("layers.get", user => {
-      getLayers(user);
-    });
+  //Get Direct_Messages
+  socket.on("direct_messages.get", user => {
+    getDirectMessages(user);
+  });
+  //Get Layers
+  socket.on("layers.get", user => {
+    getLayers(user);
+  });
 
-    //Get Markers
-    socket.on("markers.get", user => {
-      getMarkers(user);
-    });
+  //Get Markers
+  socket.on("markers.get", user => {
+    getMarkers(user);
+  });
 
-    //Post Direct_Messages
-    socket.on("direct_message.post", direct_message => {
-      console.log("direct_message.post", direct_message);
-      knex
-        .insert(direct_message)
-        .into("direct_messages")
-        .returning("id")
-        .then(id => {
-          direct_message.id = id;
-          io.sockets.emit("direct_message.post", direct_message);
-          console.log("emit(direct_message.post", direct_message);
-        });
-    });
+  //Post Direct_Messages
+  socket.on("direct_message.post", direct_message => {
+    knex
+      .insert(direct_message)
+      .into("direct_messages")
+      .returning("id")
+      .then(id => {
+        direct_message.id = id;
+        io.sockets.emit("direct_message.post", direct_message);
+      });
+  });
 
-    //Post Channel_Message
-    socket.on("channel_message.post", channel_message => {
-      console.log("channel_message.post", channel_message);
-      knex
-        .insert(channel_message)
-        .into("channel_messages")
-        .returning("id")
-        .then(id => {
-          channel_message.id = id;
-          io.sockets.emit("channel_message.post", channel_message);
-        });
-    });
+  //Post Channel_Message
+  socket.on("channel_message.post", channel_message => {
+    console.log("channel_message.post", channel_message);
+    knex
+      .insert(channel_message)
+      .into("channel_messages")
+      .returning("id")
+      .then(id => {
+        channel_message.id = id;
+        io.sockets.emit("channel_message.post", channel_message);
+      });
+  });
 
-    //Get Channel_Messages
-    socket.on("channel_messages.get", user => {
-      getChannelMessages(user);
-    });
+  //Get Channel_Messages
+  socket.on("channel_messages.get", user => {
+    getChannelMessages(user);
+  });
 
-    //Marker moves
-    socket.on("marker.move", marker => {
-      markerMove(marker);
-    });
+  //Marker moves
+  socket.on("marker.move", marker => {
+    markerMove(marker);
+  });
 
-    // User moves
-    socket.on("user.move", data => {
-      console.log("user.move", data.user, data.position);
-      // TODO save to locations.
-      io.sockets.emit("user.move", data);
-    });
-  }
+  // User moves
+  socket.on("user.move", data => {
+    // TODO save to locations.
+    io.sockets.emit("user.move", data);
+  });
 });

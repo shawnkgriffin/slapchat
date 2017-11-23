@@ -96,6 +96,7 @@ class App extends Component {
 
     // Receive a direct message
     this.socket.on("direct_message.post", direct_message => {
+      console.log("hits here");
       direct_message.avatar = this.state.users.find(
         user => user.id === direct_message.sender_user_id
       ).avatar;
@@ -106,7 +107,18 @@ class App extends Component {
       this.setState({
         direct_messages: direct_messages
       });
-
+      console.log(
+        "sender:" +
+          direct_message.sender_user_id +
+          "is:" +
+          this.state.currentDirectMessageId
+      );
+      console.log(
+        "rec:" +
+          direct_message.recipient_user_id +
+          "is:" +
+          this.state.currentUser.id
+      );
       if (
         (direct_message.sender_user_id === this.state.currentDirectMessageId &&
           direct_message.recipient_user_id === this.state.currentUser.id) ||
@@ -190,7 +202,9 @@ class App extends Component {
         content: content
       };
     }
+
     this.socket.emit(action, payload);
+    console.log("ALMOST", action, "PAY", payload);
   };
 
   // When a lower level component needs to send something to the server
