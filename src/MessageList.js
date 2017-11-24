@@ -3,7 +3,6 @@ import Message from "./Message.js";
 import ChatBar from "./ChatBar.js";
 
 function MessageList({ messages, onNewMessage }) {
-  console.log("MESSAGES", messages);
   return (
     <section className="message-interface">
       <div id="messages-container" className="messages-container">

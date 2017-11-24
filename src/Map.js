@@ -156,7 +156,6 @@ class Map extends Component {
 
   // Marker events
   handleMarkerClick = (marker, markerState) => {
-    console.log("google:", window.google);
     console.log("handleMarkerClick", marker, markerState);
   };
   handleDragEnd = (marker, markerState) => {
@@ -180,7 +179,6 @@ class Map extends Component {
     }
   };
   onCircleComplete = e => {
-    console.log("onCircleComplete", e.center.lat(), e.center.lng(), e.radius);
     let circle = {
       label: "Danger",
       description: "Avalanche hazard, do not approach",
@@ -200,7 +198,6 @@ class Map extends Component {
       lat: e.position.lat(),
       lng: e.position.lng()
     });
-    console.log("onMarkerComplete", e.position.lat(), e.position.lng());
     // TODO delete the marker
   };
   onPolygonComplete = e => {

@@ -131,7 +131,6 @@ io.sockets.on("connection", socket => {
       .then(markerArray => {
         let newMarker = markerArray[0];
         newMarker.position = { lat: newMarker.lat, lng: newMarker.lng };
-        console.log("markerAdd", newMarker);
         io.sockets.emit("marker.add", newMarker);
       });
   }
