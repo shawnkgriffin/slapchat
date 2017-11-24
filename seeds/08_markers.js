@@ -17,7 +17,7 @@ exports.seed = function(knex, Promise) {
           draggable: true,
           label: "Avalanche danger",
           description: "Patrol has determined high risk of avalanche.",
-          icon: "http://localhost:3001/avalanche1.png"
+          icon: "/avalanche1.png"
         }),
         knex("markers").insert({
           layer_id: queryResult[0][1].id,
@@ -27,7 +27,7 @@ exports.seed = function(knex, Promise) {
           label: "Junior",
           description: "Junior ski school meeting point. Ages 9-11.",
           draggable: true,
-          icon: "http://localhost:3001/school.png"
+          icon: "/school.png"
         }),
         knex("markers").insert({
           layer_id: queryResult[0][2].id,
@@ -37,7 +37,7 @@ exports.seed = function(knex, Promise) {
           draggable: true,
           label: "Fire",
           description: "Bush fire, under control.",
-          icon: "http://localhost:3001/fire.png"
+          icon: "/fire.png"
         })
       ]);
     });
