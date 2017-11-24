@@ -32,9 +32,6 @@ class ChatBar extends Component {
           onChange={this.onMessageChange}
           value={this.state.content}
         />
-        <button id="message-submit-button" className="btn btn-primary">
-          Send
-        </button>
       </div>
     );
   }
