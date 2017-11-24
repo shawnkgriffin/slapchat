@@ -272,6 +272,14 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("circle.add", newCircle);
       });
   }
+  function circleDelete(circle) {
+    knex("circles")
+      .where("id", "=", circle.id)
+      .delete()
+      .then(rows => {
+        io.sockets.emit("circle.delete", circle);
+      });
+  }
   /**
    * Randomly move users around.
    * Check to see if they are in range of a circle, if so issue an alert (once)
@@ -479,5 +487,8 @@ io.sockets.on("connection", socket => {
   });
   socket.on("circle.move", circle => {
     circleMove(circle);
+  });
+  socket.on("circle.delete", circle => {
+    circleDelete(circle);
   });
 });

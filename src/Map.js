@@ -63,6 +63,10 @@ const MyMapComponent = withScriptjs(
           clickable={true}
           draggable={true}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
+          onClick={circleState => props.onCircleClick(circle, circleState)}
+          onRightClick={circleState =>
+            props.onCircleRightClick(circle, circleState)
+          }
         />
       ))}
       <SearchBox
@@ -154,6 +158,8 @@ class Map extends Component {
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
     this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.handleCircleClick = this.handleCircleClick.bind(this);
+    this.handleCircleRightClick = this.handleCircleRightClick.bind(this);
     this.onCircleDragEnd = this.onCircleDragEnd.bind(this);
     this.onCircleComplete = this.onCircleComplete.bind(this);
   }
@@ -185,6 +191,14 @@ class Map extends Component {
       default:
         console.log("unexpected type", marker.type);
     }
+  };
+  // Circle events
+  handleCircleClick = (circle, circleState) => {
+    console.log("handleCircleClick", circle, circleState);
+  };
+  // Circle events
+  handleCircleRightClick = (circle, circleState) => {
+    this.props.sendServer("circle.delete", circle);
   };
   onCircleComplete = e => {
     let circle = {
@@ -234,6 +248,8 @@ class Map extends Component {
           onMarkerClick={this.handleMarkerClick}
           onMarkerRightClick={this.handleMarkerRightClick}
           onDragEnd={this.handleDragEnd}
+          onCircleClick={this.handleCircleClick}
+          onCircleRightClick={this.handleCircleRightClick}
           onCircleComplete={this.onCircleComplete}
           onCircleDragEnd={this.onCircleDragEnd}
           onMarkerComplete={this.onMarkerComplete}
