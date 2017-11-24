@@ -41,14 +41,15 @@ class App extends Component {
   //RECIVES STATE DATA
   componentDidMount() {
     this.socket = io("localhost:3001");
-
     // successful login will cause everything to fill
 
     this.socket.on("users", users => {
       this.setState({ users: users });
     });
-    this.socket.on("user.logged_in", user => {
-      this.setState({ currentUser: user, isAuth: "" });
+    this.socket.on("user.logged_in", ({ token, user }) => {
+      console.log("TOKEN", token);
+      this.socket.query = "token=" + token;
+      this.setState({ currentUser: user, isAuth: "", token });
     });
 
     this.socket.on("channels", channels => {

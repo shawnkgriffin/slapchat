@@ -7,6 +7,8 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io").listen(server);
+const socketioJwt = require("socketio-jwt");
+const jwt = require("jsonwebtoken");
 
 let connections = [];
 
@@ -20,7 +22,19 @@ app.get("/", (req, res) => {
 
 //Socket on connect
 io.sockets.on("connection", socket => {
-  connections.push(socket);
+  socket.use((packet, next) => {
+    console.log("PACKET", packet);
+    if (packet[0] === "user.login") {
+      console.log("this should go through");
+      next();
+    } else {
+      console.log("checking auth");
+      socketioJwt.authorize({
+        secret: "secret"
+      })(packet, next);
+    }
+  });
+  socket.use(socketioJwt.authorize({ secret: "secret" }), socket);
   let isLoggedIn = false;
   console.log("Connected: %s sockets connected", connections.length);
 
@@ -155,7 +169,6 @@ io.sockets.on("connection", socket => {
       });
   }
   function circleCreate(circle) {
-    console.log("circleCreate(", circle);
     knex("circles")
       .insert({
         label: circle.label,
@@ -193,8 +206,12 @@ io.sockets.on("connection", socket => {
           isLoggedIn = true;
           let user = users[0];
 
+          console.log("TOKEN");
           user.position = { lat: user.lat, lng: user.lng };
-          socket.emit("user.logged_in", user);
+          socket.emit("user.logged_in", {
+            token: jwt.sign({ user_id: user.id }, "secret")
+            // user
+          });
 
           // User is logged in, send them the user info,
           // existing users, channels, messages, maps and markers
