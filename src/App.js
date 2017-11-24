@@ -7,7 +7,7 @@ import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
-
+const SERVER = "http://localhost:3001/";
 const textStyle = {
   color: "red",
   fontstyle: "italic"
@@ -45,7 +45,26 @@ class App extends Component {
     // successful login will cause everything to fill
 
     this.socket.on("users", users => {
-      this.setState({ users: users });
+      // create markers for the users
+      // remove any existing user markers
+      let userMarkers = this.state.markers.filter(
+        marker => marker.type !== "USER"
+      );
+      users.forEach(user =>
+        userMarkers.push({
+          icon: SERVER + "skiing-blue.png",
+          position: user.position,
+          label: user.display_name,
+          type: "USER",
+          draggable: true,
+          userId: user.id
+        })
+      );
+      console.log("users", userMarkers);
+      this.setState({
+        users: users,
+        markers: this.state.markers.concat(userMarkers)
+      });
     });
     this.socket.on("user.logged_in", user => {
       this.setState({ currentUser: user, isAuth: "" });
@@ -149,9 +168,14 @@ class App extends Component {
         );
       }
     });
+    // add in the markers, don't remove the USERS
     this.socket.on("markers", markers => {
-      this.setState({ markers: markers });
+      let newMarkers = this.state.markers.filter(
+        marker => marker.type !== "MARKER"
+      );
+      this.setState({ markers: newMarkers.concat(markers) });
     });
+
     this.socket.on("marker.add", marker => {
       this.setState({ markers: this.state.markers.concat([marker]) });
     });
