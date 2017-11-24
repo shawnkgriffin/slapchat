@@ -32,6 +32,9 @@ const MyMapComponent = withScriptjs(
       {props.markers.map((marker, index) => (
         <Marker
           onClick={markerState => props.onMarkerClick(marker, markerState)}
+          onRightClick={markerState =>
+            props.onMarkerRightClick(marker, markerState)
+          }
           onDragEnd={markerState => props.onDragEnd(marker, markerState)}
           key={index}
           {...marker}
@@ -149,6 +152,7 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.onCircleDragEnd = this.onCircleDragEnd.bind(this);
     this.onCircleComplete = this.onCircleComplete.bind(this);
@@ -157,6 +161,11 @@ class Map extends Component {
   // Marker events
   handleMarkerClick = (marker, markerState) => {
     console.log("handleMarkerClick", marker, markerState);
+  };
+  // Marker events
+  handleMarkerRightClick = (marker, markerState) => {
+    console.log("handleMarkerRightClick", marker, markerState);
+    this.props.sendServer("marker.delete", marker);
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
@@ -223,6 +232,7 @@ class Map extends Component {
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
           onMarkerClick={this.handleMarkerClick}
+          onMarkerRightClick={this.handleMarkerRightClick}
           onDragEnd={this.handleDragEnd}
           onCircleComplete={this.onCircleComplete}
           onCircleDragEnd={this.onCircleDragEnd}
