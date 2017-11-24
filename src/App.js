@@ -104,6 +104,7 @@ class App extends Component {
       if (direct_message.content.indexOf("!alert") !== -1) {
         alert(direct_message.content);
       }
+
       direct_message.avatar = this.state.users.find(
         user => user.id === direct_message.sender_user_id
       ).avatar;
