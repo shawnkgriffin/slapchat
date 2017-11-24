@@ -15,17 +15,19 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           draggable: true,
-          label: "Accidents",
-          icon: "http://localhost:3001/avalanche1.png"
+          label: "Avalanche danger",
+          description: "Patrol has determined high risk of avalanche.",
+          icon: "/avalanche1.png"
         }),
         knex("markers").insert({
           layer_id: queryResult[0][1].id,
           owner_user_id: queryResult[1][1].id,
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
-          label: "Items Needing Repair",
+          label: "Junior",
+          description: "Junior ski school meeting point. Ages 9-11.",
           draggable: true,
-          icon: "http://localhost:3001/school.png"
+          icon: "/school.png"
         }),
         knex("markers").insert({
           layer_id: queryResult[0][2].id,
@@ -33,8 +35,9 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           draggable: true,
-          label: "Sasquatch",
-          icon: "http://localhost:3001/avalanche1.png"
+          label: "Fire",
+          description: "Bush fire, under control.",
+          icon: "/fire.png"
         })
       ]);
     });

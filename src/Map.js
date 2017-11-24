@@ -15,9 +15,6 @@ const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
-// what is this?
-const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
-
 const polygon = [
   { lat: 50.114806, lng: -122.892426 },
   { lat: 50.102365, lng: -122.885903 },
@@ -159,7 +156,6 @@ class Map extends Component {
 
   // Marker events
   handleMarkerClick = (marker, markerState) => {
-    console.log("google:", window.google);
     console.log("handleMarkerClick", marker, markerState);
   };
   handleDragEnd = (marker, markerState) => {
@@ -173,7 +169,6 @@ class Map extends Component {
         let user = {
           id: marker.userId,
           lat: markerState.latLng.lat(),
-
           lng: markerState.latLng.lng()
         };
         this.props.sendServer("user.move", user);
@@ -183,7 +178,6 @@ class Map extends Component {
     }
   };
   onCircleComplete = e => {
-    console.log("onCircleComplete", e.center.lat(), e.center.lng(), e.radius);
     let circle = {
       label: "Danger",
       description: "Avalanche hazard, do not approach",
@@ -191,10 +185,9 @@ class Map extends Component {
       lng: e.center.lng(),
       radius: e.radius
     };
-    this.props.sendServer("circle.create", circle);
+    this.props.sendServer("circle.add", circle);
   };
   onCircleDragEnd = (circle, circleState) => {
-    console.log("onCircleDragEnd", circle);
     circle.lat = circleState.latLng.lat();
     circle.lng = circleState.latLng.lng();
     this.props.sendServer("circle.move", circle);
@@ -204,7 +197,6 @@ class Map extends Component {
       lat: e.position.lat(),
       lng: e.position.lng()
     });
-    console.log("onMarkerComplete", e.position.lat(), e.position.lng());
     // TODO delete the marker
   };
   onPolygonComplete = e => {
@@ -222,16 +214,6 @@ class Map extends Component {
 
   render() {
     const markers = this.props.markers || [];
-    this.props.users.forEach(user =>
-      markers.push({
-        icon: `/skiing-blue.png`,
-        position: user.position,
-        label: user.display_name,
-        type: "USER",
-        draggable: true,
-        userId: user.id
-      })
-    );
     return (
       <div className="map-container">
         <MyMapComponent

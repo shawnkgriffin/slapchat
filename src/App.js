@@ -7,7 +7,6 @@ import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
-
 const textStyle = {
   color: "red",
   fontstyle: "italic"
@@ -55,15 +54,28 @@ class App extends Component {
 
     this.socket.on("connect", () => {
       console.info("connected to web socket");
-      // successful login will cause everything to fill
-      this.socket.emit("user.login", {
-        email: "shawn@shawngriffin.com",
-        password: "slapme"
-      });
     });
 
     this.socket.on("users", users => {
-      this.setState({ users: users });
+      // create markers for the users
+      // remove any existing user markers
+      let userMarkers = this.state.markers.filter(
+        marker => marker.type !== "USER"
+      );
+      users.forEach(user =>
+        userMarkers.push({
+          icon: "/skiing-blue.png",
+          position: user.position,
+          label: user.display_name,
+          type: "USER",
+          draggable: true,
+          userId: user.id
+        })
+      );
+      this.setState({
+        users: users,
+        markers: this.state.markers.concat(userMarkers)
+      });
     });
     this.socket.on("user.logged_in", user => {
       this.setState({ currentUser: user, isAuth: "" });
@@ -71,7 +83,6 @@ class App extends Component {
 
     this.socket.on("channels", channels => {
       this.setState({ channels: channels });
-      console.log("channels", channels[0].id);
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -86,7 +97,6 @@ class App extends Component {
       if (channel_message.content.indexOf("!alert") !== -1) {
         alert(channel_message.content);
       }
-      console.log("channel_message.post", channel_message);
       channel_message.avatar = this.state.users.find(
         user => user.id === channel_message.sender_user_id
       ).avatar;
@@ -133,18 +143,6 @@ class App extends Component {
       this.setState({
         direct_messages: direct_messages
       });
-      console.log(
-        "sender:" +
-          direct_message.sender_user_id +
-          "is:" +
-          this.state.currentDirectMessageId
-      );
-      console.log(
-        "rec:" +
-          direct_message.recipient_user_id +
-          "is:" +
-          this.state.currentUser.id
-      );
       if (
         (direct_message.sender_user_id === this.state.currentDirectMessageId &&
           direct_message.recipient_user_id === this.state.currentUser.id) ||
@@ -182,16 +180,60 @@ class App extends Component {
         );
       }
     });
+    // add in the markers, don't remove the USERS
     this.socket.on("markers", markers => {
-      this.setState({ markers: markers });
+      let newMarkers = this.state.markers.filter(
+        marker => marker.type !== "MARKER"
+      );
+      this.setState({ markers: newMarkers.concat(markers) });
+    });
+
+    this.socket.on("marker.add", marker => {
+      this.setState({ markers: this.state.markers.concat([marker]) });
+    });
+    this.socket.on("marker.move", newMarker => {
+      this.setState({
+        markers: this.state.markers.map(marker => {
+          return marker.id === newMarker.id ? newMarker : marker;
+        })
+      });
     });
     this.socket.on("circles", circles => {
       this.setState({ circles: circles });
     });
+    this.socket.on("circle.add", circle => {
+      this.setState({ circles: this.state.circles.concat([circle]) });
+    });
+    this.socket.on("circle.move", movedCircle => {
+      this.setState({
+        circles: this.state.circles.map(circle => {
+          return circle.id === movedCircle.id ? movedCircle : circle;
+        })
+      });
+    });
+
+    // layers
     this.socket.on("layers", layers => {
       this.setState({ layers: layers });
     });
-    this.socket.on("user.move", userPosition => {});
+
+    // User moves
+    this.socket.on("user.move", user => {
+      const newUserMarker = {
+        icon: "/skiing-blue.png",
+        position: user.position,
+        label: user.display_name,
+        type: "USER",
+        draggable: true,
+        userId: user.id
+      };
+      const newMarkers = this.state.markers.map(marker => {
+        return marker.type === "USER" && marker.userId === user.id
+          ? newUserMarker
+          : marker;
+      });
+      this.setState({ markers: newMarkers });
+    });
 
     this.socket.on("user.login_pass_error", () => {
       this.setState({ isAuth: "Incorrect Email or Password" });
@@ -233,13 +275,11 @@ class App extends Component {
     }
 
     this.socket.emit(action, payload);
-    console.log("ALMOST", action, "PAY", payload);
   };
 
   // When a lower level component needs to send something to the server
   // it calls sendServer(action, payload)
   sendServer = function sendServer(action, payload) {
-    console.log(`sendServer(${action}, ${payload})`);
     this.socket.emit(action, payload);
   };
 
@@ -323,7 +363,6 @@ class App extends Component {
                 sendServer={this.sendServer}
                 markers={this.state.markers}
                 circles={this.state.circles}
-                users={this.state.users}
               />
             </section>
           )}

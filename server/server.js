@@ -46,9 +46,19 @@ io.sockets.on("connection", socket => {
   // Define all the user data functions here for closure.
   // getUsers is called at the beginning to load all the users for a newly logged in person
   function getUsers(user) {
-    knex
+    knex("users")
       .select()
-      .from("users")
+      .returning([
+        // avoid returning password
+        "id",
+        "first_name",
+        "last_name",
+        "display_name",
+        "email",
+        "avatar",
+        "lat",
+        "lng"
+      ])
       .then(users => {
         users.forEach(user => {
           user.position = { lat: user.lat, lng: user.lng };
@@ -59,12 +69,24 @@ io.sockets.on("connection", socket => {
   function userMove(user) {
     knex("users")
       .where("id", "=", user.id)
+      .returning([
+        "id",
+        "first_name",
+        "last_name",
+        "display_name",
+        "email",
+        "avatar",
+        "lat",
+        "lng"
+      ])
       .update({
         lat: user.lat,
         lng: user.lng
       })
-      .then(numRows => {
-        io.sockets.emit("user.move", user);
+      .then(userArray => {
+        let movedUser = userArray[0];
+        movedUser.position = { lat: movedUser.lat, lng: movedUser.lng };
+        io.sockets.emit("user.move", movedUser);
       });
   }
   // Get all the channels for a user
@@ -110,6 +132,8 @@ io.sockets.on("connection", socket => {
         socket.emit("layers", layers);
       });
   }
+
+  // Markers
   function getMarkers(user) {
     knex("markers")
       .select()
@@ -120,6 +144,54 @@ io.sockets.on("connection", socket => {
         socket.emit("markers", markers);
       });
   }
+
+  function markerAdd(marker) {
+    knex("markers")
+      .returning([
+        "id",
+        "label",
+        "lat",
+        "lng",
+        "owner_user_id",
+        "icon",
+        "type",
+        "draggable"
+      ])
+      .insert({
+        lat: marker.lat,
+        lng: marker.lng
+      })
+      .then(markerArray => {
+        let newMarker = markerArray[0];
+        newMarker.position = { lat: newMarker.lat, lng: newMarker.lng };
+        io.sockets.emit("marker.add", newMarker);
+      });
+  }
+  function markerMove(marker) {
+    knex("markers")
+      .where("id", "=", marker.id)
+      .returning([
+        "id",
+        "label",
+        "lat",
+        "lng",
+        "owner_user_id",
+        "icon",
+        "type",
+        "draggable"
+      ])
+      .update({
+        lat: marker.lat,
+        lng: marker.lng
+      })
+      .then(markerArray => {
+        let movedMarker = markerArray[0];
+        movedMarker.position = { lat: movedMarker.lat, lng: movedMarker.lng };
+        io.sockets.emit("marker.move", movedMarker);
+      });
+  }
+
+  // Circles
   function getCircles(user) {
     knex("circles")
       .select()
@@ -130,44 +202,41 @@ io.sockets.on("connection", socket => {
         socket.emit("circles", circles);
       });
   }
-
-  function markerMove(marker) {
-    knex("markers")
-      .where("id", "=", marker.id)
-      .update({
-        lat: marker.lat,
-        lng: marker.lng
-      })
-      .then(numRows => {
-        io.sockets.emit("marker.move", marker);
-      });
-  }
-
-  function markerAdd(marker) {
-    knex("markers")
-      .insert({
-        lat: marker.lat,
-        lng: marker.lng
-      })
-      .then(id => {
-        marker.id = id;
-        io.sockets.emit("marker.add", marker);
-      });
-  }
   function circleMove(circle) {
     knex("circles")
+      .returning([
+        "id",
+        "lat",
+        "lng",
+        "radius",
+        "owner_user_id",
+        "label",
+        "description",
+        "draggable"
+      ])
       .where("id", "=", circle.id)
       .update({
         lat: circle.lat,
         lng: circle.lng
       })
-      .then(numRows => {
-        io.sockets.emit("circle.move", circle);
+      .then(circleArray => {
+        let movedCircle = circleArray[0];
+        movedCircle.center = { lat: movedCircle.lat, lng: movedCircle.lng };
+        io.sockets.emit("circle.move", movedCircle);
       });
   }
-  function circleCreate(circle) {
-    console.log("circleCreate(", circle);
+  function circleAdd(circle) {
     knex("circles")
+      .returning([
+        "id",
+        "lat",
+        "lng",
+        "radius",
+        "owner_user_id",
+        "label",
+        "description",
+        "draggable"
+      ])
       .insert({
         label: circle.label,
         description: circle.description,
@@ -175,9 +244,10 @@ io.sockets.on("connection", socket => {
         lng: circle.lng,
         radius: circle.radius
       })
-      .then(id => {
-        circle.id = id;
-        io.sockets.emit("circle.create", circle);
+      .then(circleArray => {
+        let newCircle = circleArray[0];
+        newCircle.center = { lat: newCircle.lat, lng: newCircle.lng };
+        io.sockets.emit("circle.add", newCircle);
       });
   }
   ///////////////////////////////////////////////////////////////////////////
@@ -290,8 +360,8 @@ io.sockets.on("connection", socket => {
   });
 
   // Circle functions
-  socket.on("circle.create", circle => {
-    circleCreate(circle);
+  socket.on("circle.add", circle => {
+    circleAdd(circle);
   });
 
   socket.on("circles.get", user => {
