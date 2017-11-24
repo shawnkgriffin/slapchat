@@ -199,10 +199,30 @@ class App extends Component {
         })
       });
     });
+
+    // layers
     this.socket.on("layers", layers => {
       this.setState({ layers: layers });
     });
-    this.socket.on("user.move", userPosition => {});
+
+    // User moves
+    this.socket.on("user.move", user => {
+      const newUserMarker = {
+        icon: SERVER + "skiing-blue.png",
+        position: user.position,
+        label: user.display_name,
+        type: "USER",
+        draggable: true,
+        userId: user.id
+      };
+      const newMarkers = this.state.markers.map(marker => {
+        return marker.type === "USER" && marker.userId === user.id
+          ? newUserMarker
+          : marker;
+      });
+      console.log("user.move", this.state.markers, newMarkers);
+      this.setState({ markers: newMarkers });
+    });
 
     this.socket.on("user.login_pass_error", () => {
       this.setState({ isAuth: "Incorrect Email or Password" });

@@ -169,7 +169,6 @@ class Map extends Component {
         let user = {
           id: marker.userId,
           lat: markerState.latLng.lat(),
-
           lng: markerState.latLng.lng()
         };
         this.props.sendServer("user.move", user);
