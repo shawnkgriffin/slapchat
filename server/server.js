@@ -20,7 +20,6 @@ const staticPath = path.resolve(__dirname, "..", "build");
 
 let timeoutUsersMove = null; // timer used to randomly move people.
 const timeoutValue = 1000; // move users every 1 seconds.
-let generalChannel = null; // need to know the general channel for alerts.
 
 server.listen(process.env.PORT || 3001);
 
@@ -100,10 +99,6 @@ io.sockets.on("connection", socket => {
       .select()
       .from("channels")
       .then(channels => {
-        generalChannel = channels.filter(
-          channel => channel.name === "General"
-        )[0].id;
-        console.log("general channel", generalChannel);
         socket.emit("channels", channels);
       });
   }
@@ -265,7 +260,7 @@ io.sockets.on("connection", socket => {
    * @function usersMove
    * @param {integer} commandArray - tokenized array
    */
-  function usersMove(commandArray) {
+  function usersMove(senderId, channelId, commandArray) {
     const distanceToMove = 0.001; // small distance in lat/lng.
     let alerted = false; //only alert once
 
@@ -300,13 +295,6 @@ io.sockets.on("connection", socket => {
                 //if so alert once.
                 // issue an alert if we haven't already
                 circles.forEach(circle => {
-                  console.log(
-                    "user lat lng radius ",
-                    user.display_name,
-                    user.lat - circle.lat,
-                    user.lng - circle.lng,
-                    circle.radius
-                  );
                   if (
                     !alerted &&
                     geolib.isPointInCircle(
@@ -316,10 +304,13 @@ io.sockets.on("connection", socket => {
                     )
                   ) {
                     let channel_message = {
-                      id: generalChannel,
-                      content: `!alert ${user.display_name} in area ${
-                        circle.label
-                      }`
+                      channel_id: channelId,
+                      sender_user_id: senderId,
+                      content: `!alert ${user.display_name}(${
+                        user.first_name
+                      } ${user.last_name}) close to ${circle.label}:${
+                        circle.description
+                      }.`
                     };
                     io.sockets.emit("channel_message.post", channel_message);
                     alerted = true;
@@ -414,7 +405,11 @@ io.sockets.on("connection", socket => {
       const commandArray = channel_message.content.split(" ");
       switch (commandArray[0]) {
         case "!move":
-          usersMove(commandArray);
+          usersMove(
+            channel_message.sender_user_id,
+            channel_message.channel_id,
+            commandArray
+          );
           break;
         case "!stop":
           usersStop(commandArray);
