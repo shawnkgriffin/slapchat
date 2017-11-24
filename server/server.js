@@ -172,13 +172,25 @@ io.sockets.on("connection", socket => {
   }
   function circleMove(circle) {
     knex("circles")
+      .returning([
+        "id",
+        "lat",
+        "lng",
+        "radius",
+        "owner_user_id",
+        "label",
+        "description",
+        "draggable"
+      ])
       .where("id", "=", circle.id)
       .update({
         lat: circle.lat,
         lng: circle.lng
       })
-      .then(numRows => {
-        io.sockets.emit("circle.move", circle);
+      .then(circleArray => {
+        let movedCircle = circleArray[0];
+        movedCircle.center = { lat: movedCircle.lat, lng: movedCircle.lng };
+        io.sockets.emit("circle.move", movedCircle);
       });
   }
   function circleAdd(circle) {

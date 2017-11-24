@@ -193,7 +193,6 @@ class Map extends Component {
     this.props.sendServer("circle.add", circle);
   };
   onCircleDragEnd = (circle, circleState) => {
-    console.log("onCircleDragEnd", circle);
     circle.lat = circleState.latLng.lat();
     circle.lng = circleState.latLng.lng();
     this.props.sendServer("circle.move", circle);

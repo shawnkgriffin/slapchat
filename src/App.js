@@ -168,6 +168,13 @@ class App extends Component {
     this.socket.on("circle.add", circle => {
       this.setState({ circles: this.state.circles.concat([circle]) });
     });
+    this.socket.on("circle.move", movedCircle => {
+      this.setState({
+        circles: this.state.circles.map(circle => {
+          return circle.id === movedCircle.id ? movedCircle : circle;
+        })
+      });
+    });
     this.socket.on("layers", layers => {
       this.setState({ layers: layers });
     });
