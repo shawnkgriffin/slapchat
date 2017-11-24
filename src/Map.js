@@ -15,6 +15,7 @@ const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
+// what is this?
 const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
 
 const polygon = [
@@ -223,7 +224,7 @@ class Map extends Component {
     const markers = this.props.markers || [];
     this.props.users.forEach(user =>
       markers.push({
-        icon: SERVER + "skiing-blue.png",
+        icon: `/skiing-blue.png`,
         position: user.position,
         label: user.display_name,
         type: "USER",
