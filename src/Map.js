@@ -15,8 +15,6 @@ const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
-const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
-
 const polygon = [
   { lat: 50.114806, lng: -122.892426 },
   { lat: 50.102365, lng: -122.885903 },
