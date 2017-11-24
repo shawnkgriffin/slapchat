@@ -74,7 +74,6 @@ io.sockets.on("connection", socket => {
       })
       .then(userArray => {
         let movedUser = userArray[0];
-        console.log("movedUser", movedUser);
         movedUser.position = { lat: movedUser.lat, lng: movedUser.lng };
         io.sockets.emit("user.move", movedUser);
       });
@@ -216,7 +215,6 @@ io.sockets.on("connection", socket => {
       });
   }
   function circleAdd(circle) {
-    console.log("circleAdd(", circle);
     knex("circles")
       .returning([
         "id",

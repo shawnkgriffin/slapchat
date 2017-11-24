@@ -60,7 +60,6 @@ class App extends Component {
           userId: user.id
         })
       );
-      console.log("users", userMarkers);
       this.setState({
         users: users,
         markers: this.state.markers.concat(userMarkers)
@@ -220,7 +219,6 @@ class App extends Component {
           ? newUserMarker
           : marker;
       });
-      console.log("user.move", this.state.markers, newMarkers);
       this.setState({ markers: newMarkers });
     });
 
