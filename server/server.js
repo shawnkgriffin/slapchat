@@ -12,10 +12,15 @@ const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const uuidv4 = require("uuid/v4");
 const path = require("path");
+const geolib = require("geolib");
 
 let connections = [];
 
 const staticPath = path.resolve(__dirname, "..", "build");
+
+let timeoutUsersMove = null; // timer used to randomly move people.
+const timeoutValue = 1000; // move users every 1 seconds.
+let generalChannel = null; // need to know the general channel for alerts.
 
 server.listen(process.env.PORT || 3001);
 
@@ -95,6 +100,10 @@ io.sockets.on("connection", socket => {
       .select()
       .from("channels")
       .then(channels => {
+        generalChannel = channels.filter(
+          channel => channel.name === "General"
+        )[0].id;
+        console.log("general channel", generalChannel);
         socket.emit("channels", channels);
       });
   }
@@ -250,23 +259,95 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("circle.add", newCircle);
       });
   }
+  /**
+   * Randomly move users around.
+   * Check to see if they are in range of a circle, if so issue an alert (once)
+   * @function usersMove
+   * @param {integer} commandArray - tokenized array
+   */
+  function usersMove(commandArray) {
+    const distanceToMove = 0.001; // small distance in lat/lng.
+    let alerted = false; //only alert once
+
+    // get the circles first as we only need to do this once.
+    // TODO refactor into a Promise.all
+    knex("circles")
+      .select()
+      .then(circles => {
+        knex("users")
+          .select()
+          .returning([
+            // avoid returning password
+            "id",
+            "first_name",
+            "last_name",
+            "display_name",
+            "email",
+            "avatar",
+            "lat",
+            "lng"
+          ])
+          .then(users => {
+            timeoutUsersMove = setInterval(() => {
+              users.forEach(user => {
+                (user.lat = user.lat + (Math.random() - 0.5) * distanceToMove),
+                  (user.lng =
+                    user.lng + (Math.random() - 0.5) * distanceToMove);
+                user.position = { lat: user.lat, lng: user.lng };
+                userMove(user);
+
+                //check if user is in circle
+                //if so alert once.
+                // issue an alert if we haven't already
+                circles.forEach(circle => {
+                  console.log(
+                    "user lat lng radius ",
+                    user.display_name,
+                    user.lat - circle.lat,
+                    user.lng - circle.lng,
+                    circle.radius
+                  );
+                  if (
+                    !alerted &&
+                    geolib.isPointInCircle(
+                      { latitude: user.lat, longitude: user.lng },
+                      { latitude: circle.lat, longitude: circle.lng },
+                      circle.radius
+                    )
+                  ) {
+                    let channel_message = {
+                      id: generalChannel,
+                      content: `!alert ${user.display_name} in area ${
+                        circle.label
+                      }`
+                    };
+                    io.sockets.emit("channel_message.post", channel_message);
+                    alerted = true;
+                  }
+                });
+              });
+            }, timeoutValue);
+          }); //users
+      }); //circles
+  }
+  /**
+   * stop user movement.
+   * @function usersStop
+   */
+  function usersStop() {
+    clearTimeout(timeoutUsersMove);
+  }
+
   ///////////////////////////////////////////////////////////////////////////
   // Here is all the socket state information.
-  // socket.on("user.register", user => {
-  //   knex
-  //     .insert(user)
-  //     .into("users")
-  //     .returning("id");.then(id => {
 
-  //     })
-  // });
   socket.on("user.login", user => {
     const password = user.password;
     knex("users")
       .where({ email: user.email })
       .select()
       .then(users => {
-        if (users.length == 0) {
+        if (users.length === 0) {
           socket.emit("user.login_email_error");
         } else if (password !== users[0].password) {
           socket.emit("user.login_pass_error");
@@ -292,7 +373,6 @@ io.sockets.on("connection", socket => {
 
   //Get Users
   socket.on("users.get", user => {
-    console.log("Here", user);
     getUsers(user);
   });
 
@@ -329,6 +409,20 @@ io.sockets.on("connection", socket => {
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
+    //check for server specific commands
+    if (channel_message.content.indexOf("!") !== -1) {
+      const commandArray = channel_message.content.split(" ");
+      switch (commandArray[0]) {
+        case "!move":
+          usersMove(commandArray);
+          break;
+        case "!stop":
+          usersStop(commandArray);
+          break;
+        default:
+          console.log("bot: understand not do I: ", channel_message.content);
+      }
+    }
     knex
       .insert(channel_message)
       .into("channel_messages")
