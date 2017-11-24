@@ -7,7 +7,6 @@ import SideBar from "./SideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
-const SERVER = "http://localhost:3001/";
 const textStyle = {
   color: "red",
   fontstyle: "italic"
@@ -30,6 +29,17 @@ class App extends Component {
       currentDirectMessageId: null,
       isAuth: ""
     };
+
+    /* eslint-disable no-restricted-globals */
+    if (location.hostname === "localhost") {
+      this.connectionString = "http://localhost:3001";
+    } else {
+      this.connectionString = `${location.protocol}//${
+        location.hostname
+      }:${location.port || (location.protocol === "https:" ? 443 : 80)}`;
+    }
+    /* eslint-enable no-restricted-globals */
+
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
@@ -40,9 +50,11 @@ class App extends Component {
 
   //RECIVES STATE DATA
   componentDidMount() {
-    this.socket = io("localhost:3001");
+    this.socket = io(this.connectionString);
 
-    // successful login will cause everything to fill
+    this.socket.on("connect", () => {
+      console.info("connected to web socket");
+    });
 
     this.socket.on("users", users => {
       // create markers for the users
@@ -52,7 +64,7 @@ class App extends Component {
       );
       users.forEach(user =>
         userMarkers.push({
-          icon: SERVER + "skiing-blue.png",
+          icon: "/skiing-blue.png",
           position: user.position,
           label: user.display_name,
           type: "USER",
@@ -207,7 +219,7 @@ class App extends Component {
     // User moves
     this.socket.on("user.move", user => {
       const newUserMarker = {
-        icon: SERVER + "skiing-blue.png",
+        icon: "/skiing-blue.png",
         position: user.position,
         label: user.display_name,
         type: "USER",

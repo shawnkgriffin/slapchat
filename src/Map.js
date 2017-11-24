@@ -214,7 +214,6 @@ class Map extends Component {
 
   render() {
     const markers = this.props.markers || [];
-
     return (
       <div className="map-container">
         <MyMapComponent

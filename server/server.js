@@ -1,22 +1,33 @@
-require("dotenv").config();
+const ENV = process.env.NODE_ENV || "development";
 
-const ENV = process.env.ENV || "development";
+if (ENV === "development") {
+  require("dotenv").config();
+}
+
 const knexConfig = require("../knexfile.js");
 const knex = require("knex")(knexConfig[ENV]);
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io").listen(server);
+const io = require("socket.io")(server);
+const uuidv4 = require("uuid/v4");
+const path = require("path");
 
 let connections = [];
 
+const staticPath = path.resolve(__dirname, "..", "build");
+
 server.listen(process.env.PORT || 3001);
 
-app.use(express.static("./server/public"));
+console.log("/public", staticPath);
+app.use(express.static(staticPath));
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
+if (ENV === "development") {
+  //Index HTML is for debugging
+  app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/index.html");
+  });
+}
 
 //Socket on connect
 io.sockets.on("connection", socket => {
@@ -281,6 +292,7 @@ io.sockets.on("connection", socket => {
 
   //Get Users
   socket.on("users.get", user => {
+    console.log("Here", user);
     getUsers(user);
   });
 
