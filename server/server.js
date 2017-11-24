@@ -35,9 +35,19 @@ io.sockets.on("connection", socket => {
   // Define all the user data functions here for closure.
   // getUsers is called at the beginning to load all the users for a newly logged in person
   function getUsers(user) {
-    knex
+    knex("users")
       .select()
-      .from("users")
+      .returning([
+        // avoid returning password
+        "id",
+        "first_name",
+        "last_name",
+        "display_name",
+        "email",
+        "avatar",
+        "lat",
+        "lng"
+      ])
       .then(users => {
         users.forEach(user => {
           user.position = { lat: user.lat, lng: user.lng };
@@ -48,12 +58,24 @@ io.sockets.on("connection", socket => {
   function userMove(user) {
     knex("users")
       .where("id", "=", user.id)
+      .returning([
+        "id",
+        "first_name",
+        "last_name",
+        "display_name",
+        "email",
+        "avatar",
+        "lat",
+        "lng"
+      ])
       .update({
         lat: user.lat,
         lng: user.lng
       })
-      .then(numRows => {
-        io.sockets.emit("user.move", user);
+      .then(userArray => {
+        let movedUser = userArray[0];
+        movedUser.position = { lat: movedUser.lat, lng: movedUser.lng };
+        io.sockets.emit("user.move", movedUser);
       });
   }
   // Get all the channels for a user
