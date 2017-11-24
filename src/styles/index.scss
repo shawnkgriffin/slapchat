@@ -17,7 +17,6 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
   right: 0;
 
   .side-bar {
-    background-color: #a0d468;
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -29,8 +28,9 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       display: flex;
       align-items: center;
       padding: 5px;
-      border-bottom: 1px solid grey;
       font-size: 1.3em;
+      background-color: #be90d4;
+      color: white;
     }
 
     .user-info-avatar {
