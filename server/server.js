@@ -1,26 +1,32 @@
 const ENV = process.env.NODE_ENV || "development";
-
 if (ENV === "development") {
   require("dotenv").config();
 }
-
 const knexConfig = require("../knexfile.js");
 const knex = require("knex")(knexConfig[ENV]);
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io").listen(server);
+const jwt = require("jsonwebtoken");
+const socketioJwt = require("socketio-jwt");
+const bodyparser = require("body-parser");
 const uuidv4 = require("uuid/v4");
 const path = require("path");
+const geolib = require("geolib");
 
 let connections = [];
+let timeoutUsersMove = null; // timer used to randomly move people.
+const timeoutValue = 1000; // move users every 1 seconds.
+
+app.use(bodyparser.json());
+app.use(express.static("./server/public"));
 
 const staticPath = path.resolve(__dirname, "..", "build");
-
-server.listen(process.env.PORT || 3001);
-
 console.log("/public", staticPath);
 app.use(express.static(staticPath));
+
+server.listen(process.env.PORT || 3001);
 
 if (ENV === "development") {
   //Index HTML is for debugging
@@ -29,22 +35,58 @@ if (ENV === "development") {
   });
 }
 
+app.put("/login", (req, res) => {
+  const password = req.body.password;
+  knex("users")
+    .where({ email: req.body.email })
+    .select()
+    .then(users => {
+      if (users.length === 0) {
+        res.json({
+          error: "No user with email"
+        });
+      } else if (password !== users[0].password) {
+        return res.json({ error: "Incorrect password" });
+      } else {
+        let user = users[0];
+
+        user.position = { lat: user.lat, lng: user.lng };
+
+        res.json({ token: jwt.sign({ user_id: user.id }, "secret"), user });
+      }
+    });
+});
+app.get("/logout", (req, res) => {
+  res.redirect("/");
+});
+
+server.listen(process.env.PORT || 3001);
+
+io.use(
+  socketioJwt.authorize({
+    secret: "secret",
+    handshake: true
+  })
+);
+
 //Socket on connect
 io.sockets.on("connection", socket => {
-  connections.push(socket);
-  let isLoggedIn = false;
   console.log("Connected: %s sockets connected", connections.length);
 
   //Disconnect
   socket.on("disconnect", data => {
     connections.splice(connections.indexOf(socket), 1);
-    isLoggedIn = false;
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
   ///////////////////////////////////////////////////////////////////////////
   // Define all the user data functions here for closure.
   // getUsers is called at the beginning to load all the users for a newly logged in person
+
+  function currentUser(user) {
+    socket.emit("current", user);
+  }
+
   function getUsers(user) {
     knex("users")
       .select()
@@ -137,9 +179,20 @@ io.sockets.on("connection", socket => {
   function getMarkers(user) {
     knex("markers")
       .select()
+      .returning([
+        "id",
+        "label",
+        "lat",
+        "lng",
+        "owner_user_id",
+        "icon",
+        "type",
+        "draggable"
+      ])
       .then(markers => {
         markers.forEach(marker => {
           marker.position = { lat: marker.lat, lng: marker.lng };
+          marker.visible = true;
         });
         socket.emit("markers", markers);
       });
@@ -165,6 +218,14 @@ io.sockets.on("connection", socket => {
         let newMarker = markerArray[0];
         newMarker.position = { lat: newMarker.lat, lng: newMarker.lng };
         io.sockets.emit("marker.add", newMarker);
+      });
+  }
+  function markerDelete(marker) {
+    knex("markers")
+      .where("id", "=", marker.id)
+      .delete()
+      .then(rows => {
+        io.sockets.emit("marker.delete", marker);
       });
   }
   function markerMove(marker) {
@@ -250,50 +311,105 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("circle.add", newCircle);
       });
   }
-  ///////////////////////////////////////////////////////////////////////////
-  // Here is all the socket state information.
-  // socket.on("user.register", user => {
-  //   knex
-  //     .insert(user)
-  //     .into("users")
-  //     .returning("id");.then(id => {
+  function circleDelete(circle) {
+    knex("circles")
+      .where("id", "=", circle.id)
+      .delete()
+      .then(rows => {
+        io.sockets.emit("circle.delete", circle);
+      });
+  }
+  /**
+   * Randomly move users around.
+   * Check to see if they are in range of a circle, if so issue an alert (once)
+   * @function usersMove
+   * @param {integer} commandArray - tokenized array
+   */
+  function usersMove(senderId, channelId, commandArray) {
+    const distanceToMove = 0.001; // small distance in lat/lng.
+    let alerted = false; //only alert once
 
-  //     })
-  // });
-  socket.on("user.login", user => {
-    const password = user.password;
-    console.log(user);
-    knex("users")
-      .where({ email: user.email })
+    // get the circles first as we only need to do this once.
+    // TODO refactor into a Promise.all
+    knex("circles")
       .select()
-      .then(users => {
-        if (users.length == 0) {
-          socket.emit("user.login_email_error");
-        } else if (password !== users[0].password) {
-          socket.emit("user.login_pass_error");
-        } else {
-          isLoggedIn = true;
-          let user = users[0];
+      .then(circles => {
+        knex("users")
+          .select()
+          .returning([
+            // avoid returning password
+            "id",
+            "first_name",
+            "last_name",
+            "display_name",
+            "email",
+            "avatar",
+            "lat",
+            "lng"
+          ])
+          .then(users => {
+            timeoutUsersMove = setInterval(() => {
+              users.forEach(user => {
+                (user.lat = user.lat + (Math.random() - 0.5) * distanceToMove),
+                  (user.lng =
+                    user.lng + (Math.random() - 0.5) * distanceToMove);
+                user.position = { lat: user.lat, lng: user.lng };
+                userMove(user);
 
-          user.position = { lat: user.lat, lng: user.lng };
-          socket.emit("user.logged_in", user);
+                //check if user is in circle
+                //if so alert once.
+                // issue an alert if we haven't already
+                circles.forEach(circle => {
+                  if (
+                    !alerted &&
+                    geolib.isPointInCircle(
+                      { latitude: user.lat, longitude: user.lng },
+                      { latitude: circle.lat, longitude: circle.lng },
+                      circle.radius
+                    )
+                  ) {
+                    let channel_message = {
+                      channel_id: channelId,
+                      sender_user_id: senderId,
+                      content: `!alert ${user.display_name}(${
+                        user.first_name
+                      } ${user.last_name}) close to ${circle.label}:${
+                        circle.description
+                      }.`
+                    };
+                    io.sockets.emit("channel_message.post", channel_message);
+                    alerted = true;
+                  }
+                });
+              });
+            }, timeoutValue);
+          }); //users
+      }); //circles
+  }
+  /**
+   * stop user movement.
+   * @function usersStop
+   */
+  function usersStop() {
+    clearTimeout(timeoutUsersMove);
+  }
 
-          // User is logged in, send them the user info,
-          // existing users, channels, messages, maps and markers
-          getUsers(user);
-          getChannels(user);
-          getDirectMessages(user);
-          getChannelMessages(user);
-          getLayers(user);
-          getMarkers(user);
-          getCircles(user);
-        }
+  socket.on("init", () => {
+    knex("users")
+      .where("id", socket.decoded_token.user_id)
+      .then(([user]) => {
+        currentUser(user);
+        getUsers(user);
+        getChannels(user);
+        getDirectMessages(user);
+        getChannelMessages(user);
+        getLayers(user);
+        getMarkers(user);
+        getCircles(user);
       });
   });
-
   //Get Users
   socket.on("users.get", user => {
-    console.log("Here", user);
     getUsers(user);
   });
 
@@ -330,6 +446,24 @@ io.sockets.on("connection", socket => {
 
   //Post Channel_Message
   socket.on("channel_message.post", channel_message => {
+    //check for server specific commands
+    if (channel_message.content.indexOf("!") !== -1) {
+      const commandArray = channel_message.content.split(" ");
+      switch (commandArray[0]) {
+        case "!move":
+          usersMove(
+            channel_message.sender_user_id,
+            channel_message.channel_id,
+            commandArray
+          );
+          break;
+        case "!stop":
+          usersStop(commandArray);
+          break;
+        default:
+          console.log("bot: understand not do I: ", channel_message.content);
+      }
+    }
     knex
       .insert(channel_message)
       .into("channel_messages")
@@ -353,6 +487,9 @@ io.sockets.on("connection", socket => {
   socket.on("marker.add", marker => {
     markerAdd(marker);
   });
+  socket.on("marker.delete", marker => {
+    markerDelete(marker);
+  });
 
   // User functions
   // user.move contains id=userId and lat, lng of new position
@@ -370,5 +507,8 @@ io.sockets.on("connection", socket => {
   });
   socket.on("circle.move", circle => {
     circleMove(circle);
+  });
+  socket.on("circle.delete", circle => {
+    circleDelete(circle);
   });
 });
