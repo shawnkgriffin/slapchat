@@ -46,7 +46,10 @@ const MyMapComponent = withScriptjs(
           }}
           label={{
             text: marker.label,
-            color: marker.type === "USER" ? "#268FFF" : "#C03638",
+            color:
+              marker.type === "USER"
+                ? "#268FFF"
+                : "DESTINATION" ? "#66C547" : "#C03638",
             fontSize: "16px",
             fontWeight: "bold"
           }}
@@ -203,16 +206,18 @@ class Map extends Component {
         this.props.sendServer("marker.move", marker);
         break;
       case "USER":
-        let circle = {
+        let destinationMarker = {
           lat: markerState.latLng.lat(),
           lng: markerState.latLng.lng(),
-          radius: 100,
-          owner_user_id: marker.userId,
-          label: `Destination for ${marker.label}`,
-          description: `Please  move here`
+          type: "DESTINATION",
+          owner_user_id: marker.owner_user_id,
+          label: `->${marker.label}`,
+          description: `Please  move here`,
+          icon: "/destination-green.png"
         };
         // TODO instead of adding a circle, create a new marker type "DESTINATION" that you can send people to.
-        this.props.sendServer("circle.add", circle);
+        // TODO move user back to original position. Need a new command. Server should only send it to this user.
+        this.props.sendServer("marker.add", destinationMarker);
         break;
       default:
         console.log("unexpected type", marker.type);
@@ -247,7 +252,11 @@ class Map extends Component {
   onMarkerComplete = e => {
     this.props.sendServer("marker.add", {
       lat: e.position.lat(),
-      lng: e.position.lng()
+      lng: e.position.lng(),
+      type: "MARKER",
+      label: `New`,
+      description: `Please enter`,
+      icon: "/avalanche1.png"
     });
     // TODO delete the marker
   };

@@ -16,6 +16,7 @@ exports.seed = function(knex, Promise) {
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           draggable: true,
           label: "Avalanche danger",
+          type: "MARKER",
           description: "Patrol has determined high risk of avalanche.",
           icon: "/avalanche1.png"
         }),
@@ -25,6 +26,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           label: "Junior",
+          type: "MARKER",
           description: "Junior ski school meeting point. Ages 9-11.",
           draggable: true,
           icon: "/school.png"
@@ -35,6 +37,7 @@ exports.seed = function(knex, Promise) {
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           draggable: true,
+          type: "MARKER",
           label: "Fire",
           description: "Bush fire, under control.",
           icon: "/fire.png"

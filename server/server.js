@@ -174,7 +174,11 @@ io.sockets.on("connection", socket => {
       ])
       .insert({
         lat: marker.lat,
-        lng: marker.lng
+        lng: marker.lng,
+        type: marker.type,
+        label: marker.label,
+        description: marker.description,
+        icon: marker.icon
       })
       .then(markerArray => {
         let newMarker = markerArray[0];

@@ -32,10 +32,10 @@ exports.up = function(knex, Promise) {
         .references("id")
         .inTable("users")
         .onDelete("CASCADE");
-      table.string("label").defaultTo("New Marker");
-      table.string("description").defaultTo("Description");
-      table.string("icon").defaultTo("/avalanche1.png");
-      table.string("type").defaultTo("MARKER");
+      table.string("label");
+      table.string("description");
+      table.string("icon");
+      table.string("type");
       table.boolean("draggable").defaultTo(true);
       table.timestamps(true, true);
     })
