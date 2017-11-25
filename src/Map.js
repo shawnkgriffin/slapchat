@@ -211,11 +211,7 @@ class Map extends Component {
           label: `Destination for ${marker.label}`,
           description: `Please  move here`
         };
-        // let user = {
-        //   id: marker.userId,
-        //   lat: markerState.latLng.lat(),
-        //   lng: markerState.latLng.lng()
-        // };
+        // TODO instead of adding a circle, create a new marker type "DESTINATION" that you can send people to.
         this.props.sendServer("circle.add", circle);
         break;
       default:
