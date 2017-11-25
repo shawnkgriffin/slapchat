@@ -3,7 +3,7 @@ import Users from "./Users.js";
 import Channels from "./Channels.js";
 import UserInfo from "./UserInfo.js";
 
-class SideBar extends Component {
+class StaticSideBar extends Component {
   render() {
     return (
       <div className="side-bar">
@@ -33,4 +33,4 @@ class SideBar extends Component {
   }
 }
 
-export default SideBar;
+export default StaticSideBar;
