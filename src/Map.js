@@ -46,7 +46,7 @@ const MyMapComponent = withScriptjs(
           }}
           label={{
             text: marker.label,
-            color: marker.type === "USER" ? "#4256f4" : "#f44141",
+            color: marker.type === "USER" ? "#268FFF" : "#C03638",
             fontSize: "16px",
             fontWeight: "bold"
           }}
@@ -75,7 +75,7 @@ const MyMapComponent = withScriptjs(
           strokeWeight={0.5}
           key={index}
           radius={circle.radius}
-          fillColor="#f91212"
+          fillColor={"#f91212"}
           fillOpacity={0.35}
           clickable={true}
           draggable={true}
@@ -203,12 +203,20 @@ class Map extends Component {
         this.props.sendServer("marker.move", marker);
         break;
       case "USER":
-        let user = {
-          id: marker.userId,
+        let circle = {
           lat: markerState.latLng.lat(),
-          lng: markerState.latLng.lng()
+          lng: markerState.latLng.lng(),
+          radius: 100,
+          owner_user_id: marker.userId,
+          label: `Destination for ${marker.label}`,
+          description: `Please  move here`
         };
-        this.props.sendServer("user.move", user);
+        // let user = {
+        //   id: marker.userId,
+        //   lat: markerState.latLng.lat(),
+        //   lng: markerState.latLng.lng()
+        // };
+        this.props.sendServer("circle.add", circle);
         break;
       default:
         console.log("unexpected type", marker.type);

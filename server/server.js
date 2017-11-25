@@ -288,8 +288,31 @@ io.sockets.on("connection", socket => {
    * @param {integer} commandArray - tokenized array
    */
   function usersMove(senderId, channelId, commandArray) {
-    const distanceToMove = 0.001; // small distance in lat/lng.
+    const latDelta = 0.005; // small distance in lat/lng.
+    const lngDelta = 0.005;
+    let latDirection,
+      lngDirection = 0;
+
     let alerted = false; //only alert once
+    switch (commandArray[1] || "") {
+      case "north":
+        latDirection = 1;
+        lngDirection = 0;
+        break;
+      case "south":
+        latDirection = -1;
+        lngDirection = 0;
+        break;
+      case "west":
+        latDirection = 0;
+        lngDirection = -1;
+        break;
+      case "east":
+        latDirection = 0;
+        lngDirection = -1;
+        break;
+      default:
+    }
 
     // get the circles first as we only need to do this once.
     // TODO refactor into a Promise.all
@@ -312,9 +335,10 @@ io.sockets.on("connection", socket => {
           .then(users => {
             timeoutUsersMove = setInterval(() => {
               users.forEach(user => {
-                (user.lat = user.lat + (Math.random() - 0.5) * distanceToMove),
+                (user.lat =
+                  user.lat + (Math.random() + latDirection) * latDelta),
                   (user.lng =
-                    user.lng + (Math.random() - 0.5) * distanceToMove);
+                    user.lng + (Math.random() + lngDirection) * lngDelta);
                 user.position = { lat: user.lat, lng: user.lng };
                 userMove(user);
 

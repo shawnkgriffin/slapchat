@@ -110,7 +110,7 @@ class App extends Component {
         channels.find(channel => channel.name === "General").id || 0;
       this.setState({
         channels: channels,
-        currentChannelId: channels[generalChannel].channel_id,
+        currentChannelId: generalChannel,
         generalChannel: generalChannel
       });
     });
