@@ -93,6 +93,25 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("user.move", movedUser);
       });
   }
+  function userLocate(user) {
+    knex("users")
+      .where("id", "=", user.id)
+      .returning([
+        "id",
+        "first_name",
+        "last_name",
+        "display_name",
+        "email",
+        "avatar",
+        "lat",
+        "lng"
+      ])
+      .then(userArray => {
+        let movedUser = userArray[0];
+        movedUser.position = { lat: movedUser.lat, lng: movedUser.lng };
+        io.sockets.emit("user.move", movedUser);
+      });
+  }
   // Get all the channels for a user
   function getChannels(user) {
     knex
@@ -217,6 +236,27 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("marker.move", movedMarker);
       });
   }
+  function markerLocate(marker) {
+    console.log("markerLocate(", marker);
+    knex("markers")
+      .where("id", "=", marker.id)
+      .returning([
+        "id",
+        "label",
+        "lat",
+        "lng",
+        "owner_user_id",
+        "icon",
+        "type",
+        "draggable"
+      ])
+      .then(markerArray => {
+        let movedMarker = markerArray[0];
+        console.log("markerLocate(", movedMarker);
+        movedMarker.position = { lat: movedMarker.lat, lng: movedMarker.lng };
+        io.sockets.emit("marker.move", movedMarker);
+      });
+  }
 
   // Circles
   function getCircles(user) {
@@ -294,8 +334,8 @@ io.sockets.on("connection", socket => {
   function usersMove(senderId, channelId, commandArray) {
     const latDelta = 0.005; // small distance in lat/lng.
     const lngDelta = 0.005;
-    let latDirection,
-      lngDirection = 0;
+    let latDirection = 0;
+    let lngDirection = 0;
 
     let alerted = false; //only alert once
     switch (commandArray[1] || "") {
@@ -492,6 +532,10 @@ io.sockets.on("connection", socket => {
   socket.on("marker.move", marker => {
     markerMove(marker);
   });
+  //Just locate the marker on the map. This is used when a marker is moved by dispatch to send the user to a new position
+  socket.on("marker.locate", marker => {
+    markerLocate(marker);
+  });
 
   socket.on("marker.add", marker => {
     markerAdd(marker);
@@ -506,6 +550,10 @@ io.sockets.on("connection", socket => {
     userMove(user);
   });
 
+  //Just locate the user on the map. This is used when a user is moved by dispatch to send the user to a new position
+  socket.on("user.locate", user => {
+    userLocate(user);
+  });
   // Circle functions
   socket.on("circle.add", circle => {
     circleAdd(circle);

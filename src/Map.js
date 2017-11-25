@@ -215,9 +215,14 @@ class Map extends Component {
           description: `Please  move here`,
           icon: "/destination-green.png"
         };
-        // TODO instead of adding a circle, create a new marker type "DESTINATION" that you can send people to.
-        // TODO move user back to original position. Need a new command. Server should only send it to this user.
+        // relocate the user's marker
+        this.props.sendServer("user.locate", { id: marker.userId });
+
+        // create a new marker as a destination
         this.props.sendServer("marker.add", destinationMarker);
+
+        // post a message on the general channel to ask the user to move.
+        // TODO this should be a private message. Consider implementing it as the user.move function?
         this.props.sendServer("channel_message.post", {
           sender_user_id: this.props.currentUserId,
           channel_id: this.props.generalChannelId,
