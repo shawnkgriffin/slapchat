@@ -24,11 +24,10 @@ class App extends Component {
       markers: [],
       circles: [],
       layers: [],
-      loading: false,
+      loading: true,
       currentUser: null,
       currentChannelId: null,
-      currentDirectMessageId: null,
-      isAuth: ""
+      currentDirectMessageId: null
     };
     this.onNewMessage = this.onNewMessage.bind(this);
     this.sendServer = this.sendServer.bind(this);
@@ -38,18 +37,28 @@ class App extends Component {
     this.sendNewRegister = this.sendNewRegister.bind(this);
   }
 
-  //RECIVES STATE DATA
   componentDidMount() {
-    this.socket = io("localhost:3001");
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.setupSocket(token);
+    } else {
+      this.setState({
+        loading: false
+      });
+    }
+  }
+
+  //RECIVES STATE DATA
+
+  setupSocket(token) {
+    this.socket = io("localhost:3001", { query: "token=" + token });
     // successful login will cause everything to fill
+    this.socket.on("current", user => {
+      this.setState({ currentUser: user, loading: false });
+    });
 
     this.socket.on("users", users => {
       this.setState({ users: users });
-    });
-    this.socket.on("user.logged_in", ({ token, user }) => {
-      console.log("TOKEN", token);
-      this.socket.query = "token=" + token;
-      this.setState({ currentUser: user, isAuth: "", token });
     });
 
     this.socket.on("channels", channels => {
@@ -175,19 +184,26 @@ class App extends Component {
     });
     this.socket.on("user.move", userPosition => {});
 
-    this.socket.on("user.login_pass_error", () => {
-      this.setState({ isAuth: "Incorrect Email or Password" });
-    });
-    this.socket.on("user.login_email_error", () => {
-      this.setState({ isAuth: "Incorrect Email or Password" });
-    });
+    this.socket.emit("init");
   }
   sendNewRegister(newRegister) {
     this.socket.emit("user.register", newRegister);
   }
 
   sendNewLogin(newLogin) {
-    this.socket.emit("user.login", newLogin);
+    //his.socket.emit("user.login", newLogin);
+    fetch("/login", {
+      method: "PUT",
+      body: JSON.stringify(newLogin),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        localStorage.setItem("token", data.token);
+        this.setupSocket(data.token);
+      });
   }
 
   // when we get a new message, send it to the server
@@ -260,25 +276,17 @@ class App extends Component {
   }
 
   render() {
+    if (this.state.loading) {
+      return <div>Loading</div>;
+    }
     if (this.state.currentUser === null) {
-      if (this.state.isAuth !== "") {
-        return (
-          <div>
-            <h1> Welcome to Slap </h1>
-            <span style={textStyle}>{this.state.isAuth}</span>
-            <Login sendNewLogin={this.sendNewLogin} />
-            <Register sendNewRegister={this.sendNewRegister} />
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <h1> Welcome to Slap! </h1>
-            <Login sendNewLogin={this.sendNewLogin} />
-            <Register sendNewRegister={this.sendNewRegister} />
-          </div>
-        );
-      }
+      return (
+        <div>
+          <h1> Welcome to Slap! </h1>
+          <Login sendNewLogin={this.sendNewLogin} />
+          <Register sendNewRegister={this.sendNewRegister} />
+        </div>
+      );
     }
     return (
       <div className="fixed-container">

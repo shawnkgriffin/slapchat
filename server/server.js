@@ -7,47 +7,71 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io").listen(server);
-const socketioJwt = require("socketio-jwt");
 const jwt = require("jsonwebtoken");
+const socketioJwt = require("socketio-jwt");
+const bodyparser = require("body-parser");
 
 let connections = [];
 
-server.listen(process.env.PORT || 3001);
-
+app.use(bodyparser.json());
 app.use(express.static("./server/public"));
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+app.put("/login", (req, res) => {
+  const password = req.body.password;
+  knex("users")
+    .where({ email: req.body.email })
+    .select()
+    .then(users => {
+      if (users.length === 0) {
+        res.json({
+          error: "No user with email"
+        });
+      } else if (password !== users[0].password) {
+        return res.json({ error: "Incorrect password" });
+      } else {
+        let user = users[0];
+
+        user.position = { lat: user.lat, lng: user.lng };
+
+        res.json({ token: jwt.sign({ user_id: user.id }, "secret"), user });
+      }
+    });
+});
+app.get("/logout", (req, res) => {
+  res.redirect("/");
+});
+
+server.listen(process.env.PORT || 3001);
+
+io.use(
+  socketioJwt.authorize({
+    secret: "secret",
+    handshake: true
+  })
+);
+
 //Socket on connect
 io.sockets.on("connection", socket => {
-  socket.use((packet, next) => {
-    console.log("PACKET", packet);
-    if (packet[0] === "user.login") {
-      console.log("this should go through");
-      next();
-    } else {
-      console.log("checking auth");
-      socketioJwt.authorize({
-        secret: "secret"
-      })(packet, next);
-    }
-  });
-  socket.use(socketioJwt.authorize({ secret: "secret" }), socket);
-  let isLoggedIn = false;
   console.log("Connected: %s sockets connected", connections.length);
 
   //Disconnect
   socket.on("disconnect", data => {
     connections.splice(connections.indexOf(socket), 1);
-    isLoggedIn = false;
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
   ///////////////////////////////////////////////////////////////////////////
   // Define all the user data functions here for closure.
   // getUsers is called at the beginning to load all the users for a newly logged in person
+
+  function currentUser(user) {
+    socket.emit("current", user);
+  }
+
   function getUsers(user) {
     knex
       .select()
@@ -182,50 +206,21 @@ io.sockets.on("connection", socket => {
         io.sockets.emit("circle.create", circle);
       });
   }
-  ///////////////////////////////////////////////////////////////////////////
-  // Here is all the socket state information.
-  // socket.on("user.register", user => {
-  //   knex
-  //     .insert(user)
-  //     .into("users")
-  //     .returning("id");.then(id => {
 
-  //     })
-  // });
-  socket.on("user.login", user => {
-    const password = user.password;
+  socket.on("init", () => {
     knex("users")
-      .where({ email: user.email })
-      .select()
-      .then(users => {
-        if (users.length == 0) {
-          socket.emit("user.login_email_error");
-        } else if (password !== users[0].password) {
-          socket.emit("user.login_pass_error");
-        } else {
-          isLoggedIn = true;
-          let user = users[0];
-
-          console.log("TOKEN");
-          user.position = { lat: user.lat, lng: user.lng };
-          socket.emit("user.logged_in", {
-            token: jwt.sign({ user_id: user.id }, "secret")
-            // user
-          });
-
-          // User is logged in, send them the user info,
-          // existing users, channels, messages, maps and markers
-          getUsers(user);
-          getChannels(user);
-          getDirectMessages(user);
-          getChannelMessages(user);
-          getLayers(user);
-          getMarkers(user);
-          getCircles(user);
-        }
+      .where("id", socket.decoded_token.user_id)
+      .then(([user]) => {
+        currentUser(user);
+        getUsers(user);
+        getChannels(user);
+        getDirectMessages(user);
+        getChannelMessages(user);
+        getLayers(user);
+        getMarkers(user);
+        getCircles(user);
       });
   });
-
   //Get Users
   socket.on("users.get", user => {
     getUsers(user);
