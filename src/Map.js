@@ -15,8 +15,6 @@ const {
   DrawingManager
 } = require("react-google-maps/lib/components/drawing/DrawingManager");
 
-const SERVER = "http://localhost:3001/"; // TODO fix this entered as Jira task to figure out how to handle server static info
-
 const polygon = [
   { lat: 50.114806, lng: -122.892426 },
   { lat: 50.102365, lng: -122.885903 },
@@ -34,9 +32,28 @@ const MyMapComponent = withScriptjs(
       {props.markers.map((marker, index) => (
         <Marker
           onClick={markerState => props.onMarkerClick(marker, markerState)}
+          onRightClick={markerState =>
+            props.onMarkerRightClick(marker, markerState)
+          }
           onDragEnd={markerState => props.onDragEnd(marker, markerState)}
           key={index}
-          {...marker}
+          icon={{
+            url: marker.icon,
+            size: new window.google.maps.Size(32, 64),
+            origin: new window.google.maps.Point(0, 0),
+            // anchor: new window.google.maps.Point(32, 37),
+            labelOrigin: new window.google.maps.Point(20, 45)
+          }}
+          label={{
+            text: marker.label,
+            color: marker.type === "USER" ? "#4256f4" : "#f44141",
+            fontSize: "16px",
+            fontWeight: "bold"
+          }}
+          position={marker.position}
+          draggable={marker.draggable}
+          visible={marker.visible}
+          // {...marker}
         />
       ))}
       <Polygon
@@ -53,15 +70,24 @@ const MyMapComponent = withScriptjs(
       {props.circles.map((circle, index) => (
         <Circle
           center={circle.center}
-          strokeColor="#f91616"
+          strokeColor="#f91212"
           strokeOpacity={0.8}
           strokeWeight={0.5}
+          key={index}
           radius={circle.radius}
-          fillColor="#f91616"
+          fillColor="#f91212"
           fillOpacity={0.35}
           clickable={true}
           draggable={true}
+          editable={false}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
+          onClick={circleState => props.onCircleClick(circle, circleState)}
+          // onRadiusChanged={circleState =>
+          //   props.onCircleRadiusChanged(circle, circleState)
+          // }
+          onRightClick={circleState =>
+            props.onCircleRightClick(circle, circleState)
+          }
         />
       ))}
       <SearchBox
@@ -151,15 +177,23 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.handleCircleClick = this.handleCircleClick.bind(this);
+    this.handleCircleRightClick = this.handleCircleRightClick.bind(this);
+    this.handleCircleRadiusChanged = this.handleCircleRadiusChanged.bind(this);
     this.onCircleDragEnd = this.onCircleDragEnd.bind(this);
     this.onCircleComplete = this.onCircleComplete.bind(this);
   }
 
   // Marker events
   handleMarkerClick = (marker, markerState) => {
-    console.log("google:", window.google);
     console.log("handleMarkerClick", marker, markerState);
+  };
+  // Marker events
+  handleMarkerRightClick = (marker, markerState) => {
+    console.log("handleMarkerRightClick", marker, markerState);
+    this.props.sendServer("marker.delete", marker);
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
@@ -172,7 +206,6 @@ class Map extends Component {
         let user = {
           id: marker.userId,
           lat: markerState.latLng.lat(),
-
           lng: markerState.latLng.lng()
         };
         this.props.sendServer("user.move", user);
@@ -181,8 +214,15 @@ class Map extends Component {
         console.log("unexpected type", marker.type);
     }
   };
+  // Circle events
+  handleCircleClick = (circle, circleState) => {
+    console.log("handleCircleClick", circle, circleState);
+  };
+  // Circle events
+  handleCircleRightClick = (circle, circleState) => {
+    this.props.sendServer("circle.delete", circle);
+  };
   onCircleComplete = e => {
-    console.log("onCircleComplete", e.center.lat(), e.center.lng(), e.radius);
     let circle = {
       label: "Danger",
       description: "Avalanche hazard, do not approach",
@@ -190,20 +230,21 @@ class Map extends Component {
       lng: e.center.lng(),
       radius: e.radius
     };
-    this.props.sendServer("circle.create", circle);
+    this.props.sendServer("circle.add", circle);
   };
   onCircleDragEnd = (circle, circleState) => {
-    console.log("onCircleDragEnd", circle);
     circle.lat = circleState.latLng.lat();
     circle.lng = circleState.latLng.lng();
     this.props.sendServer("circle.move", circle);
+  };
+  handleCircleRadiusChanged = (circle, circleState) => {
+    console.log("handleCircleRadiusChanged = (", circle);
   };
   onMarkerComplete = e => {
     this.props.sendServer("marker.add", {
       lat: e.position.lat(),
       lng: e.position.lng()
     });
-    console.log("onMarkerComplete", e.position.lat(), e.position.lng());
     // TODO delete the marker
   };
   onPolygonComplete = e => {
@@ -221,16 +262,7 @@ class Map extends Component {
 
   render() {
     const markers = this.props.markers || [];
-    this.props.users.forEach(user =>
-      markers.push({
-        icon: SERVER + "skiing-blue.png",
-        position: user.position,
-        label: user.display_name,
-        type: "USER",
-        draggable: true,
-        userId: user.id
-      })
-    );
+
     return (
       <div className="map-container">
         <MyMapComponent
@@ -240,7 +272,11 @@ class Map extends Component {
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
           onMarkerClick={this.handleMarkerClick}
+          onMarkerRightClick={this.handleMarkerRightClick}
           onDragEnd={this.handleDragEnd}
+          onCircleClick={this.handleCircleClick}
+          onCircleRadiusChanged={this.handleCircleRadiusChanged}
+          onCircleRightClick={this.handleCircleRightClick}
           onCircleComplete={this.onCircleComplete}
           onCircleDragEnd={this.onCircleDragEnd}
           onMarkerComplete={this.onMarkerComplete}

@@ -11,8 +11,8 @@ class ChatBar extends Component {
   // onMessageSubmit when the user presses enter on the submit field.
   onMessageSubmit(event) {
     if (event.key === "Enter") {
-      this.setState({ content: "" });
       this.props.onNewMessage(this.state.content);
+      this.setState({ content: "" });
     }
   }
 
@@ -32,9 +32,6 @@ class ChatBar extends Component {
           onChange={this.onMessageChange}
           value={this.state.content}
         />
-        <button id="message-submit-button" className="btn btn-primary">
-          Send
-        </button>
       </div>
     );
   }
