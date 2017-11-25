@@ -32,6 +32,7 @@ class App extends Component {
       currentUser: null,
       currentChannelId: null,
       currentDirectMessageId: null,
+      generalChannel: 0, //general channel is a special channel.
       isAuth: ""
     };
 
@@ -105,9 +106,12 @@ class App extends Component {
     });
 
     this.socket.on("channels", channels => {
+      const generalChannel =
+        channels.find(channel => channel.name === "General").id || 0;
       this.setState({
         channels: channels,
-        currentChannelId: channels[0].channel_id
+        currentChannelId: channels[generalChannel].channel_id,
+        generalChannel: generalChannel
       });
     });
     this.socket.on("direct_messages", direct_messages => {
@@ -314,19 +318,20 @@ class App extends Component {
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
     // Send the msg object as a JSON-formatted string.
-    let action =
-      this.state.currentChannelId != null
-        ? "channel_message.post"
-        : "direct_message.post";
+    let action = "";
     let payload = {};
-
-    if (action === "channel_message.post") {
+    if (
+      this.state.currentChannelId !== null ||
+      !this.state.currentDirectMessageId // protect from a case where currentDirectMessageId is not set and use general channel.
+    ) {
+      action = "channel_message.post";
       payload = {
         sender_user_id: this.state.currentUser.id,
-        channel_id: this.state.currentChannelId,
+        channel_id: this.state.currentChannelId || this.state.generalChannel,
         content: content
       };
     } else {
+      action = "direct_message.post";
       payload = {
         sender_user_id: this.state.currentUser.id,
         recipient_user_id: this.state.currentDirectMessageId,
