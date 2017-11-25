@@ -226,7 +226,7 @@ class Map extends Component {
         this.props.sendServer("channel_message.post", {
           sender_user_id: this.props.currentUserId,
           channel_id: this.props.generalChannelId,
-          content: `@${marker.label} please move to ->${marker.label}`
+          content: `@${marker.label} please move to >${marker.label}`
         });
         break;
       default:
