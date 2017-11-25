@@ -34,7 +34,7 @@ exports.up = function(knex, Promise) {
         .onDelete("CASCADE");
       table.string("label").defaultTo("New Marker");
       table.string("description").defaultTo("Description");
-      table.string("icon").defaultTo("/skiing-red.png");
+      table.string("icon").defaultTo("/avalanche1.png");
       table.string("type").defaultTo("MARKER");
       table.boolean("draggable").defaultTo(true);
       table.timestamps(true, true);
