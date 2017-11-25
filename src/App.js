@@ -125,12 +125,11 @@ class App extends Component {
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
       if (channel_message.content.indexOf("!alert") !== -1) {
-        Alert.error(channel_message.content, {
+        const content = channel_message.content.replace("!alert ", "");
+        Alert.error(content, {
           position: "top-right",
           effect: "slide",
-          onShow: function() {
-            console.log("aye!");
-          },
+          onShow: function() {},
           beep: true,
           timeout: "none",
           offset: 100
