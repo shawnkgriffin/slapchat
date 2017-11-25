@@ -3,10 +3,14 @@ import { animateScroll } from "react-scroll";
 import io from "socket.io-client";
 import Map from "./Map.js";
 import MessageList from "./MessageList.js";
-import SideBar from "./SideBar.js";
+import StaticSideBar from "./StaticSideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
+import Alert from "react-s-alert";
+import "react-s-alert/dist/s-alert-default.css";
+import "react-s-alert/dist/s-alert-css-effects/slide.css";
+import Sidebar from "react-sidebar";
 const textStyle = {
   color: "red",
   fontstyle: "italic"
@@ -15,6 +19,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sidebarOpen: false,
       users: [],
       direct_messages: [],
       channel_messages: [],
@@ -46,6 +51,23 @@ class App extends Component {
     this.onUserCallback = this.onUserCallback.bind(this);
     this.sendNewLogin = this.sendNewLogin.bind(this);
     this.sendNewRegister = this.sendNewRegister.bind(this);
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+  }
+
+  //Beep attached to alert
+  componentWillMount() {
+    let beep = this.props.beep;
+    let condition = this.props.condition;
+    if (beep && typeof beep === "string") {
+      this.alertAudio = new Audio(beep);
+      this.alertAudio.load();
+      this.alertAudio.play();
+    }
+    if (beep && typeof beep === "object" && condition === "warning") {
+      this.alertAudio = new Audio(beep.warning);
+      this.alertAudio.load();
+      this.alertAudio.play();
+    }
   }
 
   //RECIVES STATE DATA
@@ -99,7 +121,16 @@ class App extends Component {
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
       if (channel_message.content.indexOf("!alert") !== -1) {
-        alert(channel_message.content);
+        Alert.error(channel_message.content, {
+          position: "top-right",
+          effect: "slide",
+          onShow: function() {
+            console.log("aye!");
+          },
+          beep: true,
+          timeout: "none",
+          offset: 100
+        });
       }
       channel_message.avatar = this.state.users.find(
         user => user.id === channel_message.sender_user_id
@@ -134,7 +165,16 @@ class App extends Component {
     // Receive a direct message
     this.socket.on("direct_message.post", direct_message => {
       if (direct_message.content.indexOf("!alert") !== -1) {
-        alert(direct_message.content);
+        Alert.error(direct_message.content, {
+          position: "top-right",
+          effect: "slide",
+          onShow: function() {
+            console.log("aye!");
+          },
+          beep: true,
+          timeout: "none",
+          offset: 100
+        });
       }
 
       direct_message.avatar = this.state.users.find(
@@ -337,7 +377,16 @@ class App extends Component {
     });
   }
 
+  onSetSidebarOpen(open) {
+    this.setState({ sidebarOpen: open });
+  }
+
   render() {
+    const sidebarContent = (
+      <b>
+        <button>Logout</button>
+      </b>
+    );
     if (this.state.currentUser === null) {
       if (this.state.isAuth !== "") {
         return (
@@ -360,7 +409,7 @@ class App extends Component {
     }
     return (
       <div className="fixed-container">
-        <SideBar
+        <StaticSideBar
           onChannelCallback={this.onChannelCallback}
           onUserCallback={this.onUserCallback}
           users={this.state.users}
@@ -370,6 +419,7 @@ class App extends Component {
           activeChannelId={this.state.currentChannelId}
         />
         <main className="nav-and-content">
+          <Alert stack={{ limit: 3 }} />
           <NavBar currentUser={this.state.currentUser} />
           {this.state.loading ? (
             <div>Loading</div>
@@ -387,6 +437,11 @@ class App extends Component {
             </section>
           )}
         </main>
+        <Sidebar
+          sidebar={sidebarContent}
+          open={this.state.sidebarOpen}
+          onSetOpen={this.onSetSidebarOpen}
+        />
       </div>
     );
   }
