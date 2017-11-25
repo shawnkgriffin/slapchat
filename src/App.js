@@ -28,7 +28,7 @@ class App extends Component {
       markers: [],
       circles: [],
       layers: [],
-      loading: false,
+      loading: true,
       currentUser: null,
       currentChannelId: null,
       currentDirectMessageId: null,
@@ -71,12 +71,27 @@ class App extends Component {
     }
   }
 
-  //RECIVES STATE DATA
   componentDidMount() {
-    this.socket = io(this.connectionString);
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.setupSocket(token);
+    } else {
+      this.setState({
+        loading: false
+      });
+    }
+  }
 
-    this.socket.on("connect", () => {
-      console.info("connected to web socket");
+  //RECIVES STATE DATA
+
+  setupSocket(token) {
+    this.socket = io(this.connectionString, { query: "token=" + token });
+    // successful login will cause everything to fill
+    this.socket.on("current", user => {
+      this.setState({ currentUser: user, loading: false });
+      this.socket.on("connect", () => {
+        console.info("connected to web socket");
+      });
     });
 
     this.socket.on("users", users => {
@@ -100,9 +115,6 @@ class App extends Component {
         users: users,
         markers: this.state.markers.concat(userMarkers)
       });
-    });
-    this.socket.on("user.logged_in", user => {
-      this.setState({ currentUser: user, isAuth: "" });
     });
 
     this.socket.on("channels", channels => {
@@ -298,19 +310,26 @@ class App extends Component {
       this.setState({ markers: newMarkers });
     });
 
-    this.socket.on("user.login_pass_error", () => {
-      this.setState({ isAuth: "Incorrect Email or Password" });
-    });
-    this.socket.on("user.login_email_error", () => {
-      this.setState({ isAuth: "Incorrect Email or Password" });
-    });
+    this.socket.emit("init");
   }
   sendNewRegister(newRegister) {
     this.socket.emit("user.register", newRegister);
   }
 
   sendNewLogin(newLogin) {
-    this.socket.emit("user.login", newLogin);
+    //his.socket.emit("user.login", newLogin);
+    fetch("/login", {
+      method: "PUT",
+      body: JSON.stringify(newLogin),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        localStorage.setItem("token", data.token);
+        this.setupSocket(data.token);
+      });
   }
 
   // when we get a new message, send it to the server
@@ -386,30 +405,17 @@ class App extends Component {
   }
 
   render() {
-    const sidebarContent = (
-      <b>
-        <button>Logout</button>
-      </b>
-    );
+    if (this.state.loading) {
+      return <div>Loading</div>;
+    }
     if (this.state.currentUser === null) {
-      if (this.state.isAuth !== "") {
-        return (
-          <div>
-            <h1> Welcome to Slap </h1>
-            <span style={textStyle}>{this.state.isAuth}</span>
-            <Login sendNewLogin={this.sendNewLogin} />
-            <Register sendNewRegister={this.sendNewRegister} />
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <h1> Welcome to Slap! </h1>
-            <Login sendNewLogin={this.sendNewLogin} />
-            <Register sendNewRegister={this.sendNewRegister} />
-          </div>
-        );
-      }
+      return (
+        <div>
+          <h1> Welcome to Slap! </h1>
+          <Login sendNewLogin={this.sendNewLogin} />
+          <Register sendNewRegister={this.sendNewRegister} />
+        </div>
+      );
     }
     return (
       <div className="fixed-container">
@@ -442,7 +448,7 @@ class App extends Component {
           )}
         </main>
         <Sidebar
-          sidebar={sidebarContent}
+          // sidebar={sidebarContent}
           open={this.state.sidebarOpen}
           onSetOpen={this.onSetSidebarOpen}
         />
