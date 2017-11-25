@@ -68,6 +68,7 @@ class App extends Component {
           position: user.position,
           label: user.display_name,
           type: "USER",
+          visible: true,
           draggable: true,
           userId: user.id
         })
