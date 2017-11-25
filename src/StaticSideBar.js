@@ -3,7 +3,7 @@ import Users from "./Users.js";
 import Channels from "./Channels.js";
 import UserInfo from "./UserInfo.js";
 
-class SideBar extends Component {
+class StaticSideBar extends Component {
   handleLogout(event) {
     localStorage.clear();
   }
