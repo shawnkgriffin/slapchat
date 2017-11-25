@@ -3,10 +3,14 @@ import { animateScroll } from "react-scroll";
 import io from "socket.io-client";
 import Map from "./Map.js";
 import MessageList from "./MessageList.js";
-import SideBar from "./SideBar.js";
+import StaticSideBar from "./StaticSideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
 import Register from "./Register.js";
+import Alert from "react-s-alert";
+import "react-s-alert/dist/s-alert-default.css";
+import "react-s-alert/dist/s-alert-css-effects/slide.css";
+import Sidebar from "react-sidebar";
 const textStyle = {
   color: "red",
   fontstyle: "italic"
@@ -15,6 +19,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      sidebarOpen: false,
       users: [],
       direct_messages: [],
       channel_messages: [],
@@ -23,11 +28,10 @@ class App extends Component {
       markers: [],
       circles: [],
       layers: [],
-      loading: false,
+      loading: true,
       currentUser: null,
       currentChannelId: null,
-      currentDirectMessageId: null,
-      isAuth: ""
+      currentDirectMessageId: null
     };
 
     /* eslint-disable no-restricted-globals */
@@ -46,14 +50,46 @@ class App extends Component {
     this.onUserCallback = this.onUserCallback.bind(this);
     this.sendNewLogin = this.sendNewLogin.bind(this);
     this.sendNewRegister = this.sendNewRegister.bind(this);
+    this.onSetSidebarOpen = this.onSetSidebarOpen.bind(this);
+  }
+
+  //Beep attached to alert
+  componentWillMount() {
+    let beep = this.props.beep;
+    let condition = this.props.condition;
+    if (beep && typeof beep === "string") {
+      this.alertAudio = new Audio(beep);
+      this.alertAudio.load();
+      this.alertAudio.play();
+    }
+    if (beep && typeof beep === "object" && condition === "warning") {
+      this.alertAudio = new Audio(beep.warning);
+      this.alertAudio.load();
+      this.alertAudio.play();
+    }
+  }
+
+  componentDidMount() {
+    const token = localStorage.getItem("token");
+    if (token) {
+      this.setupSocket(token);
+    } else {
+      this.setState({
+        loading: false
+      });
+    }
   }
 
   //RECIVES STATE DATA
-  componentDidMount() {
-    this.socket = io(this.connectionString);
 
-    this.socket.on("connect", () => {
-      console.info("connected to web socket");
+  setupSocket(token) {
+    this.socket = io(this.connectionString, { query: "token=" + token });
+    // successful login will cause everything to fill
+    this.socket.on("current", user => {
+      this.setState({ currentUser: user, loading: false });
+      this.socket.on("connect", () => {
+        console.info("connected to web socket");
+      });
     });
 
     this.socket.on("users", users => {
@@ -68,6 +104,7 @@ class App extends Component {
           position: user.position,
           label: user.display_name,
           type: "USER",
+          visible: true,
           draggable: true,
           userId: user.id
         })
@@ -77,12 +114,12 @@ class App extends Component {
         markers: this.state.markers.concat(userMarkers)
       });
     });
-    this.socket.on("user.logged_in", user => {
-      this.setState({ currentUser: user, isAuth: "" });
-    });
 
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels });
+      this.setState({
+        channels: channels,
+        currentChannelId: channels[0].channel_id
+      });
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -95,7 +132,16 @@ class App extends Component {
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
       if (channel_message.content.indexOf("!alert") !== -1) {
-        alert(channel_message.content);
+        Alert.error(channel_message.content, {
+          position: "top-right",
+          effect: "slide",
+          onShow: function() {
+            console.log("aye!");
+          },
+          beep: true,
+          timeout: "none",
+          offset: 100
+        });
       }
       channel_message.avatar = this.state.users.find(
         user => user.id === channel_message.sender_user_id
@@ -130,7 +176,16 @@ class App extends Component {
     // Receive a direct message
     this.socket.on("direct_message.post", direct_message => {
       if (direct_message.content.indexOf("!alert") !== -1) {
-        alert(direct_message.content);
+        Alert.error(direct_message.content, {
+          position: "top-right",
+          effect: "slide",
+          onShow: function() {
+            console.log("aye!");
+          },
+          beep: true,
+          timeout: "none",
+          offset: 100
+        });
       }
 
       direct_message.avatar = this.state.users.find(
@@ -191,6 +246,13 @@ class App extends Component {
     this.socket.on("marker.add", marker => {
       this.setState({ markers: this.state.markers.concat([marker]) });
     });
+    this.socket.on("marker.delete", deleteMarker => {
+      this.setState({
+        markers: this.state.markers.filter(
+          marker => !(marker.type === "MARKER" && marker.id === deleteMarker.id)
+        )
+      });
+    });
     this.socket.on("marker.move", newMarker => {
       this.setState({
         markers: this.state.markers.map(marker => {
@@ -198,6 +260,8 @@ class App extends Component {
         })
       });
     });
+
+    // Circles
     this.socket.on("circles", circles => {
       this.setState({ circles: circles });
     });
@@ -209,6 +273,13 @@ class App extends Component {
         circles: this.state.circles.map(circle => {
           return circle.id === movedCircle.id ? movedCircle : circle;
         })
+      });
+    });
+    this.socket.on("circle.delete", deleteCircle => {
+      this.setState({
+        circles: this.state.circles.filter(
+          circle => !(circle.id === deleteCircle.id)
+        )
       });
     });
 
@@ -235,19 +306,26 @@ class App extends Component {
       this.setState({ markers: newMarkers });
     });
 
-    this.socket.on("user.login_pass_error", () => {
-      this.setState({ isAuth: "Incorrect Email or Password" });
-    });
-    this.socket.on("user.login_email_error", () => {
-      this.setState({ isAuth: "Incorrect Email or Password" });
-    });
+    this.socket.emit("init");
   }
   sendNewRegister(newRegister) {
     this.socket.emit("user.register", newRegister);
   }
 
   sendNewLogin(newLogin) {
-    this.socket.emit("user.login", newLogin);
+    //his.socket.emit("user.login", newLogin);
+    fetch("/login", {
+      method: "PUT",
+      body: JSON.stringify(newLogin),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        localStorage.setItem("token", data.token);
+        this.setupSocket(data.token);
+      });
   }
 
   // when we get a new message, send it to the server
@@ -317,30 +395,26 @@ class App extends Component {
     });
   }
 
+  onSetSidebarOpen(open) {
+    this.setState({ sidebarOpen: open });
+  }
+
   render() {
+    if (this.state.loading) {
+      return <div>Loading</div>;
+    }
     if (this.state.currentUser === null) {
-      if (this.state.isAuth !== "") {
-        return (
-          <div>
-            <h1> Welcome to Slap </h1>
-            <span style={textStyle}>{this.state.isAuth}</span>
-            <Login sendNewLogin={this.sendNewLogin} />
-            <Register sendNewRegister={this.sendNewRegister} />
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <h1> Welcome to Slap! </h1>
-            <Login sendNewLogin={this.sendNewLogin} />
-            <Register sendNewRegister={this.sendNewRegister} />
-          </div>
-        );
-      }
+      return (
+        <div>
+          <h1> Welcome to Slap! </h1>
+          <Login sendNewLogin={this.sendNewLogin} />
+          <Register sendNewRegister={this.sendNewRegister} />
+        </div>
+      );
     }
     return (
       <div className="fixed-container">
-        <SideBar
+        <StaticSideBar
           onChannelCallback={this.onChannelCallback}
           onUserCallback={this.onUserCallback}
           users={this.state.users}
@@ -350,6 +424,7 @@ class App extends Component {
           activeChannelId={this.state.currentChannelId}
         />
         <main className="nav-and-content">
+          <Alert stack={{ limit: 3 }} />
           <NavBar currentUser={this.state.currentUser} />
           {this.state.loading ? (
             <div>Loading</div>
@@ -367,6 +442,11 @@ class App extends Component {
             </section>
           )}
         </main>
+        <Sidebar
+          // sidebar={sidebarContent}
+          open={this.state.sidebarOpen}
+          onSetOpen={this.onSetSidebarOpen}
+        />
       </div>
     );
   }

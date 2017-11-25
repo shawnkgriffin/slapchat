@@ -17,20 +17,21 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
   right: 0;
 
   .side-bar {
-    background-color: #a0d468;
     background-color: #fff;
     display: flex;
     flex-direction: column;
     min-width: 200px;
     justify-content: space-around;
+    z-index: 1;
 
     .user-info {
       min-height: 60px;
       display: flex;
       align-items: center;
       padding: 5px;
-      border-bottom: 1px solid grey;
       font-size: 1.3em;
+      background-color: #be90d4;
+      color: white;
     }
 
     .user-info-avatar {
@@ -85,6 +86,7 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    z-index: 1;
 
     .nav-bar {
       display: flex;
@@ -182,7 +184,52 @@ video {
   border: none;
 }
 
+.s-alert-warning{
+  background: indianred;
+}
+.s-alert-box{
+  border-radius: 17px;
+}
+
+sidebar{
+  width: 200px;
+}
+
 #message-submit-button {
   border-radius: 0;
   margin: 0;
+}
+
+.login-page-container {
+  background-image: url("https://thesweetsetup.com/wp-content/uploads/2016/11/sunrise-blur.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+  opacity: 0.7;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 50px;
+  border-radius: 10px;
+
+  h2 {
+     margin: 0 0 1rem;
+   }
+}
+
+.sign-in-form {
+  width: 100%;
+}
+
+.login-form-input {
+  margin-bottom:.5rem;
 }
