@@ -4,9 +4,17 @@ import Channels from "./Channels.js";
 import UserInfo from "./UserInfo.js";
 
 class StaticSideBar extends Component {
+  handleLogout(event) {
+    localStorage.clear();
+  }
   render() {
     return (
       <div className="side-bar">
+        <form method="GET" action="/">
+          <button type="submit" onClick={this.handleLogout}>
+            logout
+          </button>
+        </form>
         <UserInfo currentUser={this.props.currentUser} />
         <div className="side-bar-nav">
           <section className="channels">

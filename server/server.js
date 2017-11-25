@@ -1,30 +1,32 @@
 const ENV = process.env.NODE_ENV || "development";
-
 if (ENV === "development") {
   require("dotenv").config();
 }
-
 const knexConfig = require("../knexfile.js");
 const knex = require("knex")(knexConfig[ENV]);
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const io = require("socket.io").listen(server);
+const jwt = require("jsonwebtoken");
+const socketioJwt = require("socketio-jwt");
+const bodyparser = require("body-parser");
 const uuidv4 = require("uuid/v4");
 const path = require("path");
 const geolib = require("geolib");
 
 let connections = [];
-
-const staticPath = path.resolve(__dirname, "..", "build");
-
 let timeoutUsersMove = null; // timer used to randomly move people.
 const timeoutValue = 1000; // move users every 1 seconds.
 
-server.listen(process.env.PORT || 3001);
+app.use(bodyparser.json());
+app.use(express.static("./server/public"));
 
+const staticPath = path.resolve(__dirname, "..", "build");
 console.log("/public", staticPath);
 app.use(express.static(staticPath));
+
+server.listen(process.env.PORT || 3001);
 
 if (ENV === "development") {
   //Index HTML is for debugging
@@ -33,22 +35,58 @@ if (ENV === "development") {
   });
 }
 
+app.put("/login", (req, res) => {
+  const password = req.body.password;
+  knex("users")
+    .where({ email: req.body.email })
+    .select()
+    .then(users => {
+      if (users.length === 0) {
+        res.json({
+          error: "No user with email"
+        });
+      } else if (password !== users[0].password) {
+        return res.json({ error: "Incorrect password" });
+      } else {
+        let user = users[0];
+
+        user.position = { lat: user.lat, lng: user.lng };
+
+        res.json({ token: jwt.sign({ user_id: user.id }, "secret"), user });
+      }
+    });
+});
+app.get("/logout", (req, res) => {
+  res.redirect("/");
+});
+
+server.listen(process.env.PORT || 3001);
+
+io.use(
+  socketioJwt.authorize({
+    secret: "secret",
+    handshake: true
+  })
+);
+
 //Socket on connect
 io.sockets.on("connection", socket => {
-  connections.push(socket);
-  let isLoggedIn = false;
   console.log("Connected: %s sockets connected", connections.length);
 
   //Disconnect
   socket.on("disconnect", data => {
     connections.splice(connections.indexOf(socket), 1);
-    isLoggedIn = false;
     console.log("Disconnected %s sockets connnected", connections.length);
   });
 
   ///////////////////////////////////////////////////////////////////////////
   // Define all the user data functions here for closure.
   // getUsers is called at the beginning to load all the users for a newly logged in person
+
+  function currentUser(user) {
+    socket.emit("current", user);
+  }
+
   function getUsers(user) {
     knex("users")
       .select()
@@ -424,39 +462,20 @@ io.sockets.on("connection", socket => {
     clearTimeout(timeoutUsersMove);
   }
 
-  ///////////////////////////////////////////////////////////////////////////
-  // Here is all the socket state information.
-
-  socket.on("user.login", user => {
-    const password = user.password;
+  socket.on("init", () => {
     knex("users")
-      .where({ email: user.email })
-      .select()
-      .then(users => {
-        if (users.length === 0) {
-          socket.emit("user.login_email_error");
-        } else if (password !== users[0].password) {
-          socket.emit("user.login_pass_error");
-        } else {
-          isLoggedIn = true;
-          let user = users[0];
-
-          user.position = { lat: user.lat, lng: user.lng };
-          socket.emit("user.logged_in", user);
-
-          // User is logged in, send them the user info,
-          // existing users, channels, messages, maps and markers
-          getUsers(user);
-          getChannels(user);
-          getDirectMessages(user);
-          getChannelMessages(user);
-          getLayers(user);
-          getMarkers(user);
-          getCircles(user);
-        }
+      .where("id", socket.decoded_token.user_id)
+      .then(([user]) => {
+        currentUser(user);
+        getUsers(user);
+        getChannels(user);
+        getDirectMessages(user);
+        getChannelMessages(user);
+        getLayers(user);
+        getMarkers(user);
+        getCircles(user);
       });
   });
-
   //Get Users
   socket.on("users.get", user => {
     getUsers(user);
