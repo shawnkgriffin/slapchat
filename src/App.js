@@ -82,7 +82,10 @@ class App extends Component {
     });
 
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels });
+      this.setState({
+        channels: channels,
+        currentChannelId: channels[0].channel_id
+      });
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });

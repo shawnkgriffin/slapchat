@@ -37,7 +37,22 @@ const MyMapComponent = withScriptjs(
           }
           onDragEnd={markerState => props.onDragEnd(marker, markerState)}
           key={index}
-          {...marker}
+          icon={{
+            url: marker.icon,
+            size: new window.google.maps.Size(32, 64),
+            origin: new window.google.maps.Point(0, 0),
+            // anchor: new window.google.maps.Point(32, 37),
+            labelOrigin: new window.google.maps.Point(20, 45)
+          }}
+          label={{
+            text: marker.label,
+            color: marker.type === "USER" ? "#4256f4" : "#f44141",
+            fontSize: "16px",
+            fontWeight: "bold"
+          }}
+          position={marker.position}
+          draggable={marker.draggable}
+          // {...marker}
         />
       ))}
       <Polygon
@@ -237,6 +252,7 @@ class Map extends Component {
 
   render() {
     const markers = this.props.markers || [];
+
     return (
       <div className="map-container">
         <MyMapComponent
