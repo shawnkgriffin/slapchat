@@ -49,14 +49,13 @@ const MyMapComponent = withScriptjs(
             color:
               marker.type === "USER"
                 ? "#268FFF"
-                : "DESTINATION" ? "#66C547" : "#C03638",
+                : marker.type === "DESTINATION" ? "#66C547" : "#C03638",
             fontSize: "16px",
             fontWeight: "bold"
           }}
           position={marker.position}
           draggable={marker.draggable}
           visible={marker.visible}
-          // {...marker}
         />
       ))}
       <Polygon
@@ -72,6 +71,7 @@ const MyMapComponent = withScriptjs(
       />
       {props.circles.map((circle, index) => (
         <Circle
+          circleRef={props.onSearchBoxMounted}
           center={circle.center}
           strokeColor="#f91212"
           strokeOpacity={0.8}
@@ -211,7 +211,7 @@ class Map extends Component {
           lng: markerState.latLng.lng(),
           type: "DESTINATION",
           owner_user_id: marker.owner_user_id,
-          label: `->${marker.label}`,
+          label: `>${marker.label}`,
           description: `Please  move here`,
           icon: "/destination-green.png"
         };
