@@ -72,6 +72,7 @@ const MyMapComponent = withScriptjs(
           strokeColor="#f91616"
           strokeOpacity={0.8}
           strokeWeight={0.5}
+          key={index}
           radius={circle.radius}
           fillColor="#f91616"
           fillOpacity={0.35}
