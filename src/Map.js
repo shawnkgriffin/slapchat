@@ -69,17 +69,21 @@ const MyMapComponent = withScriptjs(
       {props.circles.map((circle, index) => (
         <Circle
           center={circle.center}
-          strokeColor="#f91616"
+          strokeColor="#f91212"
           strokeOpacity={0.8}
           strokeWeight={0.5}
           key={index}
           radius={circle.radius}
-          fillColor="#f91616"
+          fillColor="#f91212"
           fillOpacity={0.35}
           clickable={true}
           draggable={true}
+          editable={false}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
           onClick={circleState => props.onCircleClick(circle, circleState)}
+          // onRadiusChanged={circleState =>
+          //   props.onCircleRadiusChanged(circle, circleState)
+          // }
           onRightClick={circleState =>
             props.onCircleRightClick(circle, circleState)
           }
@@ -176,6 +180,7 @@ class Map extends Component {
     this.handleDragEnd = this.handleDragEnd.bind(this);
     this.handleCircleClick = this.handleCircleClick.bind(this);
     this.handleCircleRightClick = this.handleCircleRightClick.bind(this);
+    this.handleCircleRadiusChanged = this.handleCircleRadiusChanged.bind(this);
     this.onCircleDragEnd = this.onCircleDragEnd.bind(this);
     this.onCircleComplete = this.onCircleComplete.bind(this);
   }
@@ -231,6 +236,9 @@ class Map extends Component {
     circle.lng = circleState.latLng.lng();
     this.props.sendServer("circle.move", circle);
   };
+  handleCircleRadiusChanged = (circle, circleState) => {
+    console.log("handleCircleRadiusChanged = (", circle);
+  };
   onMarkerComplete = e => {
     this.props.sendServer("marker.add", {
       lat: e.position.lat(),
@@ -266,6 +274,7 @@ class Map extends Component {
           onMarkerRightClick={this.handleMarkerRightClick}
           onDragEnd={this.handleDragEnd}
           onCircleClick={this.handleCircleClick}
+          onCircleRadiusChanged={this.handleCircleRadiusChanged}
           onCircleRightClick={this.handleCircleRightClick}
           onCircleComplete={this.onCircleComplete}
           onCircleDragEnd={this.onCircleDragEnd}
