@@ -188,7 +188,10 @@ video {
 }
 
 .login-page-container {
-  background-image: url("slapchat-app.herokuapp.com/blurred-background.png");
+  background-image: url("https://thesweetsetup.com/wp-content/uploads/2016/11/sunrise-blur.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -197,7 +200,9 @@ video {
 .login-form-container {
   display: flex;
   flex-direction: column;
-  background-color: white; 
+  background-color: white;
+  color: black;
+  opacity: 0.7;
   align-items: center;
   justify-content: center;
   padding: 20px 50px;
@@ -209,24 +214,9 @@ video {
 }
 
 .sign-in-form {
-  width: 100%; 
+  width: 100%;
 }
 
 .login-form-input {
   margin-bottom:.5rem;
-
- 
 }
-
-// .login-backgorund {
-//   /* The image used */
-//   background-image: url("http://www.midniteticket.com/sites/default/files/billy-murray-phil-connors-quarry-car-chase-groundhog-day.jpg");
-
-//   /* Full height */
-//   height: 100%;
-
-//   /* Center and scale the image nicely */
-//   background-position: center;
-//   background-repeat: no-repeat;
-//   background-size: cover;
-// }
