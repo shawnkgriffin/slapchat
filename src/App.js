@@ -32,7 +32,7 @@ class App extends Component {
       currentUser: null,
       currentChannelId: null,
       currentDirectMessageId: null,
-      generalChannel: 0, //general channel is a special channel.
+      generalChannelId: 0, //general channel is a special channel.
       isAuth: ""
     };
 
@@ -106,12 +106,12 @@ class App extends Component {
     });
 
     this.socket.on("channels", channels => {
-      const generalChannel =
+      const generalChannelId =
         channels.find(channel => channel.name === "General").id || 0;
       this.setState({
         channels: channels,
-        currentChannelId: generalChannel,
-        generalChannel: generalChannel
+        currentChannelId: generalChannelId,
+        generalChannelId: generalChannelId
       });
     });
     this.socket.on("direct_messages", direct_messages => {
@@ -241,7 +241,8 @@ class App extends Component {
     this.socket.on("marker.delete", deleteMarker => {
       this.setState({
         markers: this.state.markers.filter(
-          marker => !(marker.type === "MARKER" && marker.id === deleteMarker.id)
+          // Don't delete users
+          marker => !(marker.type !== "USER" && marker.id === deleteMarker.id)
         )
       });
     });
@@ -326,7 +327,7 @@ class App extends Component {
       action = "channel_message.post";
       payload = {
         sender_user_id: this.state.currentUser.id,
-        channel_id: this.state.currentChannelId || this.state.generalChannel,
+        channel_id: this.state.currentChannelId || this.state.generalChannelId,
         content: content
       };
     } else {
@@ -437,6 +438,8 @@ class App extends Component {
                 sendServer={this.sendServer}
                 markers={this.state.markers}
                 circles={this.state.circles}
+                generalChannelId={this.state.generalChannelId}
+                currentUserId={this.state.currentUser.id}
               />
             </section>
           )}

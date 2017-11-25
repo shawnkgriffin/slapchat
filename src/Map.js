@@ -200,7 +200,7 @@ class Map extends Component {
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
-      case "MARKER":
+      case ("MARKER", "DESTINATION"):
         marker.lat = markerState.latLng.lat();
         marker.lng = markerState.latLng.lng();
         this.props.sendServer("marker.move", marker);
@@ -218,6 +218,11 @@ class Map extends Component {
         // TODO instead of adding a circle, create a new marker type "DESTINATION" that you can send people to.
         // TODO move user back to original position. Need a new command. Server should only send it to this user.
         this.props.sendServer("marker.add", destinationMarker);
+        this.props.sendServer("channel_message.post", {
+          sender_user_id: this.props.currentUserId,
+          channel_id: this.props.generalChannelId,
+          content: `@${marker.label} please move to ->${marker.label}`
+        });
         break;
       default:
         console.log("unexpected type", marker.type);
