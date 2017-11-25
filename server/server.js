@@ -154,6 +154,7 @@ io.sockets.on("connection", socket => {
       .then(markers => {
         markers.forEach(marker => {
           marker.position = { lat: marker.lat, lng: marker.lng };
+          marker.visible = true;
         });
         socket.emit("markers", markers);
       });

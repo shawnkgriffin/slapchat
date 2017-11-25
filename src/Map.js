@@ -52,6 +52,7 @@ const MyMapComponent = withScriptjs(
           }}
           position={marker.position}
           draggable={marker.draggable}
+          visible={marker.visible}
           // {...marker}
         />
       ))}
