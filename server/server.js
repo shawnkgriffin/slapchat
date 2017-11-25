@@ -262,6 +262,7 @@ io.sockets.on("connection", socket => {
   // });
   socket.on("user.login", user => {
     const password = user.password;
+    console.log(user);
     knex("users")
       .where({ email: user.email })
       .select()

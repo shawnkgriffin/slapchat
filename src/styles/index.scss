@@ -186,3 +186,47 @@ video {
   border-radius: 0;
   margin: 0;
 }
+
+.login-page-container {
+  background-image: url("blurred-background.png");
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-form-container {
+  display: flex;
+  flex-direction: column;
+  background-color: white; 
+  align-items: center;
+  justify-content: center;
+  padding: 20px 50px;
+  border-radius: 10px;
+
+  h2 {
+     margin: 0 0 1rem;
+   }
+}
+
+.sign-in-form {
+  width: 100%; 
+}
+
+.login-form-input {
+  margin-bottom:.5rem;
+
+ 
+}
+
+.login-backgorund {
+  /* The image used */
+  background-image: url("http://www.midniteticket.com/sites/default/files/billy-murray-phil-connors-quarry-car-chase-groundhog-day.jpg");
+
+  /* Full height */
+  height: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}

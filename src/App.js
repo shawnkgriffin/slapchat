@@ -247,6 +247,7 @@ class App extends Component {
   }
 
   sendNewLogin(newLogin) {
+    debugger;
     this.socket.emit("user.login", newLogin);
   }
 
@@ -322,7 +323,6 @@ class App extends Component {
       if (this.state.isAuth !== "") {
         return (
           <div>
-            <h1> Welcome to Slap </h1>
             <span style={textStyle}>{this.state.isAuth}</span>
             <Login sendNewLogin={this.sendNewLogin} />
             <Register sendNewRegister={this.sendNewRegister} />
@@ -331,7 +331,6 @@ class App extends Component {
       } else {
         return (
           <div>
-            <h1> Welcome to Slap! </h1>
             <Login sendNewLogin={this.sendNewLogin} />
             <Register sendNewRegister={this.sendNewRegister} />
           </div>
