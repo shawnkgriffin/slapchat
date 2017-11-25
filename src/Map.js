@@ -32,9 +32,27 @@ const MyMapComponent = withScriptjs(
       {props.markers.map((marker, index) => (
         <Marker
           onClick={markerState => props.onMarkerClick(marker, markerState)}
+          onRightClick={markerState =>
+            props.onMarkerRightClick(marker, markerState)
+          }
           onDragEnd={markerState => props.onDragEnd(marker, markerState)}
           key={index}
-          {...marker}
+          icon={{
+            url: marker.icon,
+            size: new window.google.maps.Size(32, 64),
+            origin: new window.google.maps.Point(0, 0),
+            // anchor: new window.google.maps.Point(32, 37),
+            labelOrigin: new window.google.maps.Point(20, 45)
+          }}
+          label={{
+            text: marker.label,
+            color: marker.type === "USER" ? "#4256f4" : "#f44141",
+            fontSize: "16px",
+            fontWeight: "bold"
+          }}
+          position={marker.position}
+          draggable={marker.draggable}
+          // {...marker}
         />
       ))}
       <Polygon
@@ -60,6 +78,10 @@ const MyMapComponent = withScriptjs(
           clickable={true}
           draggable={true}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
+          onClick={circleState => props.onCircleClick(circle, circleState)}
+          onRightClick={circleState =>
+            props.onCircleRightClick(circle, circleState)
+          }
         />
       ))}
       <SearchBox
@@ -149,7 +171,10 @@ class Map extends Component {
   constructor(props) {
     super(props);
     this.handleMarkerClick = this.handleMarkerClick.bind(this);
+    this.handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
     this.handleDragEnd = this.handleDragEnd.bind(this);
+    this.handleCircleClick = this.handleCircleClick.bind(this);
+    this.handleCircleRightClick = this.handleCircleRightClick.bind(this);
     this.onCircleDragEnd = this.onCircleDragEnd.bind(this);
     this.onCircleComplete = this.onCircleComplete.bind(this);
   }
@@ -157,6 +182,11 @@ class Map extends Component {
   // Marker events
   handleMarkerClick = (marker, markerState) => {
     console.log("handleMarkerClick", marker, markerState);
+  };
+  // Marker events
+  handleMarkerRightClick = (marker, markerState) => {
+    console.log("handleMarkerRightClick", marker, markerState);
+    this.props.sendServer("marker.delete", marker);
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
@@ -176,6 +206,14 @@ class Map extends Component {
       default:
         console.log("unexpected type", marker.type);
     }
+  };
+  // Circle events
+  handleCircleClick = (circle, circleState) => {
+    console.log("handleCircleClick", circle, circleState);
+  };
+  // Circle events
+  handleCircleRightClick = (circle, circleState) => {
+    this.props.sendServer("circle.delete", circle);
   };
   onCircleComplete = e => {
     let circle = {
@@ -214,6 +252,7 @@ class Map extends Component {
 
   render() {
     const markers = this.props.markers || [];
+
     return (
       <div className="map-container">
         <MyMapComponent
@@ -223,7 +262,10 @@ class Map extends Component {
           containerElement={<div style={{ height: `100%` }} />}
           mapElement={<div style={{ height: `100%` }} />}
           onMarkerClick={this.handleMarkerClick}
+          onMarkerRightClick={this.handleMarkerRightClick}
           onDragEnd={this.handleDragEnd}
+          onCircleClick={this.handleCircleClick}
+          onCircleRightClick={this.handleCircleRightClick}
           onCircleComplete={this.onCircleComplete}
           onCircleDragEnd={this.onCircleDragEnd}
           onMarkerComplete={this.onMarkerComplete}

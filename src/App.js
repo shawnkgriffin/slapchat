@@ -104,7 +104,10 @@ class App extends Component {
     });
 
     this.socket.on("channels", channels => {
-      this.setState({ channels: channels });
+      this.setState({
+        channels: channels,
+        currentChannelId: channels[0].channel_id
+      });
     });
     this.socket.on("direct_messages", direct_messages => {
       this.setState({ direct_messages: direct_messages });
@@ -231,6 +234,13 @@ class App extends Component {
     this.socket.on("marker.add", marker => {
       this.setState({ markers: this.state.markers.concat([marker]) });
     });
+    this.socket.on("marker.delete", deleteMarker => {
+      this.setState({
+        markers: this.state.markers.filter(
+          marker => !(marker.type === "MARKER" && marker.id === deleteMarker.id)
+        )
+      });
+    });
     this.socket.on("marker.move", newMarker => {
       this.setState({
         markers: this.state.markers.map(marker => {
@@ -238,6 +248,8 @@ class App extends Component {
         })
       });
     });
+
+    // Circles
     this.socket.on("circles", circles => {
       this.setState({ circles: circles });
     });
@@ -249,6 +261,13 @@ class App extends Component {
         circles: this.state.circles.map(circle => {
           return circle.id === movedCircle.id ? movedCircle : circle;
         })
+      });
+    });
+    this.socket.on("circle.delete", deleteCircle => {
+      this.setState({
+        circles: this.state.circles.filter(
+          circle => !(circle.id === deleteCircle.id)
+        )
       });
     });
 
