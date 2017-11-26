@@ -67,16 +67,26 @@ class NavBar extends Component {
   render() {
     return (
       <div className="nav-bar">
-        <form className="navbar-form navbar-right" role="search">
+        <form
+          id="search-form"
+          className="navbar-form navbar-right"
+          role="search"
+        >
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input type="text" className="form-control search-query" />
           </div>
         </form>
-        <form className="navbar-form navbar-right" role="search">
+        <div>
+          <button id="marker-icon">
+            <img src="./circle-red.png" onClick={this.handleSubmit2} />
+          </button>
+        </div>
+        <form id="icon-form" className="navbar-form navbar-right" role="search">
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input
+              id="marker-input"
               type="text"
               className="form-control search-query"
               placeholder="label"
@@ -86,6 +96,7 @@ class NavBar extends Component {
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input
+              id="marker-input"
               type="text"
               className="form-control search-query"
               placeholder="Description"
@@ -100,12 +111,29 @@ class NavBar extends Component {
             </button> */}
           </div>
         </form>
-        <button id="marker-icon">
-          <img src="./avalanche1.png" onClick={this.handleSubmit} />
-        </button>
-        <button id="marker-icon">
-          <img src="./fire.png" onClick={this.handleSubmit2} />
-        </button>
+        <div id="marker-buttons">
+          <button id="marker-icon">
+            <img src="./skistation.png" onClick={this.handleSubmit2} />
+          </button>
+          <button id="marker-icon">
+            <img src="./skilifting.png" onClick={this.handleSubmit2} />
+          </button>
+          <button id="marker-icon">
+            <img src="./avalanche1.png" onClick={this.handleSubmit} />
+          </button>
+          <button id="marker-icon">
+            <img src="./fire.png" onClick={this.handleSubmit2} />
+          </button>
+          <button id="marker-icon">
+            <img src="./blast.png" onClick={this.handleSubmit2} />
+          </button>
+          <button id="marker-icon">
+            <img src="./construction.png" onClick={this.handleSubmit2} />
+          </button>
+          <button id="marker-icon">
+            <img src="./nordicskiing.png" onClick={this.handleSubmit2} />
+          </button>
+        </div>
       </div>
     );
   }
