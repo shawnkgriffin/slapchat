@@ -72,6 +72,7 @@ class App extends Component {
     }
   }
 
+  //Checks for JWT
   componentDidMount() {
     const token = localStorage.getItem("token");
     if (token === "undefined") {
@@ -90,6 +91,7 @@ class App extends Component {
 
   //RECIVES STATE DATA
 
+  //Sets Socked query to value of JWT
   setupSocket(token) {
     this.socket = io(this.connectionString, { query: "token=" + token });
     // successful login will cause everything to fill
@@ -100,9 +102,9 @@ class App extends Component {
       });
     });
 
+    // create markers for the users
+    // remove any existing user markers
     this.socket.on("users", users => {
-      // create markers for the users
-      // remove any existing user markers
       let userMarkers = this.state.markers.filter(
         marker => marker.type !== "USER"
       );
@@ -414,7 +416,7 @@ class App extends Component {
 
   render() {
     if (this.state.httpRes === false) {
-      return <div>WAIT</div>;
+      return <div> ¯\_(ツ)_/¯</div>;
     }
     if (this.state.loading) {
       return <div>Loading</div>;
