@@ -32,7 +32,6 @@ app.use(express.static(staticPath));
 server.listen(process.env.PORT || 3001);
 
 if (ENV === "development") {
-  //Index HTML is for debugging
   app.get("/", (req, res) => {
     res.sendFile(__dirname + "/index.html");
   });
