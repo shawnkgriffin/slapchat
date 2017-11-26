@@ -10,12 +10,10 @@ class StaticSideBar extends Component {
   render() {
     return (
       <div className="side-bar">
-        <form method="GET" action="/">
-          <button type="submit" onClick={this.handleLogout}>
-            logout
-          </button>
-        </form>
-        <UserInfo currentUser={this.props.currentUser} />
+        <UserInfo
+          currentUser={this.props.currentUser}
+          handleLogout={this.handleLogout}
+        />
         <div className="side-bar-nav">
           <section className="channels">
             <span className="side-bar-section-header">Channels</span>
