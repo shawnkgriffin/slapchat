@@ -11,10 +11,7 @@ import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 import Sidebar from "react-sidebar";
-const textStyle = {
-  color: "red",
-  fontstyle: "italic"
-};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +31,8 @@ class App extends Component {
       currentChannelId: null,
       currentDirectMessageId: null,
       generalChannelId: 0, //general channel is a special channel.
-      isAuth: ""
+      isAuth: "",
+      defaultCenter: { lat: 50.093284, lng: -122.93494 } // Whistler
     };
 
     /* eslint-disable no-restricted-globals */
@@ -48,6 +46,7 @@ class App extends Component {
     /* eslint-enable no-restricted-globals */
 
     this.onNewMessage = this.onNewMessage.bind(this);
+    this.dropMarkerCircle = this.dropMarkerCircle.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
     this.onUserCallback = this.onUserCallback.bind(this);
@@ -72,6 +71,7 @@ class App extends Component {
     }
   }
 
+  //Checks for JWT
   componentDidMount() {
     const token = localStorage.getItem("token");
     if (token === "undefined") {
@@ -90,6 +90,7 @@ class App extends Component {
 
   //RECIVES STATE DATA
 
+  //Sets Socked query to value of JWT
   setupSocket(token) {
     this.socket = io(this.connectionString, { query: "token=" + token });
     // successful login will cause everything to fill
@@ -100,9 +101,9 @@ class App extends Component {
       });
     });
 
+    // create markers for the users
+    // remove any existing user markers
     this.socket.on("users", users => {
-      // create markers for the users
-      // remove any existing user markers
       let userMarkers = this.state.markers.filter(
         marker => marker.type !== "USER"
       );
@@ -386,6 +387,30 @@ class App extends Component {
     });
   };
 
+  dropMarkerCircle(markerOrCircle, label, description, icon) {
+    if (markerOrCircle) {
+      this.sendServer("marker.add", {
+        lat: this.state.defaultCenter.lat,
+        lng: this.state.defaultCenter.lng,
+        type: "MARKER",
+        owner_user_id: this.state.currentUserId,
+        label: label,
+        description: description,
+        icon: icon
+      });
+      // create a new marker as a new
+    } else {
+      this.sendServer("circle.add", {
+        lat: this.state.defaultCenter.lat,
+        lng: this.state.defaultCenter.lng,
+        radius: 500,
+        owner_user_id: this.state.currentUserId,
+        label: label,
+        description: description
+      });
+    }
+  }
+
   //this callback is when the user clicks on a channel
   onUserCallback = function onUserCallback(user) {
     // set the messages container to point to the current channel
@@ -414,7 +439,7 @@ class App extends Component {
 
   render() {
     if (this.state.httpRes === false) {
-      return <div>WAIT</div>;
+      return <div> ¯\_(ツ)_/¯</div>;
     }
     if (this.state.loading) {
       return <div>Loading</div>;
@@ -439,7 +464,10 @@ class App extends Component {
         />
         <main className="nav-and-content">
           <Alert stack={{ limit: 3 }} />
-          <NavBar currentUser={this.state.currentUser} />
+          <NavBar
+            currentUser={this.state.currentUser}
+            dropMarkerCircle={this.dropMarkerCircle}
+          />
           {this.state.loading ? (
             <div>Loading</div>
           ) : (
