@@ -94,7 +94,7 @@ class App extends Component {
     this.socket = io(this.connectionString, { query: "token=" + token });
     // successful login will cause everything to fill
     this.socket.on("current", user => {
-      this.setState({ currentUser: user, loading: false });
+      this.setState({ currentUser: user, loading: false, httpRes: true });
       this.socket.on("connect", () => {
         console.info("connected to web socket");
       });
@@ -335,7 +335,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ httpRes: true });
-        localStorage.setItem("token", data.token);
+        // localStorage.setItem("token", data.token);
         this.setupSocket(data.token);
       });
   }
