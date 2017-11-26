@@ -6,7 +6,7 @@ import MessageList from "./MessageList.js";
 import StaticSideBar from "./StaticSideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
-import Register from "./Register.js";
+// import Register from "./Register.js";
 import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
@@ -28,6 +28,7 @@ class App extends Component {
       markers: [],
       circles: [],
       layers: [],
+      httpRes: true,
       loading: true,
       currentUser: null,
       currentChannelId: null,
@@ -73,12 +74,17 @@ class App extends Component {
 
   componentDidMount() {
     const token = localStorage.getItem("token");
-    if (token) {
-      this.setupSocket(token);
-    } else {
+    if (token === "undefined") {
       this.setState({
         loading: false
       });
+    }
+    if (!token) {
+      this.setState({
+        loading: false
+      });
+    } else {
+      this.setupSocket(token);
     }
   }
 
@@ -318,6 +324,7 @@ class App extends Component {
   }
 
   sendNewLogin(newLogin) {
+    this.setState({ httpRes: false });
     fetch("/login", {
       method: "PUT",
       body: JSON.stringify(newLogin),
@@ -327,6 +334,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
+        this.setState({ httpRes: true });
         localStorage.setItem("token", data.token);
         this.setupSocket(data.token);
       });
@@ -405,15 +413,16 @@ class App extends Component {
   }
 
   render() {
+    if (this.state.httpRes === false) {
+      return <div>WAIT</div>;
+    }
     if (this.state.loading) {
       return <div>Loading</div>;
     }
     if (this.state.currentUser === null) {
       return (
         <div>
-          <h1> Welcome to Slap! </h1>
           <Login sendNewLogin={this.sendNewLogin} />
-          <Register sendNewRegister={this.sendNewRegister} />
         </div>
       );
     }
