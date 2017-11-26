@@ -76,7 +76,7 @@ class NavBar extends Component {
               <div className="form-search search-only">
                 <i className="search-icon glyphicon glyphicon-search" />
                 <input
-                  id="marker-input"
+                  id="label"
                   type="text"
                   className="form-control search-query"
                   placeholder="label"
@@ -86,7 +86,7 @@ class NavBar extends Component {
               <div className="form-search search-only">
                 <i className="search-icon glyphicon glyphicon-search" />
                 <input
-                  id="marker-input"
+                  id="description"
                   type="text"
                   className="form-control search-query"
                   placeholder="Description"
