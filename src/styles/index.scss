@@ -32,6 +32,15 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       font-size: 1.3em;
       background-color: #be90d4;
       color: white;
+
+      .user-info-content {
+        .logout-button {
+          margin-left: 5px;
+        }
+        margin-left: 5px;
+        display: flex;
+        align-items: baseline;
+      }
     }
 
     .user-info-avatar {
