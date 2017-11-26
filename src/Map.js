@@ -79,7 +79,7 @@ const MyMapComponent = withScriptjs(
           fillOpacity={0.35}
           clickable={true}
           draggable={true}
-          editable={false}
+          editable={true}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
           onClick={circleState => props.onCircleClick(circle, circleState)}
           // onRadiusChanged={circleState =>
