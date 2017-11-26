@@ -26,11 +26,15 @@ class NavBar extends Component {
       alert("label and description must be filled out");
       return; // check to make sure they are not empty
     }
+
+    let newArray = i.target.src.split("/");
+    const icon = "./" + newArray[newArray.length - 1];
+
     this.props.dropMarkerCircle(
-      i.target.id.indexOf("circle") === -1,
+      i.target.src.indexOf("circle") === -1,
       this.state.label,
       this.state.description,
-      i.target.id
+      icon
     );
     document.getElementById("label").value = "";
     document.getElementById("description").value = "";
@@ -39,13 +43,26 @@ class NavBar extends Component {
   render() {
     return (
       <div className="nav-bar">
-        <form className="navbar-form navbar-right" role="search">
+        <form
+          id="search-form"
+          className="navbar-form navbar-right"
+          role="search"
+        >
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input type="text" className="form-control search-query" />
           </div>
         </form>
-        <form className="navbar-form navbar-right" role="search">
+        <div>
+          <button id="marker-icon">
+            <img
+              alt=""
+              src="./circle-red.png"
+              onClick={this.handleMarkerSubmit}
+            />
+          </button>
+        </div>
+        <form id="icon-form" className="navbar-form navbar-right" role="search">
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input
@@ -67,30 +84,49 @@ class NavBar extends Component {
             />
           </div>
         </form>
-        <button id="marker-icon">
-          <img
-            id={"./avalanche1.png"}
-            src="./avalanche1.png"
-            alt=""
-            onClick={this.handleMarkerSubmit}
-          />
-        </button>
-        <button id="marker-icon">
-          <img
-            id={"./fire.png"}
-            alt=""
-            src="./fire.png"
-            onClick={this.handleMarkerSubmit}
-          />
-        </button>
-        <button id="circle-icon">
-          <img
-            id={"./circle-red.png"}
-            alt=""
-            src="./circle-red.png"
-            onClick={this.handleMarkerSubmit}
-          />
-        </button>
+        <div id="marker-buttons">
+          <button id="marker-icon">
+            <img
+              alt=""
+              src="./skistation.png"
+              onClick={this.handleMarkerSubmit}
+            />
+          </button>
+          <button id="marker-icon">
+            <img
+              alt=""
+              src="./skilifting.png"
+              onClick={this.handleMarkerSubmit}
+            />
+          </button>
+          <button id="marker-icon">
+            <img
+              alt=""
+              src="./avalanche1.png"
+              onClick={this.handleMarkerSubmit}
+            />
+          </button>
+          <button id="marker-icon">
+            <img alt="" src="./fire.png" onClick={this.handleMarkerSubmit} />
+          </button>
+          <button id="marker-icon">
+            <img alt="" src="./blast.png" onClick={this.handleMarkerSubmit} />
+          </button>
+          <button id="marker-icon">
+            <img
+              alt=""
+              src="./construction.png"
+              onClick={this.handleMarkerSubmit}
+            />
+          </button>
+          <button id="marker-icon">
+            <img
+              alt=""
+              src="./nordicskiing.png"
+              onClick={this.handleMarkerSubmit}
+            />
+          </button>
+        </div>
       </div>
     );
   }
