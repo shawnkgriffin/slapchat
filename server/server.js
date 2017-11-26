@@ -16,8 +16,11 @@ const path = require("path");
 const geolib = require("geolib");
 
 let connections = [];
+
+// Define the constants and store the timers for moving people around
 let timeoutUsersMove = null; // timer used to randomly move people.
-const timeoutValue = 1000; // move users every 1 seconds.
+const MOVE_INTERVAL = 1; // move users every 1 seconds.
+const MOVE_SPEED = 100; // speed to move users in km/hr
 
 app.use(bodyparser.json());
 app.use(express.static("./server/public"));
@@ -370,28 +373,21 @@ io.sockets.on("connection", socket => {
    * @param {integer} commandArray - tokenized array
    */
   function usersMove(senderId, channelId, commandArray) {
-    const latDelta = 0.005; // small distance in lat/lng.
-    const lngDelta = 0.005;
-    let latDirection = 0;
-    let lngDirection = 0;
+    let bearing = 0; // bearing in degrees, 0 being north.
+    const distance = MOVE_SPEED * 1000 / 3600 * MOVE_INTERVAL;
 
     let alerted = false; //only alert once
     switch (commandArray[1] || "") {
       case "north":
-        latDirection = 1;
-        lngDirection = 0;
         break;
       case "south":
-        latDirection = -1;
-        lngDirection = 0;
+        bearing = 180;
         break;
       case "west":
-        latDirection = 0;
-        lngDirection = -1;
+        bearing = 270;
         break;
       case "east":
-        latDirection = 0;
-        lngDirection = -1;
+        bearing = 90;
         break;
       default:
     }
@@ -417,13 +413,16 @@ io.sockets.on("connection", socket => {
           .then(users => {
             timeoutUsersMove = setInterval(() => {
               users.forEach(user => {
-                (user.lat =
-                  user.lat + (Math.random() + latDirection) * latDelta),
-                  (user.lng =
-                    user.lng + (Math.random() + lngDirection) * lngDelta);
+                let newPosition = geolib.computeDestinationPoint(
+                  { lat: user.lat, lon: user.lng },
+                  distance,
+                  bearing
+                );
+                user.lat = newPosition.latitude;
+                user.lng = newPosition.longitude;
+                console.log("userMove(", user);
                 user.position = { lat: user.lat, lng: user.lng };
                 userMove(user);
-
                 //check if user is in circle
                 //if so alert once.
                 // issue an alert if we haven't already
@@ -441,7 +440,7 @@ io.sockets.on("connection", socket => {
                       sender_user_id: senderId,
                       content: `!alert ${user.display_name}(${
                         user.first_name
-                      } ${user.last_name}) close to ${circle.label}:${
+                      } ${user.last_name}) is close to ${circle.label}:${
                         circle.description
                       }.`
                     };
@@ -450,7 +449,7 @@ io.sockets.on("connection", socket => {
                   }
                 });
               });
-            }, timeoutValue);
+            }, MOVE_INTERVAL * 1000);
           }); //users
       }); //circles
   }
