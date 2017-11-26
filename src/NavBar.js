@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import SmoothCollapse from "react-smooth-collapse";
 
 class NavBar extends Component {
   constructor(props) {
@@ -40,7 +41,16 @@ class NavBar extends Component {
     document.getElementById("description").value = "";
   };
 
+  state: Object = {
+    expanded: false
+  };
+
+  _toggle() {
+    this.setState({ expanded: !this.state.expanded });
+  }
+
   render() {
+    const { expanded } = this.state;
     return (
       <div className="nav-bar">
         <form
@@ -53,80 +63,105 @@ class NavBar extends Component {
             <input type="text" className="form-control search-query" />
           </div>
         </form>
-        <div>
-          <button id="marker-icon">
-            <img
-              alt=""
-              src="./circle-red.png"
-              onClick={this.handleMarkerSubmit}
-            />
-          </button>
-        </div>
-        <form id="icon-form" className="navbar-form navbar-right" role="search">
-          <div className="form-search search-only">
-            <i className="search-icon glyphicon glyphicon-search" />
-            <input
-              id="label"
-              type="text"
-              className="form-control search-query"
-              placeholder="label"
-              onChange={this.handleLabelInput}
-            />
+        <SmoothCollapse expanded={expanded}>
+          <div className="slide">
+            <button id="marker-icon">
+              <img src="./circle-red.png" onClick={this.handleMarkerSubmit} />
+            </button>
+            <form
+              id="icon-form"
+              className="navbar-form navbar-right"
+              role="search"
+            >
+              <div className="form-search search-only">
+                <i className="search-icon glyphicon glyphicon-search" />
+                <input
+                  id="marker-input"
+                  type="text"
+                  className="form-control search-query"
+                  placeholder="label"
+                  onChange={this.handleLabelInput}
+                />
+              </div>
+              <div className="form-search search-only">
+                <i className="search-icon glyphicon glyphicon-search" />
+                <input
+                  id="marker-input"
+                  type="text"
+                  className="form-control search-query"
+                  placeholder="Description"
+                  onChange={this.handleDescriptionInput}
+                />
+                {/* <button>
+              <img
+                src="./avalanche1.png"
+                alt="avalanche"
+                onClick={this.handleSubmit}
+              />
+            </button> */}
+              </div>
+            </form>
+            <div id="marker-buttons">
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./skistation.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./skilifting.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./avalanche1.png"
+                  onClick={this.handleSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./fire.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./blast.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./construction.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
+                  src="./nordicskiing.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+            </div>
           </div>
-          <div className="form-search search-only">
-            <i className="search-icon glyphicon glyphicon-search" />
-            <input
-              id="description"
-              type="text"
-              className="form-control search-query"
-              placeholder="Description"
-              onChange={this.handleDescriptionInput}
-            />
-          </div>
-        </form>
-        <div id="marker-buttons">
-          <button id="marker-icon">
-            <img
-              alt=""
-              src="./skistation.png"
-              onClick={this.handleMarkerSubmit}
-            />
-          </button>
-          <button id="marker-icon">
-            <img
-              alt=""
-              src="./skilifting.png"
-              onClick={this.handleMarkerSubmit}
-            />
-          </button>
-          <button id="marker-icon">
-            <img
-              alt=""
-              src="./avalanche1.png"
-              onClick={this.handleMarkerSubmit}
-            />
-          </button>
-          <button id="marker-icon">
-            <img alt="" src="./fire.png" onClick={this.handleMarkerSubmit} />
-          </button>
-          <button id="marker-icon">
-            <img alt="" src="./blast.png" onClick={this.handleMarkerSubmit} />
-          </button>
-          <button id="marker-icon">
-            <img
-              alt=""
-              src="./construction.png"
-              onClick={this.handleMarkerSubmit}
-            />
-          </button>
-          <button id="marker-icon">
-            <img
-              alt=""
-              src="./nordicskiing.png"
-              onClick={this.handleMarkerSubmit}
-            />
-          </button>
-        </div>
+        </SmoothCollapse>
+        <input
+          id="collapsebutton"
+          type="image"
+          alt=""
+          src="marker-button.png"
+          value={expanded ? "Hide" : "Show"}
+          onClick={() => this._toggle()}
+        />
       </div>
     );
   }

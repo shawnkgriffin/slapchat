@@ -10,7 +10,6 @@ import Login from "./Login.js";
 import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
-import Sidebar from "react-sidebar";
 
 class App extends Component {
   constructor(props) {
@@ -190,9 +189,7 @@ class App extends Component {
         Alert.error(direct_message.content, {
           position: "top-right",
           effect: "slide",
-          onShow: function() {
-            console.log("aye!");
-          },
+          onShow: function() {},
           beep: true,
           timeout: "none",
           offset: 100
@@ -486,11 +483,6 @@ class App extends Component {
             </section>
           )}
         </main>
-        <Sidebar
-          // sidebar={sidebarContent}
-          open={this.state.sidebarOpen}
-          onSetOpen={this.onSetSidebarOpen}
-        />
       </div>
     );
   }
