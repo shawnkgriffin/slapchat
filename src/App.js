@@ -318,7 +318,6 @@ class App extends Component {
   }
 
   sendNewLogin(newLogin) {
-    //his.socket.emit("user.login", newLogin);
     fetch("/login", {
       method: "PUT",
       body: JSON.stringify(newLogin),
