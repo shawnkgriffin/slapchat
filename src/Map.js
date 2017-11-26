@@ -11,9 +11,6 @@ import {
 const {
   SearchBox
 } = require("react-google-maps/lib/components/places/SearchBox");
-const {
-  DrawingManager
-} = require("react-google-maps/lib/components/drawing/DrawingManager");
 
 const polygon = [
   { lat: 50.114806, lng: -122.892426 },
@@ -117,62 +114,6 @@ const MyMapComponent = withScriptjs(
           }}
         />
       </SearchBox>
-      <DrawingManager
-        defaultOptions={{
-          drawingControl: true,
-          drawingControlOptions: {
-            position: window.google.maps.ControlPosition.TOP_CENTER,
-            drawingModes: [
-              window.google.maps.drawing.OverlayType.MARKER,
-              window.google.maps.drawing.OverlayType.CIRCLE,
-              window.google.maps.drawing.OverlayType.POLYGON,
-              window.google.maps.drawing.OverlayType.POLYLINE,
-              window.google.maps.drawing.OverlayType.RECTANGLE
-            ]
-          },
-          markerOptions: {
-            clickable: true,
-            draggable: true,
-            editable: true,
-            zIndex: 1
-          },
-          circleOptions: {
-            fillColor: "#f91616",
-            fillOpacity: 0.2,
-            strokeWeight: 1,
-            clickable: true,
-            editable: true,
-            zIndex: 1
-          },
-          rectangleOptions: {
-            fillColor: "#f91616",
-            fillOpacity: 0.2,
-            strokeWeight: 1,
-            clickable: true,
-            editable: true,
-            zIndex: 1
-          },
-          polygonOptions: {
-            fillColor: "#f91616",
-            fillOpacity: 0.2,
-            strokeWeight: 1,
-            clickable: true,
-            editable: true,
-            zIndex: 1
-          },
-          polylineOptions: {
-            strokeWeight: 1,
-            clickable: true,
-            editable: true,
-            zIndex: 1
-          }
-        }}
-        onCircleComplete={props.onCircleComplete}
-        onMarkerComplete={props.onMarkerComplete}
-        onPolygonComplete={props.onPolygonComplete}
-        onPolylineComplete={props.onPolylineComplete}
-        onRectangleComplete={props.onRectangleComplete}
-      />
     </GoogleMap>
   ))
 );
