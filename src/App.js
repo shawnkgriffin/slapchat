@@ -109,7 +109,7 @@ class App extends Component {
       );
       users.forEach(user =>
         userMarkers.push({
-          icon: "/skiing-blue.png",
+          icon: `./${user.display_name}.png`,
           position: user.position,
           label: user.display_name,
           type: "USER",
@@ -303,7 +303,7 @@ class App extends Component {
     // User moves
     this.socket.on("user.move", user => {
       const newUserMarker = {
-        icon: "/skiing-blue.png",
+        icon: `./${user.display_name}.png`,
         position: user.position,
         label: user.display_name,
         type: "USER",
