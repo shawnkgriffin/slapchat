@@ -33,7 +33,8 @@ class App extends Component {
       currentChannelId: null,
       currentDirectMessageId: null,
       generalChannelId: 0, //general channel is a special channel.
-      isAuth: ""
+      isAuth: "",
+      defaultCenter: { lat: 50.093284, lng: -122.93494 } // Whistler
     };
 
     /* eslint-disable no-restricted-globals */
@@ -382,6 +383,18 @@ class App extends Component {
 
   dropMarker(label, description, icon) {
     console.log("dropMarker(", label, description, icon);
+    let newMarker = {
+      lat: this.state.defaultCenter.lat,
+      lng: this.state.defaultCenter.lng,
+      type: "MARKER",
+      owner_user_id: this.state.currentUserId,
+      label: label,
+      description: description,
+      icon: icon
+    };
+
+    // create a new marker as a new
+    this.sendServer("marker.add", newMarker);
   }
 
   //this callback is when the user clicks on a channel

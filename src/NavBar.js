@@ -38,32 +38,31 @@ class NavBar extends Component {
     this.handleDescriptionInput = this.handleDescriptionInput.bind(this);
     this.handleLabelInput = this.handleLabelInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleSubmit2 = this.handleSubmit2.bind(this);
   }
   handleLabelInput = i => {
-    console.log("handleLabelInput =", i, i.target.value);
     this.setState({ label: i.target.value });
   };
   handleDescriptionInput = i => {
-    console.log("handleDescriptionInput =", i, i.target.value);
     this.setState({ description: i.target.value });
   };
   handleSubmit = i => {
-    console.log("handleSubmit", i, this.state.label, this.state.description);
+    console.log(
+      "handleSubmit",
+      this.state.label,
+      this.state.description,
+      i.target.id
+    );
+    if (this.state.label && this.state.value) {
+      alert("label and description must be filled out");
+      return; // check to make sure they are not empty
+    }
     this.props.dropMarker(
       this.state.label,
       this.state.description,
-      "./avalanche.png"
+      i.target.id
     );
   };
-  handleSubmit2 = i => {
-    console.log("handleSubmit2", i, this.state.label, this.state.description);
-    this.props.dropMarker(
-      this.state.label,
-      this.state.description,
-      "./fire.png"
-    );
-  };
+
   render() {
     return (
       <div className="nav-bar">
@@ -101,10 +100,20 @@ class NavBar extends Component {
           </div>
         </form>
         <button id="marker-icon">
-          <img src="./avalanche1.png" onClick={this.handleSubmit} />
+          <img
+            id={"./avalanche1.png"}
+            src="./avalanche1.png"
+            alt=""
+            onClick={this.handleSubmit}
+          />
         </button>
         <button id="marker-icon">
-          <img src="./fire.png" onClick={this.handleSubmit2} />
+          <img
+            id={"./fire.png"}
+            alt=""
+            src="./fire.png"
+            onClick={this.handleSubmit}
+          />
         </button>
       </div>
     );
