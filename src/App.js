@@ -11,10 +11,7 @@ import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
 import Sidebar from "react-sidebar";
-const textStyle = {
-  color: "red",
-  fontstyle: "italic"
-};
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -48,7 +45,7 @@ class App extends Component {
     /* eslint-enable no-restricted-globals */
 
     this.onNewMessage = this.onNewMessage.bind(this);
-    this.dropMarker = this.dropMarker.bind(this);
+    this.dropMarkerCircle = this.dropMarkerCircle.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
     this.onUserCallback = this.onUserCallback.bind(this);
@@ -381,20 +378,28 @@ class App extends Component {
     });
   };
 
-  dropMarker(label, description, icon) {
-    console.log("dropMarker(", label, description, icon);
-    let newMarker = {
-      lat: this.state.defaultCenter.lat,
-      lng: this.state.defaultCenter.lng,
-      type: "MARKER",
-      owner_user_id: this.state.currentUserId,
-      label: label,
-      description: description,
-      icon: icon
-    };
-
-    // create a new marker as a new
-    this.sendServer("marker.add", newMarker);
+  dropMarkerCircle(markerOrCircle, label, description, icon) {
+    if (markerOrCircle) {
+      this.sendServer("marker.add", {
+        lat: this.state.defaultCenter.lat,
+        lng: this.state.defaultCenter.lng,
+        type: "MARKER",
+        owner_user_id: this.state.currentUserId,
+        label: label,
+        description: description,
+        icon: icon
+      });
+      // create a new marker as a new
+    } else {
+      this.sendServer("circle.add", {
+        lat: this.state.defaultCenter.lat,
+        lng: this.state.defaultCenter.lng,
+        radius: 500,
+        owner_user_id: this.state.currentUserId,
+        label: label,
+        description: description
+      });
+    }
   }
 
   //this callback is when the user clicks on a channel
@@ -451,7 +456,7 @@ class App extends Component {
           <Alert stack={{ limit: 3 }} />
           <NavBar
             currentUser={this.state.currentUser}
-            dropMarker={this.dropMarker}
+            dropMarkerCircle={this.dropMarkerCircle}
           />
           {this.state.loading ? (
             <div>Loading</div>

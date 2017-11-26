@@ -1,43 +1,19 @@
 import React, { Component } from "react";
 
-// </form>
-// <button>Create Circle</button>
-// <button>Create Marker</button>
-// <button>Place Marker</button>
-// <form>
-//   <input
-//     type="text"
-//     placeholder="label"
-//     className="form-control search-query"
-//   />
-//   <input
-//     type="text"
-//     placeholder="description"
-//     className="form-control search-query"
-//   />
-//   <button>
-//     <img
-//       src="/avalanche1.png"
-//       alt="my image"
-//       onClick={this.myfunction}
-//     />
-//     <img src="/blast.png" alt="my image" onClick={this.myfunction} />
-//     <img
-//       src="/construction.png"
-//       alt="my image"
-//       onClick={this.myfunction}
-//     />
-//     <img src="/fire.png" alt="my image" onClick={this.myfunction} />
-//   </button>
-// </form>
-
 class NavBar extends Component {
   constructor(props) {
     super();
-    this.setState({ label: "", description: "" });
+
     this.handleDescriptionInput = this.handleDescriptionInput.bind(this);
     this.handleLabelInput = this.handleLabelInput.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleMarkerSubmit = this.handleMarkerSubmit.bind(this);
+  }
+  componentDidMount() {
+    this.setState({
+      label: "",
+      description: "",
+      icons: ["./fire.png", "./avalanche1.png"]
+    });
   }
   handleLabelInput = i => {
     this.setState({ label: i.target.value });
@@ -45,22 +21,19 @@ class NavBar extends Component {
   handleDescriptionInput = i => {
     this.setState({ description: i.target.value });
   };
-  handleSubmit = i => {
-    console.log(
-      "handleSubmit",
-      this.state.label,
-      this.state.description,
-      i.target.id
-    );
+  handleMarkerSubmit = i => {
     if (this.state.label && this.state.value) {
       alert("label and description must be filled out");
       return; // check to make sure they are not empty
     }
-    this.props.dropMarker(
+    this.props.dropMarkerCircle(
+      i.target.id.indexOf("circle") === -1,
       this.state.label,
       this.state.description,
       i.target.id
     );
+    document.getElementById("label").value = "";
+    document.getElementById("description").value = "";
   };
 
   render() {
@@ -76,6 +49,7 @@ class NavBar extends Component {
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input
+              id="label"
               type="text"
               className="form-control search-query"
               placeholder="label"
@@ -85,18 +59,12 @@ class NavBar extends Component {
           <div className="form-search search-only">
             <i className="search-icon glyphicon glyphicon-search" />
             <input
+              id="description"
               type="text"
               className="form-control search-query"
               placeholder="Description"
               onChange={this.handleDescriptionInput}
             />
-            {/* <button>
-              <img
-                src="./avalanche1.png"
-                alt="avalanche"
-                onClick={this.handleSubmit}
-              />
-            </button> */}
           </div>
         </form>
         <button id="marker-icon">
@@ -104,7 +72,7 @@ class NavBar extends Component {
             id={"./avalanche1.png"}
             src="./avalanche1.png"
             alt=""
-            onClick={this.handleSubmit}
+            onClick={this.handleMarkerSubmit}
           />
         </button>
         <button id="marker-icon">
@@ -112,7 +80,15 @@ class NavBar extends Component {
             id={"./fire.png"}
             alt=""
             src="./fire.png"
-            onClick={this.handleSubmit}
+            onClick={this.handleMarkerSubmit}
+          />
+        </button>
+        <button id="circle-icon">
+          <img
+            id={"./circle-red.png"}
+            alt=""
+            src="./circle-red.png"
+            onClick={this.handleMarkerSubmit}
           />
         </button>
       </div>
