@@ -66,7 +66,11 @@ class NavBar extends Component {
         <SmoothCollapse expanded={expanded}>
           <div className="slide">
             <button id="marker-icon">
-              <img src="./circle-red.png" onClick={this.handleMarkerSubmit} />
+              <img
+                alt=""
+                src="./circle-red.png"
+                onClick={this.handleMarkerSubmit}
+              />
             </button>
             <form
               id="icon-form"
