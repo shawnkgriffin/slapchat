@@ -278,7 +278,6 @@ io.sockets.on("connection", socket => {
       });
   }
   function markerLocate(marker) {
-    console.log("markerLocate(", marker);
     knex("markers")
       .where("id", "=", marker.id)
       .returning([
@@ -293,7 +292,6 @@ io.sockets.on("connection", socket => {
       ])
       .then(markerArray => {
         let movedMarker = markerArray[0];
-        console.log("markerLocate(", movedMarker);
         movedMarker.position = { lat: movedMarker.lat, lng: movedMarker.lng };
         io.sockets.emit("marker.move", movedMarker);
       });
@@ -420,7 +418,6 @@ io.sockets.on("connection", socket => {
                 );
                 user.lat = newPosition.latitude;
                 user.lng = newPosition.longitude;
-                console.log("userMove(", user);
                 user.position = { lat: user.lat, lng: user.lng };
                 userMove(user);
                 //check if user is in circle
