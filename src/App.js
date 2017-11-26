@@ -47,6 +47,7 @@ class App extends Component {
     /* eslint-enable no-restricted-globals */
 
     this.onNewMessage = this.onNewMessage.bind(this);
+    this.dropMarker = this.dropMarker.bind(this);
     this.sendServer = this.sendServer.bind(this);
     this.onChannelCallback = this.onChannelCallback.bind(this);
     this.onUserCallback = this.onUserCallback.bind(this);
@@ -379,6 +380,10 @@ class App extends Component {
     });
   };
 
+  dropMarker(label, description, icon) {
+    console.log("dropMarker(", label, description, icon);
+  }
+
   //this callback is when the user clicks on a channel
   onUserCallback = function onUserCallback(user) {
     // set the messages container to point to the current channel
@@ -431,7 +436,10 @@ class App extends Component {
         />
         <main className="nav-and-content">
           <Alert stack={{ limit: 3 }} />
-          <NavBar currentUser={this.state.currentUser} />
+          <NavBar
+            currentUser={this.state.currentUser}
+            dropMarker={this.dropMarker}
+          />
           {this.state.loading ? (
             <div>Loading</div>
           ) : (
