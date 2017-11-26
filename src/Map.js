@@ -46,14 +46,16 @@ const MyMapComponent = withScriptjs(
           }}
           label={{
             text: marker.label,
-            color: marker.type === "USER" ? "#4256f4" : "#f44141",
+            color:
+              marker.type === "USER"
+                ? "#268FFF"
+                : marker.type === "DESTINATION" ? "#66C547" : "#C03638",
             fontSize: "16px",
             fontWeight: "bold"
           }}
           position={marker.position}
           draggable={marker.draggable}
           visible={marker.visible}
-          // {...marker}
         />
       ))}
       <Polygon
@@ -69,13 +71,14 @@ const MyMapComponent = withScriptjs(
       />
       {props.circles.map((circle, index) => (
         <Circle
+          circleRef={props.onSearchBoxMounted}
           center={circle.center}
           strokeColor="#f91212"
           strokeOpacity={0.8}
           strokeWeight={0.5}
           key={index}
           radius={circle.radius}
-          fillColor="#f91212"
+          fillColor={"#f91212"}
           fillOpacity={0.35}
           clickable={true}
           draggable={true}
@@ -197,18 +200,34 @@ class Map extends Component {
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
-      case "MARKER":
+      case ("MARKER", "DESTINATION"):
         marker.lat = markerState.latLng.lat();
         marker.lng = markerState.latLng.lng();
         this.props.sendServer("marker.move", marker);
         break;
       case "USER":
-        let user = {
-          id: marker.userId,
+        let destinationMarker = {
           lat: markerState.latLng.lat(),
-          lng: markerState.latLng.lng()
+          lng: markerState.latLng.lng(),
+          type: "DESTINATION",
+          owner_user_id: marker.owner_user_id,
+          label: `>${marker.label}`,
+          description: `Please  move here`,
+          icon: "/destination-green.png"
         };
-        this.props.sendServer("user.move", user);
+        // relocate the user's marker
+        this.props.sendServer("user.locate", { id: marker.userId });
+
+        // create a new marker as a destination
+        this.props.sendServer("marker.add", destinationMarker);
+
+        // post a message on the general channel to ask the user to move.
+        // TODO this should be a private message. Consider implementing it as the user.move function?
+        this.props.sendServer("channel_message.post", {
+          sender_user_id: this.props.currentUserId,
+          channel_id: this.props.generalChannelId,
+          content: `@${marker.label} please move to >${marker.label}`
+        });
         break;
       default:
         console.log("unexpected type", marker.type);
@@ -243,7 +262,11 @@ class Map extends Component {
   onMarkerComplete = e => {
     this.props.sendServer("marker.add", {
       lat: e.position.lat(),
-      lng: e.position.lng()
+      lng: e.position.lng(),
+      type: "MARKER",
+      label: `New`,
+      description: `Please enter`,
+      icon: "/avalanche1.png"
     });
     // TODO delete the marker
   };

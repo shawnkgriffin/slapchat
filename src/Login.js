@@ -1,21 +1,5 @@
 import React from "react";
-import Modal from "react-modal";
 
-// const customStyles = {
-//   content: {
-//     backgroundColor: "rgba(255, 255, 255, 0.6)",
-//     top: "50%",
-//     left: "50%",
-//     right: "auto",
-//     bottom: "auto",
-//     marginRight: "-50%",
-//     transform: "translate(-50%, -50%)",
-//     color: "rgba(255, 255, 255, 1)"
-//   },
-//   overlay: {
-//     backgroundColor: "rgba(0, 0, 0, 0.75)"
-//   }
-// };
 const textStyle = {
   color: "black"
 };
@@ -30,17 +14,6 @@ class Login extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onLogin = this.onLogin.bind(this);
-  }
-  openModal() {
-    this.setState({ modalIsOpen: true });
-  }
-
-  afterOpenModal() {
-    this.subtitle.style.color = "#black";
-  }
-
-  closeModal() {
-    this.setState({ modalIsOpen: false });
   }
 
   handleEmailChange(event) {
@@ -64,7 +37,6 @@ class Login extends React.Component {
     };
     this.props.sendNewLogin(newLogin);
     console.log(newLogin);
-    debugger;
   }
 
   render() {

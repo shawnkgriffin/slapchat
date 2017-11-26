@@ -6,7 +6,7 @@ import MessageList from "./MessageList.js";
 import StaticSideBar from "./StaticSideBar.js";
 import NavBar from "./NavBar.js";
 import Login from "./Login.js";
-import Register from "./Register.js";
+// import Register from "./Register.js";
 import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
@@ -28,10 +28,13 @@ class App extends Component {
       markers: [],
       circles: [],
       layers: [],
+      httpRes: true,
       loading: true,
       currentUser: null,
       currentChannelId: null,
-      currentDirectMessageId: null
+      currentDirectMessageId: null,
+      generalChannelId: 0, //general channel is a special channel.
+      isAuth: ""
     };
 
     /* eslint-disable no-restricted-globals */
@@ -71,12 +74,17 @@ class App extends Component {
 
   componentDidMount() {
     const token = localStorage.getItem("token");
-    if (token) {
-      this.setupSocket(token);
-    } else {
+    if (token === "undefined") {
       this.setState({
         loading: false
       });
+    }
+    if (!token) {
+      this.setState({
+        loading: false
+      });
+    } else {
+      this.setupSocket(token);
     }
   }
 
@@ -116,9 +124,12 @@ class App extends Component {
     });
 
     this.socket.on("channels", channels => {
+      const generalChannelId =
+        channels.find(channel => channel.name === "General").id || 0;
       this.setState({
         channels: channels,
-        currentChannelId: channels[0].channel_id
+        currentChannelId: generalChannelId,
+        generalChannelId: generalChannelId
       });
     });
     this.socket.on("direct_messages", direct_messages => {
@@ -132,12 +143,11 @@ class App extends Component {
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
       if (channel_message.content.indexOf("!alert") !== -1) {
-        Alert.error(channel_message.content, {
+        const content = channel_message.content.replace("!alert ", "");
+        Alert.error(content, {
           position: "top-right",
           effect: "slide",
-          onShow: function() {
-            console.log("aye!");
-          },
+          onShow: function() {},
           beep: true,
           timeout: "none",
           offset: 100
@@ -249,7 +259,8 @@ class App extends Component {
     this.socket.on("marker.delete", deleteMarker => {
       this.setState({
         markers: this.state.markers.filter(
-          marker => !(marker.type === "MARKER" && marker.id === deleteMarker.id)
+          // Don't delete users
+          marker => !(marker.type !== "USER" && marker.id === deleteMarker.id)
         )
       });
     });
@@ -313,7 +324,7 @@ class App extends Component {
   }
 
   sendNewLogin(newLogin) {
-    //his.socket.emit("user.login", newLogin);
+    this.setState({ httpRes: false });
     fetch("/login", {
       method: "PUT",
       body: JSON.stringify(newLogin),
@@ -323,6 +334,7 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(data => {
+        this.setState({ httpRes: true });
         localStorage.setItem("token", data.token);
         this.setupSocket(data.token);
       });
@@ -332,19 +344,20 @@ class App extends Component {
   // this will be called from the ChatBar component when a user presses the enter key.
   onNewMessage = function onNewMessage(content) {
     // Send the msg object as a JSON-formatted string.
-    let action =
-      this.state.currentChannelId != null
-        ? "channel_message.post"
-        : "direct_message.post";
+    let action = "";
     let payload = {};
-
-    if (action === "channel_message.post") {
+    if (
+      this.state.currentChannelId !== null ||
+      !this.state.currentDirectMessageId // protect from a case where currentDirectMessageId is not set and use general channel.
+    ) {
+      action = "channel_message.post";
       payload = {
         sender_user_id: this.state.currentUser.id,
-        channel_id: this.state.currentChannelId,
+        channel_id: this.state.currentChannelId || this.state.generalChannelId,
         content: content
       };
     } else {
+      action = "direct_message.post";
       payload = {
         sender_user_id: this.state.currentUser.id,
         recipient_user_id: this.state.currentDirectMessageId,
@@ -400,15 +413,16 @@ class App extends Component {
   }
 
   render() {
+    if (this.state.httpRes === false) {
+      return <div>WAIT</div>;
+    }
     if (this.state.loading) {
       return <div>Loading</div>;
     }
     if (this.state.currentUser === null) {
       return (
         <div>
-          <h1> Welcome to Slap! </h1>
           <Login sendNewLogin={this.sendNewLogin} />
-          <Register sendNewRegister={this.sendNewRegister} />
         </div>
       );
     }
@@ -438,6 +452,8 @@ class App extends Component {
                 sendServer={this.sendServer}
                 markers={this.state.markers}
                 circles={this.state.circles}
+                generalChannelId={this.state.generalChannelId}
+                currentUserId={this.state.currentUser.id}
               />
             </section>
           )}
