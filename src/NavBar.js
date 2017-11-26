@@ -1,35 +1,5 @@
 import React, { Component } from "react";
-
-// </form>
-// <button>Create Circle</button>
-// <button>Create Marker</button>
-// <button>Place Marker</button>
-// <form>
-//   <input
-//     type="text"
-//     placeholder="label"
-//     className="form-control search-query"
-//   />
-//   <input
-//     type="text"
-//     placeholder="description"
-//     className="form-control search-query"
-//   />
-//   <button>
-//     <img
-//       src="/avalanche1.png"
-//       alt="my image"
-//       onClick={this.myfunction}
-//     />
-//     <img src="/blast.png" alt="my image" onClick={this.myfunction} />
-//     <img
-//       src="/construction.png"
-//       alt="my image"
-//       onClick={this.myfunction}
-//     />
-//     <img src="/fire.png" alt="my image" onClick={this.myfunction} />
-//   </button>
-// </form>
+import SmoothCollapse from "react-smooth-collapse";
 
 class NavBar extends Component {
   constructor(props) {
@@ -64,7 +34,17 @@ class NavBar extends Component {
       "./fire.png"
     );
   };
+
+  state: Object = {
+    expanded: false
+  };
+
+  _toggle() {
+    this.setState({ expanded: !this.state.expanded });
+  }
+
   render() {
+    const { expanded } = this.state;
     return (
       <div className="nav-bar">
         <form
@@ -77,63 +57,76 @@ class NavBar extends Component {
             <input type="text" className="form-control search-query" />
           </div>
         </form>
-        <div>
-          <button id="marker-icon">
-            <img src="./circle-red.png" onClick={this.handleSubmit2} />
-          </button>
-        </div>
-        <form id="icon-form" className="navbar-form navbar-right" role="search">
-          <div className="form-search search-only">
-            <i className="search-icon glyphicon glyphicon-search" />
-            <input
-              id="marker-input"
-              type="text"
-              className="form-control search-query"
-              placeholder="label"
-              onChange={this.handleLabelInput}
-            />
-          </div>
-          <div className="form-search search-only">
-            <i className="search-icon glyphicon glyphicon-search" />
-            <input
-              id="marker-input"
-              type="text"
-              className="form-control search-query"
-              placeholder="Description"
-              onChange={this.handleDescriptionInput}
-            />
-            {/* <button>
+        <SmoothCollapse expanded={expanded}>
+          <div className="slide">
+            <button id="marker-icon">
+              <img src="./circle-red.png" onClick={this.handleSubmit2} />
+            </button>
+            <form
+              id="icon-form"
+              className="navbar-form navbar-right"
+              role="search"
+            >
+              <div className="form-search search-only">
+                <i className="search-icon glyphicon glyphicon-search" />
+                <input
+                  id="marker-input"
+                  type="text"
+                  className="form-control search-query"
+                  placeholder="label"
+                  onChange={this.handleLabelInput}
+                />
+              </div>
+              <div className="form-search search-only">
+                <i className="search-icon glyphicon glyphicon-search" />
+                <input
+                  id="marker-input"
+                  type="text"
+                  className="form-control search-query"
+                  placeholder="Description"
+                  onChange={this.handleDescriptionInput}
+                />
+                {/* <button>
               <img
                 src="./avalanche1.png"
                 alt="avalanche"
                 onClick={this.handleSubmit}
               />
             </button> */}
+              </div>
+            </form>
+            <div id="marker-buttons">
+              <button id="marker-icon">
+                <img src="./skistation.png" onClick={this.handleSubmit2} />
+              </button>
+              <button id="marker-icon">
+                <img src="./skilifting.png" onClick={this.handleSubmit2} />
+              </button>
+              <button id="marker-icon">
+                <img src="./avalanche1.png" onClick={this.handleSubmit} />
+              </button>
+              <button id="marker-icon">
+                <img src="./fire.png" onClick={this.handleSubmit2} />
+              </button>
+              <button id="marker-icon">
+                <img src="./blast.png" onClick={this.handleSubmit2} />
+              </button>
+              <button id="marker-icon">
+                <img src="./construction.png" onClick={this.handleSubmit2} />
+              </button>
+              <button id="marker-icon">
+                <img src="./nordicskiing.png" onClick={this.handleSubmit2} />
+              </button>
+            </div>
           </div>
-        </form>
-        <div id="marker-buttons">
-          <button id="marker-icon">
-            <img src="./skistation.png" onClick={this.handleSubmit2} />
-          </button>
-          <button id="marker-icon">
-            <img src="./skilifting.png" onClick={this.handleSubmit2} />
-          </button>
-          <button id="marker-icon">
-            <img src="./avalanche1.png" onClick={this.handleSubmit} />
-          </button>
-          <button id="marker-icon">
-            <img src="./fire.png" onClick={this.handleSubmit2} />
-          </button>
-          <button id="marker-icon">
-            <img src="./blast.png" onClick={this.handleSubmit2} />
-          </button>
-          <button id="marker-icon">
-            <img src="./construction.png" onClick={this.handleSubmit2} />
-          </button>
-          <button id="marker-icon">
-            <img src="./nordicskiing.png" onClick={this.handleSubmit2} />
-          </button>
-        </div>
+        </SmoothCollapse>
+        <input
+          id="collapsebutton"
+          type="image"
+          src="marker-button.png"
+          value={expanded ? "Hide" : "Show"}
+          onClick={() => this._toggle()}
+        />
       </div>
     );
   }

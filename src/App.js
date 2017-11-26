@@ -10,7 +10,6 @@ import Register from "./Register.js";
 import Alert from "react-s-alert";
 import "react-s-alert/dist/s-alert-default.css";
 import "react-s-alert/dist/s-alert-css-effects/slide.css";
-import Sidebar from "react-sidebar";
 const textStyle = {
   color: "red",
   fontstyle: "italic"
@@ -458,11 +457,6 @@ class App extends Component {
             </section>
           )}
         </main>
-        <Sidebar
-          // sidebar={sidebarContent}
-          open={this.state.sidebarOpen}
-          onSetOpen={this.onSetSidebarOpen}
-        />
       </div>
     );
   }
