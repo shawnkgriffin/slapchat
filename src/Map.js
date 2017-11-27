@@ -131,17 +131,15 @@ class Map extends Component {
   }
 
   // Marker events
-  handleMarkerClick = (marker, markerState) => {
-    console.log("handleMarkerClick", marker, markerState);
-  };
+  handleMarkerClick = (marker, markerState) => {};
   // Marker events
   handleMarkerRightClick = (marker, markerState) => {
-    console.log("handleMarkerRightClick", marker, markerState);
     this.props.sendServer("marker.delete", marker);
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
-      case ("MARKER", "DESTINATION"):
+      case "MARKER":
+      case "DESTINATION":
         marker.lat = markerState.latLng.lat();
         marker.lng = markerState.latLng.lng();
         this.props.sendServer("marker.move", marker);
@@ -175,9 +173,7 @@ class Map extends Component {
     }
   };
   // Circle events
-  handleCircleClick = (circle, circleState) => {
-    console.log("handleCircleClick", circle, circleState);
-  };
+  handleCircleClick = (circle, circleState) => {};
   // Circle events
   handleCircleRightClick = (circle, circleState) => {
     this.props.sendServer("circle.delete", circle);
@@ -197,9 +193,7 @@ class Map extends Component {
     circle.lng = circleState.latLng.lng();
     this.props.sendServer("circle.move", circle);
   };
-  handleCircleRadiusChanged = (circle, circleState) => {
-    console.log("handleCircleRadiusChanged = (", circle);
-  };
+  handleCircleRadiusChanged = (circle, circleState) => {};
   onMarkerComplete = e => {
     this.props.sendServer("marker.add", {
       lat: e.position.lat(),
@@ -211,18 +205,10 @@ class Map extends Component {
     });
     // TODO delete the marker
   };
-  onPolygonComplete = e => {
-    console.log("onPolygonComplete", e.getPaths().getArray()[0]);
-  };
-  onPolylineComplete = e => {
-    console.log("onPolylineComplete", e);
-  };
-  onRectangleComplete = e => {
-    console.log("onRectangleComplete", e);
-  };
-  onPlacesChanged = e => {
-    console.log("onPlacesChanged", e);
-  };
+  onPolygonComplete = e => {};
+  onPolylineComplete = e => {};
+  onRectangleComplete = e => {};
+  onPlacesChanged = e => {};
 
   render() {
     const markers = this.props.markers || [];
