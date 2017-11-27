@@ -336,7 +336,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         this.setState({ httpRes: true });
-        // localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.token);
         this.setupSocket(data.token);
       });
   }

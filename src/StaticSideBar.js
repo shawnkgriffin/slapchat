@@ -16,7 +16,7 @@ class StaticSideBar extends Component {
         />
         <div className="side-bar-nav">
           <section className="channels">
-            <span className="side-bar-section-header">Channels</span>
+            <h2 className="side-bar-section-header">Channels</h2>
             <Channels
               onChannelCallback={this.props.onChannelCallback}
               channels={this.props.channels}
@@ -25,7 +25,7 @@ class StaticSideBar extends Component {
             />
           </section>
           <section className="direct-messsages">
-            <span className="side-bar-section-header">Direct Messages</span>
+            <h3 className="side-bar-section-header">Direct Messages</h3>
             <Users
               onUserCallback={this.props.onUserCallback}
               users={this.props.users}
