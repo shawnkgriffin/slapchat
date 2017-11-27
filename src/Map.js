@@ -57,13 +57,16 @@ const MyMapComponent = withScriptjs(
       ))}
       <Polygon
         paths={[polygon]}
-        strokeColor={"#f91616"}
-        strokeOpacity={0.8}
-        strokeWeight={0.5}
-        fillColor={"#f91616"}
-        fillOpacity={0.35}
-        clickable={true}
-        draggable={true}
+        defaultOptions={{
+          fillColor: "#f91212",
+          strokeColor: "#f91212",
+          strokeOpacity: 0.8,
+          strokeWeight: 0.5,
+          fillOpacity: 0.35,
+          draggable: true,
+          clickable: true,
+          editable: false
+        }}
         onDragEnd={polygonState => props.onDragEnd(polygon, polygonState)}
       />
       {props.circles.map((circle, index) => (
@@ -76,7 +79,7 @@ const MyMapComponent = withScriptjs(
             fillOpacity: 0.35,
             draggable: true,
             clickable: true,
-            editable: true
+            editable: false
           }}
           circleRef={props.onSearchBoxMounted}
           center={circle.center}
