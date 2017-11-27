@@ -7,7 +7,7 @@ function MessageList({ messages, onNewMessage }) {
     <section className="message-interface">
       <div id="messages-container" className="messages-container">
         {messages.map(message => {
-          return <Message key={message.id} message={message} />;
+          return <Message key={Math.random() * 10000000} message={message} />;
         })}
       </div>
       <ChatBar onNewMessage={onNewMessage} />

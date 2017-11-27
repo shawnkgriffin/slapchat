@@ -7,7 +7,9 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
 
 @import "../../node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
 @import "../../node_modules/bootflat/bootflat/scss/bootflat.scss";
-
+.html {
+  overflow:hidden;
+}
 .fixed-container {
   position: fixed;
   display: flex;

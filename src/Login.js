@@ -36,7 +36,6 @@ class Login extends React.Component {
       password: this.state.password
     };
     this.props.sendNewLogin(newLogin);
-    console.log(newLogin);
   }
 
   render() {
@@ -64,7 +63,7 @@ class Login extends React.Component {
               onChange={this.handlePasswordChange}
             />
             <button
-              class="btn btn-lg btn-primary btn-block"
+              className="btn btn-lg btn-primary btn-block"
               name="Submit"
               value="Login"
               type="Submit"

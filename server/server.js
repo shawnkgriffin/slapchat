@@ -387,6 +387,7 @@ io.sockets.on("connection", socket => {
         bearing = 90;
         break;
       default:
+        bearing = -1; // means random
     }
 
     // get the circles first as we only need to do this once.
@@ -408,12 +409,16 @@ io.sockets.on("connection", socket => {
             "lng"
           ])
           .then(users => {
+            let bearings = users.map(
+              user => (bearing === -1 ? Math.random() * 360 : bearing) // if bearing is -1 choose a random bearing
+            );
+            console.log(bearings);
             timeoutUsersMove = setInterval(() => {
-              users.forEach(user => {
+              users.forEach((user, index) => {
                 let newPosition = geolib.computeDestinationPoint(
                   { lat: user.lat, lon: user.lng },
                   distance,
-                  bearing
+                  bearings[index]
                 );
                 user.lat = newPosition.latitude;
                 user.lng = newPosition.longitude;
