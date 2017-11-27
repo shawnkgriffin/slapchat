@@ -57,10 +57,10 @@ const MyMapComponent = withScriptjs(
       ))}
       <Polygon
         paths={[polygon]}
-        strokeColor="#f91616"
+        strokeColor={"#f91616"}
         strokeOpacity={0.8}
         strokeWeight={0.5}
-        fillColor="#f91616"
+        fillColor={"#f91616"}
         fillOpacity={0.35}
         clickable={true}
         draggable={true}
@@ -68,18 +68,20 @@ const MyMapComponent = withScriptjs(
       />
       {props.circles.map((circle, index) => (
         <Circle
+          defaultOptions={{
+            fillColor: "#f91212",
+            strokeColor: "#f91212",
+            strokeOpacity: 0.8,
+            strokeWeight: 0.5,
+            fillOpacity: 0.35,
+            draggable: true,
+            clickable: true,
+            editable: true
+          }}
           circleRef={props.onSearchBoxMounted}
           center={circle.center}
-          strokeColor="#f91212"
-          strokeOpacity={0.8}
-          strokeWeight={0.5}
           key={index}
           radius={circle.radius}
-          fillColor={"#f91212"}
-          fillOpacity={0.35}
-          clickable={true}
-          draggable={true}
-          editable={true}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
           onClick={circleState => props.onCircleClick(circle, circleState)}
           // onRadiusChanged={circleState =>
