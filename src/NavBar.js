@@ -158,14 +158,17 @@ class NavBar extends Component {
             </div>
           </div>
         </SmoothCollapse>
-        <input
-          id="collapsebutton"
-          type="image"
-          alt=""
-          src="marker-button.png"
-          value={expanded ? "Hide" : "Show"}
-          onClick={() => this._toggle()}
-        />
+        <div className="slap-logo">SLAP</div>
+        <div>
+          <input
+            id="collapsebutton"
+            type="image"
+            alt=""
+            src="white-hand.png"
+            value={expanded ? "Hide" : "Show"}
+            onClick={() => this._toggle()}
+          />
+        </div>
       </div>
     );
   }

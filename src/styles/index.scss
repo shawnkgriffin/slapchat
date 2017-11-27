@@ -10,6 +10,10 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
 .html {
   overflow:hidden;
 }
+.slap-logo {
+  font-size: 40px;
+  font-weight: bold;
+}
 .fixed-container {
   position: fixed;
   display: flex;
@@ -33,7 +37,7 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       padding: 5px;
       font-size: 1.3em;
       background-color: #505364;
-      color: rgb(204, 204, 204);
+      color: white;
 
       .user-info-content {
         .logout-button {
