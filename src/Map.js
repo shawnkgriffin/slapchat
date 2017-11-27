@@ -138,7 +138,8 @@ class Map extends Component {
   };
   handleDragEnd = (marker, markerState) => {
     switch (marker.type) {
-      case ("MARKER", "DESTINATION"):
+      case "MARKER":
+      case "DESTINATION":
         marker.lat = markerState.latLng.lat();
         marker.lng = markerState.latLng.lng();
         this.props.sendServer("marker.move", marker);
