@@ -116,7 +116,7 @@ class App extends Component {
       );
       users.forEach(user =>
         userMarkers.push({
-          icon: `./${user.display_name}.png`,
+          icon: `./${user.display_name}Icon.png`,
           position: user.position,
           label: user.display_name,
           type: "USER",
@@ -308,7 +308,7 @@ class App extends Component {
     // User moves
     this.socket.on("user.move", user => {
       const newUserMarker = {
-        icon: `./${user.display_name}.png`,
+        icon: `./${user.display_name}Icon.png`,
         position: user.position,
         label: user.display_name,
         type: "USER",
