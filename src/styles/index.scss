@@ -22,7 +22,6 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
 
   .side-bar {
     background-color: #505364;
-    background-color: #31659C;
     display: flex;
     flex-direction: column;
     min-width: 200px;
@@ -37,7 +36,6 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       padding: 5px;
       font-size: 1.3em;
       background-color: #505364;
-      background-color: #31659C;
 
       .user-info-content {
         .logout-button {
@@ -66,7 +64,6 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       font-size: 1em;
       padding: 5px;
       background-color: #505364;
-      background-color: #31659C;
       text-align: center;
       text-transform: uppercase;
     }
@@ -89,7 +86,6 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       font-size: 1em;
       padding: 5px;
       background-color: #505364;
-      background-color: #31659C;
       text-align: center;
       text-transform: uppercase;
     }
@@ -119,23 +115,18 @@ $img-src: "../../node_modules/bootflat/bootflat/img/check_flat/default.png";
       -moz-box-shadow: none;
       box-shadow: none;
       background-color: #505364;
-      background-color: #31659C;
     }
     .list-group-item {
        background-color: #505364;
-       background-color: #31659C;
        border-top-color: transparent;
     }
 
     .list-group-item:hover {
-      background-color:#1F4788;
+      background-color:#414454;
     }
     .list-group-item.active-user {
       background-color: #414454;
-      background-color: #6698C8;
-      background-color: ghostwhite;
       color: #FFF;
-      color: #31659C;
       font-style: italic;
       font-weight: bold;
       border-radius: 0;
