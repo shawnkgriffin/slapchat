@@ -73,13 +73,13 @@ io.use(
 
 //Socket on connect
 io.sockets.on("connection", socket => {
-  console.log("SOCKET", socket.decoded_token.user_id);
   users.push(socket.decoded_token.user_id);
-  socket.emit("login_users", users);
+  io.sockets.emit("login_users", users);
 
   //Disconnect
   socket.on("disconnect", data => {
     users.splice(users.indexOf(socket), 1);
+    io.sockets.emit("login_users", users);
   });
 
   ///////////////////////////////////////////////////////////////////////////

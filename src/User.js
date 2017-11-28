@@ -4,12 +4,12 @@ function User({ user, onUserCallback, activeUserId, login_users }) {
   let isLoggedIn = false;
   const isActive = activeUserId === user.id ? "active-user" : "";
   const userClass = `user list-group-item ${isActive}`;
+
   login_users.forEach(login_id => {
     if (login_id === user.id) {
       isLoggedIn = true;
     }
   });
-  console.log(isLoggedIn);
   return (
     <li
       className={userClass}

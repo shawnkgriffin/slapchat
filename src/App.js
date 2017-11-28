@@ -105,9 +105,6 @@ class App extends Component {
       });
     });
 
-    this.socket.on("login_users", userArr => {
-      this.setState({ login_users: userArr });
-    });
     // create markers for the users
     // remove any existing user markers
     this.socket.on("users", users => {
@@ -146,6 +143,9 @@ class App extends Component {
     this.socket.on("channel_messages", channel_messages => {
       channel_messages.type = "channel_messages";
       this.setState({ channel_messages: channel_messages });
+    });
+    this.socket.on("login_users", userArr => {
+      this.setState({ login_users: userArr });
     });
 
     // if we get a new message on a channel
