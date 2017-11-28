@@ -45,10 +45,10 @@ const MyMapComponent = withScriptjs(
             text: marker.label,
             color:
               marker.type === "USER"
-                ? "#268FFF"
-                : marker.type === "DESTINATION" ? "#66C547" : "#C03638",
-            fontSize: "16px",
-            fontWeight: "bold"
+                ? "#549BDE"
+                : marker.type === "DESTINATION" ? "#66C547" : "#D44444",
+            fontSize: "16px"
+            //fontWeight: "bold"
           }}
           position={marker.position}
           draggable={marker.draggable}
@@ -58,8 +58,8 @@ const MyMapComponent = withScriptjs(
       <Polygon
         paths={[polygon]}
         defaultOptions={{
-          fillColor: "#f91212",
-          strokeColor: "#f91212",
+          fillColor: "#D44444",
+          strokeColor: "#D44444",
           strokeOpacity: 0.8,
           strokeWeight: 0.5,
           fillOpacity: 0.35,
@@ -72,8 +72,8 @@ const MyMapComponent = withScriptjs(
       {props.circles.map((circle, index) => (
         <Circle
           defaultOptions={{
-            fillColor: "#f91212",
-            strokeColor: "#f91212",
+            fillColor: "#D44444",
+            strokeColor: "#D44444",
             strokeOpacity: 0.8,
             strokeWeight: 0.5,
             fillOpacity: 0.35,
