@@ -144,6 +144,13 @@ class NavBar extends Component {
               <button id="marker-icon">
                 <img
                   alt=""
+                  src="./bear.png"
+                  onClick={this.handleMarkerSubmit}
+                />
+              </button>
+              <button id="marker-icon">
+                <img
+                  alt=""
                   src="./construction.png"
                   onClick={this.handleMarkerSubmit}
                 />

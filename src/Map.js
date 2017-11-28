@@ -46,7 +46,7 @@ const MyMapComponent = withScriptjs(
             color:
               marker.type === "USER"
                 ? "#549BDE"
-                : marker.type === "DESTINATION" ? "#66C547" : "#D44444",
+                : marker.type === "DESTINATION" ? "#66C547" : "#EF7E7A",
             fontSize: "16px"
             //fontWeight: "bold"
           }}
