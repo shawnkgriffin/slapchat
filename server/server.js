@@ -15,7 +15,7 @@ const uuidv4 = require("uuid/v4");
 const path = require("path");
 const geolib = require("geolib");
 
-let connections = [];
+let users = [];
 
 // Define the constants and store the timers for moving people around
 let timeoutUsersMove = null; // timer used to randomly move people.
@@ -73,12 +73,13 @@ io.use(
 
 //Socket on connect
 io.sockets.on("connection", socket => {
-  console.log("Connected: %s sockets connected", connections.length);
+  users.push(socket.decoded_token.user_id);
+  io.sockets.emit("login_users", users);
 
   //Disconnect
   socket.on("disconnect", data => {
-    connections.splice(connections.indexOf(socket), 1);
-    console.log("Disconnected %s sockets connnected", connections.length);
+    users.splice(users.indexOf(socket), 1);
+    io.sockets.emit("login_users", users);
   });
 
   ///////////////////////////////////////////////////////////////////////////
@@ -412,7 +413,6 @@ io.sockets.on("connection", socket => {
             let bearings = users.map(
               user => (bearing === -1 ? Math.random() * 360 : bearing) // if bearing is -1 choose a random bearing
             );
-            console.log(bearings);
             timeoutUsersMove = setInterval(() => {
               users.forEach((user, index) => {
                 let newPosition = geolib.computeDestinationPoint(

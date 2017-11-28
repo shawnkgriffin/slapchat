@@ -31,6 +31,7 @@ class StaticSideBar extends Component {
               users={this.props.users}
               activeUserId={this.props.activeUserId}
               currentUser={this.props.currentUser}
+              login_users={this.props.login_users}
             />
           </section>
         </div>

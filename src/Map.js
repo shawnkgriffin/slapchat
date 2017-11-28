@@ -45,10 +45,10 @@ const MyMapComponent = withScriptjs(
             text: marker.label,
             color:
               marker.type === "USER"
-                ? "#268FFF"
-                : marker.type === "DESTINATION" ? "#66C547" : "#C03638",
-            fontSize: "16px",
-            fontWeight: "bold"
+                ? "#549BDE"
+                : marker.type === "DESTINATION" ? "#66C547" : "#EF7E7A",
+            fontSize: "16px"
+            //fontWeight: "bold"
           }}
           position={marker.position}
           draggable={marker.draggable}
@@ -57,29 +57,34 @@ const MyMapComponent = withScriptjs(
       ))}
       <Polygon
         paths={[polygon]}
-        strokeColor="#f91616"
-        strokeOpacity={0.8}
-        strokeWeight={0.5}
-        fillColor="#f91616"
-        fillOpacity={0.35}
-        clickable={true}
-        draggable={true}
+        defaultOptions={{
+          fillColor: "#D44444",
+          strokeColor: "#D44444",
+          strokeOpacity: 0.8,
+          strokeWeight: 0.5,
+          fillOpacity: 0.35,
+          draggable: true,
+          clickable: true,
+          editable: false
+        }}
         onDragEnd={polygonState => props.onDragEnd(polygon, polygonState)}
       />
       {props.circles.map((circle, index) => (
         <Circle
+          defaultOptions={{
+            fillColor: "#D44444",
+            strokeColor: "#D44444",
+            strokeOpacity: 0.8,
+            strokeWeight: 0.5,
+            fillOpacity: 0.35,
+            draggable: true,
+            clickable: true,
+            editable: false
+          }}
           circleRef={props.onSearchBoxMounted}
           center={circle.center}
-          strokeColor="#f91212"
-          strokeOpacity={0.8}
-          strokeWeight={0.5}
           key={index}
           radius={circle.radius}
-          fillColor={"#f91212"}
-          fillOpacity={0.35}
-          clickable={true}
-          draggable={true}
-          editable={true}
           onDragEnd={circleState => props.onCircleDragEnd(circle, circleState)}
           onClick={circleState => props.onCircleClick(circle, circleState)}
           // onRadiusChanged={circleState =>

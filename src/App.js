@@ -16,6 +16,7 @@ class App extends Component {
     super(props);
     this.state = {
       sidebarOpen: false,
+      login_users: [],
       users: [],
       direct_messages: [],
       channel_messages: [],
@@ -94,7 +95,11 @@ class App extends Component {
     this.socket = io(this.connectionString, { query: "token=" + token });
     // successful login will cause everything to fill
     this.socket.on("current", user => {
-      this.setState({ currentUser: user, loading: false, httpRes: true });
+      this.setState({
+        currentUser: user,
+        loading: false,
+        httpRes: true
+      });
       this.socket.on("connect", () => {
         console.info("connected to web socket");
       });
@@ -108,7 +113,7 @@ class App extends Component {
       );
       users.forEach(user =>
         userMarkers.push({
-          icon: `./${user.display_name}.png`,
+          icon: `./${user.display_name}Icon.png`,
           position: user.position,
           label: user.display_name,
           type: "USER",
@@ -138,6 +143,9 @@ class App extends Component {
     this.socket.on("channel_messages", channel_messages => {
       channel_messages.type = "channel_messages";
       this.setState({ channel_messages: channel_messages });
+    });
+    this.socket.on("login_users", userArr => {
+      this.setState({ login_users: userArr });
     });
 
     // if we get a new message on a channel
@@ -300,7 +308,7 @@ class App extends Component {
     // User moves
     this.socket.on("user.move", user => {
       const newUserMarker = {
-        icon: `./${user.display_name}.png`,
+        icon: `./${user.display_name}Icon.png`,
         position: user.position,
         label: user.display_name,
         type: "USER",
@@ -458,6 +466,7 @@ class App extends Component {
           currentUser={this.state.currentUser}
           activeUserId={this.state.currentDirectMessageId}
           activeChannelId={this.state.currentChannelId}
+          login_users={this.state.login_users}
         />
         <main className="nav-and-content">
           <Alert stack={{ limit: 3 }} />
