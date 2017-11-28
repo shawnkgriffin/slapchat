@@ -18,6 +18,7 @@ exports.seed = function(knex, Promise) {
           last_name: "Scotty",
           display_name: "Scotty",
           email: "scott@scott.scott",
+          password: "test",
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
           avatar: "/avatars/scott.jpg"
@@ -88,6 +89,7 @@ exports.seed = function(knex, Promise) {
           display_name: "BB8",
           lat: 50.093284 + (Math.random() - 0.5) * 0.05,
           lng: -122.93494 + (Math.random() - 0.5) * 0.05,
+          password: "test",
           email: "bb8@starwars.com",
           avatar: "/avatars/bb8.png"
         })
