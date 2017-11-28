@@ -1,7 +1,13 @@
 import React from "react";
 import User from "./User.js";
 
-function Users({ users, onUserCallback, currentUser, activeUserId }) {
+function Users({
+  users,
+  onUserCallback,
+  currentUser,
+  activeUserId,
+  login_users
+}) {
   return (
     <ul className="list-group">
       {users.filter(user => user.id !== currentUser.id).map(user => {
@@ -11,6 +17,7 @@ function Users({ users, onUserCallback, currentUser, activeUserId }) {
             key={user.id}
             user={user}
             activeUserId={activeUserId}
+            login_users={login_users}
           />
         );
       })}

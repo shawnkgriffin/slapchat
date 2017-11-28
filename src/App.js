@@ -16,6 +16,7 @@ class App extends Component {
     super(props);
     this.state = {
       sidebarOpen: false,
+      login_users: [],
       users: [],
       direct_messages: [],
       channel_messages: [],
@@ -94,12 +95,19 @@ class App extends Component {
     this.socket = io(this.connectionString, { query: "token=" + token });
     // successful login will cause everything to fill
     this.socket.on("current", user => {
-      this.setState({ currentUser: user, loading: false, httpRes: true });
+      this.setState({
+        currentUser: user,
+        loading: false,
+        httpRes: true
+      });
       this.socket.on("connect", () => {
         console.info("connected to web socket");
       });
     });
 
+    this.socket.on("login_users", userArr => {
+      this.setState({ login_users: userArr });
+    });
     // create markers for the users
     // remove any existing user markers
     this.socket.on("users", users => {
@@ -458,6 +466,7 @@ class App extends Component {
           currentUser={this.state.currentUser}
           activeUserId={this.state.currentDirectMessageId}
           activeChannelId={this.state.currentChannelId}
+          login_users={this.state.login_users}
         />
         <main className="nav-and-content">
           <Alert stack={{ limit: 3 }} />
