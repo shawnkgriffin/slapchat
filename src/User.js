@@ -17,11 +17,11 @@ function User({ user, onUserCallback, activeUserId, login_users }) {
     >
       {isLoggedIn ? (
         <span className="online-icon">
-          <i class="fa fa-circle" aria-hidden="true" />
+          <i className="fa fa-circle" aria-hidden="true" />
         </span>
       ) : (
         <span className="offline-icon">
-          <i class="fa fa-circle-o" aria-hidden="true" />
+          <i className="fa fa-circle-o" aria-hidden="true" />
         </span>
       )}
       <img

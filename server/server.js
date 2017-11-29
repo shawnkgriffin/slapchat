@@ -78,8 +78,9 @@ io.sockets.on("connection", socket => {
 
   //Disconnect
   socket.on("disconnect", data => {
-    users.splice(users.indexOf(socket), 1);
-    io.sockets.emit("login_users", users);
+    console.log("SOCKET", socket);
+    users.splice(users.indexOf(socket.decoded_token.user_id), 1);
+    io.sockets.emit("logout_users", users);
   });
 
   ///////////////////////////////////////////////////////////////////////////

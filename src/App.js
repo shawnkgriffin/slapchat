@@ -148,6 +148,11 @@ class App extends Component {
       this.setState({ login_users: userArr });
     });
 
+    this.socket.on("logout_users", userArr => {
+      console.log("USER ARR", userArr);
+      this.setState({ login_users: userArr });
+    });
+
     // if we get a new message on a channel
     this.socket.on("channel_message.post", channel_message => {
       if (channel_message.content.indexOf("!alert") !== -1) {
