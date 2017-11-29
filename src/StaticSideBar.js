@@ -35,6 +35,17 @@ class StaticSideBar extends Component {
             />
           </section>
         </div>
+        <section className="side-bar-bottom">
+          {/*<form method="GET" action="/">
+            <button
+              className="logout-button btn btn-primary btn-sm"
+              type="submit"
+              onClick={this.props.handleLogout}
+            >
+              Logout
+            </button>
+          </form>*/}
+        </section>
       </div>
     );
   }
