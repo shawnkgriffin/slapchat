@@ -11,131 +11,7 @@ import {
 const {
   SearchBox
 } = require("react-google-maps/lib/components/places/SearchBox");
-const demoFancyMapStyles = [
-  {
-    featureType: "administrative",
-    elementType: "all",
-    stylers: [
-      {
-        saturation: "-100"
-      }
-    ]
-  },
-  {
-    featureType: "administrative.province",
-    elementType: "all",
-    stylers: [
-      {
-        visibility: "off"
-      }
-    ]
-  },
-  {
-    featureType: "landscape",
-    elementType: "all",
-    stylers: [
-      {
-        saturation: -100
-      },
-      {
-        lightness: 65
-      },
-      {
-        visibility: "on"
-      }
-    ]
-  },
-  {
-    featureType: "poi",
-    elementType: "all",
-    stylers: [
-      {
-        saturation: -100
-      },
-      {
-        lightness: "50"
-      },
-      {
-        visibility: "simplified"
-      }
-    ]
-  },
-  {
-    featureType: "road",
-    elementType: "all",
-    stylers: [
-      {
-        saturation: "-100"
-      }
-    ]
-  },
-  {
-    featureType: "road.highway",
-    elementType: "all",
-    stylers: [
-      {
-        visibility: "simplified"
-      }
-    ]
-  },
-  {
-    featureType: "road.arterial",
-    elementType: "all",
-    stylers: [
-      {
-        lightness: "30"
-      }
-    ]
-  },
-  {
-    featureType: "road.local",
-    elementType: "all",
-    stylers: [
-      {
-        lightness: "40"
-      }
-    ]
-  },
-  {
-    featureType: "transit",
-    elementType: "all",
-    stylers: [
-      {
-        saturation: -100
-      },
-      {
-        visibility: "simplified"
-      }
-    ]
-  },
-  {
-    featureType: "water",
-    elementType: "geometry",
-    stylers: [
-      {
-        hue: "#ffff00"
-      },
-      {
-        lightness: -25
-      },
-      {
-        saturation: -97
-      }
-    ]
-  },
-  {
-    featureType: "water",
-    elementType: "labels",
-    stylers: [
-      {
-        lightness: -25
-      },
-      {
-        saturation: -100
-      }
-    ]
-  }
-];
+const mapStyle = require("./styles/lunarMapStyle.json");
 
 const polygon = [
   { lat: 50.114806, lng: -122.892426 },
@@ -149,7 +25,7 @@ const MyMapComponent = withScriptjs(
     <GoogleMap
       defaultZoom={13}
       defaultCenter={{ lat: 50.093284, lng: -122.93494 }} // Whistler
-      defaultOptions={{ styles: demoFancyMapStyles }}
+      defaultOptions={{ styles: mapStyle }}
     >
       <TrafficLayer autoUpdate />
       {props.markers.map((marker, index) => (
