@@ -237,24 +237,25 @@ class App extends Component {
                   this.state.currentDirectMessageId)
           )
         });
-        this.setState(
-          {
-            currentChannelId: null,
-            currentDirectMessageId: direct_message.recipient_user_id,
-            messages: this.state.direct_messages.filter(
-              direct_message =>
-                (direct_message.sender_user_id ===
-                  this.state.currentDirectMessageId &&
-                  direct_message.recipient_user_id ===
-                    this.state.currentUser.id) ||
-                (direct_message.sender_user_id === this.state.currentUser.id &&
-                  direct_message.recipient_user_id ===
-                    this.state.currentDirectMessageId)
-            )
-          },
-          this.scrollToBottom
-        );
       }
+      console.log("HERE", direct_message.recipient_user_id);
+      this.setState(
+        {
+          currentChannelId: null,
+          // currentDirectMessageId: direct_message.recipient_user_id,
+          messages: this.state.direct_messages.filter(
+            direct_message =>
+              (direct_message.sender_user_id ===
+                this.state.currentDirectMessageId &&
+                direct_message.recipient_user_id ===
+                  this.state.currentUser.id) ||
+              (direct_message.sender_user_id === this.state.currentUser.id &&
+                direct_message.recipient_user_id ===
+                  this.state.currentDirectMessageId)
+          )
+        },
+        this.scrollToBottom
+      );
     });
     // add in the markers, don't remove the USERS
     this.socket.on("markers", markers => {
