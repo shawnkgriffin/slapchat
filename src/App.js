@@ -186,14 +186,17 @@ class App extends Component {
               channel_message.id === this.state.currentChannelId
           )
         });
-      this.setState({
-        currentChannelId: this.state.currentChannelId,
-        currentDirectMessageId: null,
-        messages: this.state.channel_messages.filter(
-          channel_message =>
-            channel_message.channel_id === this.state.currentChannelId
-        )
-      });
+      this.setState(
+        {
+          currentChannelId: this.state.currentChannelId,
+          currentDirectMessageId: null,
+          messages: this.state.channel_messages.filter(
+            channel_message =>
+              channel_message.channel_id === this.state.currentChannelId
+          )
+        },
+        this.scrollToBottom
+      );
     });
 
     // Receive a direct message
@@ -238,7 +241,6 @@ class App extends Component {
           )
         });
       }
-      console.log("HERE", direct_message.recipient_user_id);
       this.setState(
         {
           currentChannelId: null,
