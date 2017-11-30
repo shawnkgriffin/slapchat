@@ -67,8 +67,8 @@ exports.seed = function(knex, Promise) {
           first_name: "Greg",
           last_name: "Sugiyama",
           display_name: "Greg",
-          lat: 50.07256947565124,
-          lng: -122.96979837036133,
+          lat: 50.07315,
+          lng: -122.97082,
           email: "greg@greg.greg",
           password: "test",
           avatar: "/avatars/greg.jpg"
