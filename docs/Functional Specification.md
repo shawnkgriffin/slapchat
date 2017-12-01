@@ -1,9 +1,9 @@
 # Functional Specification
-slapChat (slack + maps) is a program that integrates the best of slack with the ability to share locations on a map. 
+slapChat (slack + maps) is a program that integrates the best of slack with maps (SLAP). 
 
 # System Architecture
 All communication is by web sockets. 
-State changes are sent by each client to the server. The server updates it's internal state using redux. The server will either send the message to all clients or it will send the updated state (tbd).
+State changes are sent by each client to the server. 
 ![System Layout](https://github.com/shawnkgriffin/slap/blob/master/docs/slap%20system.png "System Layout")
 ## State Description
 Each client manages it's own state. The state consists of the following major components
@@ -12,11 +12,10 @@ Each client manages it's own state. The state consists of the following major co
   * Markers - {location, description, title, icon, picture}
   * Circles - {location, radius, description, title, icon, picture}
   * Polygons - array of locations, description, title, icon, picture}
-  * Layers - {name, [pins], [circles], [polygons]}
+  * Layers - {name, [markers], [circles], [polygons]}
 * Users
   * {Name, avatar} 
 * Chat
-  * Messages - {originator, text, [images], [uris]}
   * channels - {name, channel_id, [messages]}
   * direct messages - {user_id1, userid2, [messages]}
 
@@ -24,7 +23,6 @@ Each client manages it's own state. The state consists of the following major co
 - [ ] Android - React Native
 - [ ] iOS - React Native
 - [X] Web - React
-- [ ] Redux - state machine management for all client environments.
 
 ## Server 
 - [X] Express Server
@@ -37,7 +35,7 @@ Each client manages it's own state. The state consists of the following major co
 
 ## Chat Features (Core)
 - [X] Channels - display, select, read, update
-- [ ] Messages - Messages sent on a channel or 1-1 are only visible on that channel. 
+- [X] Messages - Messages sent on a channel or 1-1 are only visible on that channel. 
 - [X] Direct messages (1-1) - display, select, read,  update
 - [ ] Notifications
 - [X] User avatar
@@ -49,7 +47,7 @@ Each client manages it's own state. The state consists of the following major co
 - [ ] Tags, keywords & @mentions
 - [ ] User changes in name, avatar or status are immediately reflected in all clients
 - [X] Notifications are styled differently from chat messages
-- [ ] User status (logged in or not) is shown in the sidebar.
+- [X] User status (logged in or not) is shown in the sidebar.
 - [X] Messages sent when user is logged off are stored for later retrieval
  
 
@@ -100,20 +98,20 @@ Each client manages it's own state. The state consists of the following major co
 
  ## Map Features
  ### Users
- - [ ] User location is tracked and sent by the client to the server. 
+ - [X] User location is tracked and sent by the client to the server. 
  - [X] All users can see the location of any active user on their map.
- - [ ] When a user moves, the client will dynamically update the location on the map. 
- - [ ] For demonstration and testing, a bot updates the user positions
- - [ ] For demonstration and testing, a bot can send alerts
+ - [X] When a user moves, the client will dynamically update the location on the map. 
+ - [X] For demonstration and testing, a bot updates the user positions
+ - [X] For demonstration and testing, a bot can send alerts
  - [ ] For demonstration and testing, a bot can reply to message
  ### Map
 - [ ] users can see a list of the available layers
 - [ ] users can view a layer
-- [ ] a layer can contain many pins
-- [ ] users can create pins
-- [ ] users can edit pins
-- [ ] each pin can have: a title, description, and image
-- [ ] the icons for pins are customizable
+- [ ] a layer can contain manymarkers
+- [ ] users can createmarkers
+- [ ] users can editmarkers
+- [ ] each marker can have: a title, description, and image
+- [ ] the icons formarkers are customizable
 - [X] a layer can contain many circles
 - [x] users can create circles
 - [ ] users can edit circles
@@ -130,14 +128,13 @@ Each client manages it's own state. The state consists of the following major co
 
 ## Extensions:
 - [ ] Using redux, history can be rolled back to any point for a client. 
-- [ ] Using redux, history can be rolled back to any point for the server. 
 - [ ] add unit tests (using mocha + chai)
 - [ ] add end-to-end tests (using phantomjs)
 - [ ] document using jsdocs.
-- [ ] Use Jira to manage project.
+- [X] Use Jira to manage project.
 
 ## Behaviour Requirements
-- [ ] When any connected user sends a chat message, all connected users receive and display the message
+- [X] When any connected user sends a chat message, all connected users receive and display the message
 - [ ] When any connected user changes their name, all connected users are notified of the name change
 ## Technical Specifications
 ### Stack:
@@ -165,55 +162,6 @@ Each client manages it's own state. The state consists of the following major co
 - [X] It's a simple server using express and sockets.io
 - [X] The server should send and receive JSON-encoded messages
 #### When a client sends a message:
-- [ ] the server should determine what to do based on the message's type property
+- [X] the server should determine what to do based on the message's type property
 - [ ] it should construct a message to send back in response with a corresponding type and a generated unique id (e.g. a UUID)
-- [ ] When a client connects or disconnects, the server should broadcast the current user count to all connected clients
-- [ ] (STRETCH) the server may assign and/or keep track of user colours (there are several ways of solving this)
-### Submit Requirements
-### Step 1: Verify the project is complete
-- [ ] Functional requirements complete
-### Step 2: Clean up the code
-- [ ] Remove console.logs
-- [ ] Add comments
-- [ ] Check best practices
-- [ ] Correct variable declaration and semi-colon use
-- [ ] Proper and consistent indentation and spacing
-- [ ] Clear and consistent function and variable names
-- [ ] Modular and reusable code (no need to break your code into Node modules, but using helper functions to keep the code DRY is a good idea)
-- [ ] Well-commented code (in other words, that your code is easy to read)
-- [ ] That no debugging, commented-out or dead/un-used code is present
-- [ ] Sensible structure for the project's files and directories
-### Step 3: Verify your project will install on your mentors' computers
-- [ ] verify that your package.json files include all the necessary dependencies. Yes, that's files plural: You should have a separate package.json file for each of the two server.
-
-- [ ] Open the package.json file in your project's root directory and verify that you've got the following packages listed under the "devDependencies" and/or "dependencies" keys.
-* Client 
-  * babel-core
-  * babel-loader
-  * babel-preset-es2015
-  * babel-preset-react
-  * css-loader
-  * node-sass
-  * sass-loader
-  * sockjs-client
-  * style-loader
-  * webpack
-  * webpack-dev-server
-  * react
-  * react-dom
-
-* Server
-  * express
-  * ws
-  * uuid
-
-Step 4: Update README file
-- [ ] README.md
-Step 5: Add screenshots
-
-- [ ] screenshots
-- [ ] doc directory
-### Step 6: Push the final version to GitHub
-- [ ] Push the final version of your Chatty project to GitHub (to the master branch).
-### Step 7: Submit the project!
-- [ ] Done
+- [X] When a client connects or disconnects, the server should broadcast the current user count to all connected clients
