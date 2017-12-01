@@ -26,3 +26,5 @@ yarn-error.log*
 .env
 /server/.env
 /db/.knex/.env
+
+*.mov
