@@ -9,7 +9,7 @@ exports.seed = function(knex, Promise) {
         knex("direct_messages").insert({
           sender_user_id: queryResult[0].id,
           recipient_user_id: queryResult[1].id,
-          content: "This is a direct message"
+          content: "Your lesson is here, I'll send you a marker."
         })
       ]);
     });
