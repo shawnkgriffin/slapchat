@@ -4,7 +4,7 @@ slapChat (slack + maps) is a program that integrates the best of slack with maps
 # System Architecture
 All communication is by web sockets. 
 State changes are sent by each client to the server. 
-![System Layout](https://github.com/shawnkgriffin/slap/blob/master/docs/slap%20system.png "System Layout")
+![System Layout](https://github.com/shawnkgriffin/slapchat/blob/master/docs/slap%20system.png "System Layout")
 ## State Description
 Each client manages it's own state. The state consists of the following major components
 * Map
