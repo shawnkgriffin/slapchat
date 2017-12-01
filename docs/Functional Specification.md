@@ -20,17 +20,17 @@ Each client manages it's own state. The state consists of the following major co
   * direct messages - {user_id1, userid2, [messages]}
 
 ## Client 
-- [ ] Android - React Native
-- [ ] iOS - React Native
+- [ ] Android - React Native (Stretch)
+- [ ] iOS - React Native (Stretch)
 - [X] Web - React
 
 ## Server 
 - [X] Express Server
-- [ ] Redux - state machine management (stretch)
+- [ ] Redux - state machine management (Stretch)
 
 ## Database 
  - [X] Postgres 
- - [ ] PostgresGIS (stretch)
+ - [ ] PostgresGIS (Stretch)
 
 
 ## Chat Features (Core)
@@ -51,7 +51,7 @@ Each client manages it's own state. The state consists of the following major co
 - [X] Messages sent when user is logged off are stored for later retrieval
  
 
- ## Chat Features (stretch)
+ ## Chat Features (Stretch)
  - [ ] Audio / video conferencing
  - [ ] Two-way audio & video
  - [ ] 1:1 and group calls
