@@ -2,7 +2,7 @@
 # Slap
 
 Slap is the start to the solution of providing situational awareness or dispatch functions for environments where there are large numbers of people, different roles and geographical dispersion. Slap combines the best of Slack and Maps (Slap!) to provide dispatch and situational awareness solutions.  
-The functional spacifications, and their status can be found [here](https://github.com/shawnkgriffin/slapchat/blob/master/docs/Functional%20Specification.md). 
+The functional specification can be found [here](https://github.com/shawnkgriffin/slapchat/blob/master/docs/Functional%20Specification.md). 
 
 ## Screen Shots
 ![SlapChat](https://github.com/shawnkgriffin/slapchat/blob/master/docs/slap.gif "Sample Session.")
