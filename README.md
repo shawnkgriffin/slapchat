@@ -1,11 +1,11 @@
 ![Slap](https://github.com/shawnkgriffin/lighthouse-Slap/blob/master/docs/Titlebar.png)
 # Slap
 
-Slap is the start to the solution of providing situational awareness or dispatch functions. Slap combines the best of Slack and Maps (Slap!) to provide dispatch with 
+Slap is the start to the solution of providing situational awareness or dispatch functions for environments where there are large numbers of people, different roles and geographical dispersion. Slap combines the best of Slack and Maps (Slap!) to provide dispatch with 
 The functional spacifications, and their status can be found [here](https://github.com/shawnkgriffin/slapchat/blob/master/docs/Functional%20Specification.md). 
 
 ## Screen Shots
-![4 Users](https://github.com/shawnkgriffin/lighthouse-Slap/blob/master/docs/Screenshot.png "Sample Session.")
+![SlapChat](https://github.com/shawnkgriffin/slapchat/blob/master/docs/slap.gif "Sample Session.")
 
 
 ## Getting Started
