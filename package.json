@@ -55,7 +55,6 @@
     "react": "^16.1.1",
     "react-dev-utils": "^4.2.1",
     "react-dom": "^16.1.1",
-    "react-forecast": "0.0.7",
     "react-google-maps": "^9.2.2",
     "react-modal": "^3.1.2",
     "react-native-weather": "^0.2.11",
